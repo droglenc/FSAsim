@@ -1,0 +1,120 @@
+\name{simLenSelectP}
+\alias{simLenSelectM}
+\alias{simLenSelectP}
+\title{Simulate sampling fish based on length selectivity.}
+\usage{
+simLenSelectP(lens, alpha = 1, beta = 1, max.height = 1, show = FALSE)
+
+simLenSelectM(lens, breaks, probs = rep(max.height, length(breaks)),
+  max.height = 1, interact = TRUE, digits = 2)
+}
+\arguments{
+  \item{lens}{A vector containg the lengths of individual
+  fish.}
+
+  \item{alpha}{A numeric shape parameter to the beta
+  distribution.  See \code{\link{dbeta}}.}
+
+  \item{beta}{A numeric shape parameter to the beta
+  distribution.  See \code{\link{dbeta}}.}
+
+  \item{max.height}{A numeric that controls the maximum
+  height of the probability distribution -- i.e., this will
+  be the maximum probability of capture.}
+
+  \item{show}{A logical indicating whether a graphic of the
+  selectivity curve should be shown (\code{=TRUE}) or not
+  (\code{=TRUE}; default).}
+
+  \item{breaks}{A numeric vector of lower values for the
+  break points of the length categories.}
+
+  \item{probs}{A numeric vector of capture probabilities
+  (i.e., selectivities) for each length category.  Default
+  is a vector containing all ones -- i.e., no selectivity
+  by length category.}
+
+  \item{interact}{A logical indicating whether the capture
+  probabilities (i.e., selectivities) should be chosen by
+  the user interacting with a selectivity plot.  See
+  details.}
+
+  \item{digits}{A numeric indicating the number of digits
+  that should be used when selecting the capture
+  probabilities.  Smaller values represent coarser
+  choices.}
+}
+\value{
+If \code{simLenSelectP} is used then a vector of logicals
+indicating whether each fish was sampled (\code{TRUE}) or
+not.  If \code{simLenSelectM} is used then a list that
+contains the following three items is returned: \itemize{
+\item smpld a vector of logicals indicating whether each
+fish was sampled (\code{TRUE}) or not. \item breaks the
+vector of length category breaks sent in \code{breaks}.
+\item probs the vector of capture probabilities that
+corresponds to the length categories in \code{breaks}.
+This vector may not equal the supplied \code{probs} vector
+if the user changed the capture probabilities with the
+interactive graphic (i.e., using \code{interact=TRUE}). }
+}
+\description{
+Constructs a sample of fish based on a user-supplied
+length-based selectivity curve.  The selectivity curve can
+be supplied via a parametric model (the beta distribution)
+or manually for various length categories.
+}
+\details{
+NEED DETAIL HERE.
+}
+\examples{
+## Load FSA package for Summarize()
+library(FSA)
+
+## set seed for repeatability
+set.seed(5234734)
+
+## Simulated individual ages (random)
+#    see simAges functions
+bg.ages <- simAges(N0=500,A=0.35)
+
+## Simulated lengths, given the above ages
+bg.lens <- simLenFromAge(bg.ages,228,0.206,0,8)
+
+## Simulated samplings given the above lengths and
+##   selectivities from a beta(3,5)
+bg.smpl <- simLenSelectP(bg.lens,3,5)
+# append ages, lengths, and samplings into one data frame
+bg.df1 <- data.frame(age=bg.ages,len=bg.lens,smpld=bg.smpl)
+# get only those that were sampled
+bg.df1a <- Subset(bg.df1,smpld)
+# Summaries
+Summarize(len~age,data=bg.df1,digits=1)
+Summarize(len~age,data=bg.df1a,digits=1)
+
+## Simulated samplings given the above lengths and user supplied selectivities
+bg.brks <- seq(20,230,10)
+bg.prbs1 <- c(0.0,0.0,0.0,0.1,0.3,0.6,0.9,0.9,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.9,
+ 0.8,0.6,0.3,0.2,0.1,0.0)
+bg.smpl1 <- simLenSelectM(bg.lens,bg.brks,bg.prbs1,interact=FALSE)
+bg.df2 <- data.frame(age=bg.ages,len=bg.lens,smpld=bg.smpl1$smpld)
+bg.df2a <- Subset(bg.df2,smpld)
+Summarize(len~age,data=bg.df2,digits=1)
+Summarize(len~age,data=bg.df2a,digits=1)
+
+## Simulated samplings given the above lengths and selectivities from interactive choices
+#  NOT RUN because of interactive choices
+\dontrun{
+bg.brks <- seq(20,230,10)
+bg.smpl2 <- simLenSelectM(bg.lens,bg.brks)
+bg.df3 <- data.frame(age=bg.ages,len=bg.lens,smpld=bg.smpl2$smpld)
+bg.df3a <- Subset(bg.df3,smpld)
+Summarize(len~age,data=bg.df3,digits=1)
+Summarize(len~age,data=bg.df3a,digits=1)
+}
+}
+\seealso{
+\code{\link{simAges}}, \code{\link{simLenFromAge}}
+}
+\keyword{misc}
+

@@ -1,0 +1,76 @@
+\name{simAgeBias}
+\alias{simAgeBias}
+\alias{simApplyAgeBias}
+\title{Simulate an age bias and simulate the ages of fish using the age bias.}
+\usage{
+simAgeBias(max.age = 10, show.props = TRUE, scale = TRUE)
+
+simApplyAgeBias(ages, bias.table = NULL, agree.table = NULL)
+}
+\arguments{
+  \item{max.age}{A numeric indicating the maximum age to be
+  modelled in the age bias table.}
+
+  \item{show.props}{A logical indicating whether
+  proportions of fish at x-axis age or numbers of fish
+  should be shown on the interactive plot (\code{=TRUE};
+  default) or not.}
+
+  \item{scale}{A logical indicating whether the plotted
+  value of the proportions or numbers should be scaled in
+  relation to their numeric value (\code{=TRUE}; default)
+  or not.}
+
+  \item{ages}{A vector containg the \sQuote{true} ages of
+  individual fish.}
+
+  \item{bias.table}{A table that contains, as columns, the
+  proportion of fish of a certain \sQuote{true} age in
+  various \sQuote{biased} ages -- i.e., a
+  column-proportions table constructed from an age
+  agreement table where the \sQuote{true} ages correspond
+  to columns.}
+
+  \item{agree.table}{A table that contains the
+  age-agreement table where the \sQuote{true} ages
+  correspond to columns.}
+}
+\value{
+If \code{simApplyAgeBias} is used then a vector of
+\sQuote{biased} ages is returned.  If \code{simAgeBias} is
+used then a list with the following two items is returned:
+\itemize{ \item agree a table containing the age agreement
+table resulting from the interactive process. \item bias a
+table containing the bias table resulting from the
+interactive process. }
+}
+\description{
+Constructs an age-bias table interactively.  This age-bias
+table can then be used to convert the true ages of a sample
+of fish to \sQuote{biased} ages.
+}
+\details{
+NEED DETAIL HERE.
+}
+\examples{
+## set seed for repeatability
+set.seed(5234734)
+
+## Simulated individual ages (random)
+#    see simAges functions
+bg.ages <- simAges(N0=500,A=0.35)
+summary(bg.ages)
+
+## Simulated ages given the above 'true' ages and age biases from interactive choices
+#  NOT RUN because of interactive choices
+\dontrun{
+bg.ab <- simAgeBias(max.age=max(bg.ages))
+bg.ages2 <- simApplyAgeBias(bg.ages,bg.ab$bias)
+summary(bg.ages2)
+}
+}
+\seealso{
+\code{\link{simAges}}, \code{ageComp} in \pkg{FSA}
+}
+\keyword{misc}
+
