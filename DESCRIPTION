@@ -1,4 +1,4 @@
-Package: FSASim
+Package: FSAsim
 Version: 0.0.1
 Title: Functions to simulate data for fisheries stock assessment methods.
 Description: This package can be used to simulate data for fisheries stock

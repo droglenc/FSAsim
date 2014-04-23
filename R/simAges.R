@@ -17,10 +17,8 @@
 #'stochastically produce ages for individual fish -- i.e., essentially
 #'\code{sample(t,sum(Nt),replace=TRUE,prob=Nt/sum(Nt))}.
 #'
-#'@param N0 A numeric representing the initial cohort size to be used in the
-#'simulations.
-#'@param A A numeric representing the annual mortality rate to be used in the
-#'simulations.
+#'@param N0 A numeric representing the initial cohort size to be used in the simulations.
+#'@param A A numeric representing the annual mortality rate to be used in the simulations.
 #'@param Z A numeric representing the instantaneous mortality rate to be used
 #'in the simulations.  Will default to the value that corresponds to the user
 #'supplied value for \code{A}.
@@ -49,7 +47,7 @@
 #'str(bg.ages)
 #'table(bg.ages)
 #'
-#'## Simulated age frequency (non-random)
+#'## Simulated age frequency (random)
 #'bg.ages.sum <- simAges(N0=500,A=0.35,indivs=FALSE) 
 #'str(bg.ages.sum)
 #'t(bg.ages.sum)

@@ -1,3 +1,4 @@
+export(sample4ALK)
 export(simAgeBias)
 export(simAges)
 export(simApplyAgeBias)

@@ -73,7 +73,7 @@ bg.ages <- simAges(N0=500,A=0.35)
 str(bg.ages)
 table(bg.ages)
 
-## Simulated age frequency (non-random)
+## Simulated age frequency (random)
 bg.ages.sum <- simAges(N0=500,A=0.35,indivs=FALSE)
 str(bg.ages.sum)
 t(bg.ages.sum)

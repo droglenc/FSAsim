@@ -29,7 +29,7 @@
 #'@keywords misc
 #'@examples
 #'## Load FSA package for Summarize()
-#'library(FSA)
+#'require(FSA)
 #'
 #'## set seed for repeatability
 #'set.seed(5234734)
