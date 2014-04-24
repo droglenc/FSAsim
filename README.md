@@ -1,7 +1,7 @@
 FSAsim
 ======
 
-This is the github page for the FSAsim package for R developed by Derek Ogle at Northland College.  This is very much a *work-in-progress* so please use at your discretion.
+This is the github page for the FSAsim package for R developed by [Derek Ogle](http://droglenc.wordpress.com/) at [Northland College](http://www.northland.edu/).  This is very much a *work-in-progress* so please use at your discretion.
 
 ## Installation
 This package can be installed from github to your R with the following code
