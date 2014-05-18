@@ -1,38 +1,28 @@
 #'Simulate an age bias and simulate the ages of fish using the age bias.
 #'
-#'Constructs an age-bias table interactively.  This age-bias table can then be
-#'used to convert the true ages of a sample of fish to \sQuote{biased} ages.
+#'Constructs an age-bias table interactively.  This age-bias table can then be used to convert the true ages of a sample of fish to \sQuote{biased} ages.
 #'
 #'NEED DETAIL HERE.
 #'
-#'@aliases simAgeBias simApplyAgeBias
-#'@param max.age A numeric indicating the maximum age to be modelled in the age
-#'bias table.
-#'@param show.props A logical indicating whether proportions of fish at x-axis
-#'age or numbers of fish should be shown on the interactive plot (\code{=TRUE};
-#'default) or not.
-#'@param scale A logical indicating whether the plotted value of the
-#'proportions or numbers should be scaled in relation to their numeric value
-#'(\code{=TRUE}; default) or not.
-#'@param ages A vector containg the \sQuote{true} ages of individual fish.
-#'@param bias.table A table that contains, as columns, the proportion of fish
-#'of a certain \sQuote{true} age in various \sQuote{biased} ages -- i.e., a
-#'column-proportions table constructed from an age agreement table where the
-#'\sQuote{true} ages correspond to columns.
-#'@param agree.table A table that contains the age-agreement table where the
-#'\sQuote{true} ages correspond to columns.
-#'@return If \code{simApplyAgeBias} is used then a vector of \sQuote{biased}
-#'ages is returned.  If \code{simAgeBias} is used then a list with the
-#'following two items is returned:
-#'\itemize{
-#'\item agree a table containing the age agreement table resulting from the
-#'interactive process.
-#'\item bias a table containing the bias table resulting from the interactive
-#'process.
-#'}
-#'@seealso \code{\link{simAges}}, \code{ageComp} in \pkg{FSA}
-#'@keywords misc
-#'@examples
+#' @aliases simAgeBias simApplyAgeBias
+#'
+#' @param max.age A numeric indicating the maximum age to be modelled in the age bias table.
+#' @param show.props A logical indicating whether proportions of fish at x-axis age or numbers of fish should be shown on the interactive plot (\code{=TRUE}; default) or not.
+#' @param scale A logical indicating whether the plotted value of the proportions or numbers should be scaled in relation to their numeric value (\code{=TRUE}; default) or not.
+#' @param ages A vector containg the \sQuote{true} ages of individual fish.
+#' @param bias.table A table that contains, as columns, the proportion of fish of a certain \sQuote{true} age in various \sQuote{biased} ages -- i.e., a column-proportions table constructed from an age agreement table where the \sQuote{true} ages correspond to columns.
+#' @param agree.table A table that contains the age-agreement table where the \sQuote{true} ages correspond to columns.
+#'
+#' @return If \code{simApplyAgeBias} is used then a vector of \sQuote{biased} ages is returned.  If \code{simAgeBias} is used then a list with the following two items is returned:
+#' \itemize{
+#' \item agree a table containing the age agreement table resulting from the interactive process.
+#' \item bias a table containing the bias table resulting from the interactive process.
+#' }
+#' @seealso See \code{\link{simAges}} for related functionality and \code{ageBias} and \code{agePrecision} in \pkg{FSA} for analyzing this type of data.
+#'
+#' @keywords misc
+#'
+#' @examples
 #'## set seed for repeatability
 #'set.seed(5234734)
 #'
@@ -49,8 +39,8 @@
 #'summary(bg.ages2)
 #'}
 #'
-#'@rdname simAgeBias
-#'@export simAgeBias
+#' @rdname simAgeBias
+#' @export simAgeBias
 simAgeBias <- function(max.age=10,show.props=TRUE,scale=TRUE) {
   Freq <- NULL  # attempting to get by bindings warning in RCMD CHECK
   old.par <- par(no.readonly=TRUE)
@@ -127,15 +117,15 @@ simAgeBias <- function(max.age=10,show.props=TRUE,scale=TRUE) {
   if (is.null(x)) stop("No points were added to the plot.  Nothing is returned.",call.=FALSE)
   else {
     df <- data.frame(true=x,bias=y)
-    ac <- ageComp(x,y,col.lab="Truth",row.lab="Biased")
+    ac <- ageBias(true~bias,data=df,col.lab="Truth",row.lab="Biased")
     agree.raw <- ac$agree
     agree.prop <- prop.table(agree.raw,margin=2)
     list(agree=agree.raw,bias=agree.prop)
   }
 }
 
-#'@rdname simAgeBias
-#'@export simApplyAgeBias
+#' @rdname simAgeBias
+#' @export simApplyAgeBias
 simApplyAgeBias <- function(ages,bias.table=NULL,agree.table=NULL) {
  # some checking
   if (length(ages) == 0) stop("'ages' must contain data.",call.=FALSE)

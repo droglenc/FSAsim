@@ -13,5 +13,6 @@ Imports:
     nlme,
     relax,
     TeachingDemos
+Roxygen: list(wrap=FALSE)
 License: GPL (>= 2)
 URL: http://fishr.wordpress.com/

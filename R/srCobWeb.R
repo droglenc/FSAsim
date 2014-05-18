@@ -1,34 +1,19 @@
 #'Plots typical fisheries stock-recruitment models with cobwebbing traces.
 #'
-#'Plots typical fisheries stock-recruitment models with cobwebbing traces for four
-#'parameterizations of the Beverton-Holt and three parameterizations of the Ricker
-#'stock-recruit models.
+#'Plots typical fisheries stock-recruitment models with cobwebbing traces for four parameterizations of the Beverton-Holt and three parameterizations of the Ricker stock-recruit models.
 #'
 #'This function can be used to explore the dynamics of stock-recruitment models for various parameter choices.
 #'
 #'The \code{type=} argument is used to choose either the \code{"BevertonHolt"} or \code{"Ricker"} models.  Different parameterizations of these two models are chosen with the \code{param=} argument.  Four paramaterizations of the Beverton-Holt model and three parameterizations of the Ricker model are allowed.  See \code{srModels} and \code{srFuns} in \pkg{FSA} for a representation of each parameterization.
 #'
 #'@aliases srCobWeb
-#'@param type A single string that indicates which stock-recruitment model to use.  
-#'See \code{srModels} in \pkg{FSA}.
-#'@param param A single numeric that indicates which parameterization of the \code{type}
-#'to use.  See \code{srModels} in \pkg{FSA}.
+#'@param type A single string that indicates which stock-recruitment model to use.  See \code{srModels} in \pkg{FSA}.
+#'@param param A single numeric that indicates which parameterization of the \code{type} to use.  See \code{srModels} in \pkg{FSA}.
 #'@param N A single numeric that indicates the number of iterations to run for the cobwebbing.
 #'@param initS A single numeric that indicates the starting value of spawning stock size.
-#'@param N2ignore A single numeric that indicates the number of initial iterattions to
-#'ignore when plotting the results.  This allows the function to \sQuote{burn-in}
-#'before showing results.
-#'@param \dots Optional parameters that are used in stock-recruitment model indicated
-#'with \code{type} and \code{param}.  See \code{srModels} and \code{srFuns} in \pkg{FSA}
-#'for the list and meanings of the parameters.  Also see the examples..
-#'@return None.  However a two-paned graphic is printed.  The top pane represents
-#'the stock-recruit function as a blue line and the 1:1 replacement line as a red
-#'line.  In addition, the \sQuote{cob-webbing} procedure is shown by a gray line.
-#'The gray line of the cobwebbing will become \sQuote{darker} as more cobwebbing
-#'lines are plotted on top of each other.  This makes it easer to see periodicity
-#'if it exists.  The \sQuote{stopping} point in the cobwebbing is shown as a red
-#'dot and the \sQuote{starting} point is shown, as long as \code{N2Ignore=0}, a 
-#'green dot.  The bottom panel is the stock size plotted against time.
+#'@param N2ignore A single numeric that indicates the number of initial iterattions to ignore when plotting the results.  This allows the function to \sQuote{burn-in} before showing results.
+#'@param \dots Optional parameters that are used in stock-recruitment model indicated with \code{type} and \code{param}.  See \code{srModels} and \code{srFuns} in \pkg{FSA} for the list and meanings of the parameters.  Also see the examples..
+#'@return None.  However a two-paned graphic is printed.  The top pane represents the stock-recruit function as a blue line and the 1:1 replacement line as a red line.  In addition, the \sQuote{cob-webbing} procedure is shown by a gray line.  The gray line of the cobwebbing will become \sQuote{darker} as more cobwebbing lines are plotted on top of each other.  This makes it easer to see periodicity if it exists.  The \sQuote{stopping} point in the cobwebbing is shown as a red dot and the \sQuote{starting} point is shown, as long as \code{N2Ignore=0}, a green dot.  The bottom panel is the stock size plotted against time.
 #'@author Derek H. Ogle, \email{dogle@@northland.edu}
 #'@seealso \code{\link{srSim}}; \code{srModels} and \code{srFuns} in \pkg{FSA}.
 #'@keywords iplot
