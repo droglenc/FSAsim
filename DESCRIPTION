@@ -1,8 +1,7 @@
 Package: FSAsim
-Version: 0.0.1
-Title: Functions to simulate data for fisheries stock assessment methods.
-Description: This package can be used to simulate data for fisheries stock
-    assessment methods.
+Version: 0.0.2
+Title: Functions to simulate data for fisheries stock assessment methods
+Description: This package can be used to simulate data or visualize models for fisheries stock assessment methods.
 Author: Derek H. Ogle <dogle@northland.edu>
 Maintainer: Derek H. Ogle <dogle@northland.edu>
 Depends:
