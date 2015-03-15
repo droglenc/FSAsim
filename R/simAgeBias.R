@@ -18,7 +18,7 @@
 #' \item agree a table containing the age agreement table resulting from the interactive process.
 #' \item bias a table containing the bias table resulting from the interactive process.
 #' }
-#' @seealso See \code{\link{simAges}} for related functionality and \code{ageBias} and \code{agePrecision} in \pkg{FSA} for analyzing this type of data.
+#' @seealso See \code{\link{simAges}} for related functionality and \code{\link[FSA]{ageBias}} and \code{\link[FSA]{agePrecision}} in \pkg{FSA} for analyzing this type of data.
 #'
 #' @keywords misc
 #'
@@ -117,7 +117,7 @@ simAgeBias <- function(max.age=10,show.props=TRUE,scale=TRUE) {
   if (is.null(x)) stop("No points were added to the plot.  Nothing is returned.",call.=FALSE)
   else {
     df <- data.frame(true=x,bias=y)
-    ac <- ageBias(true~bias,data=df,col.lab="Truth",row.lab="Biased")
+    ac <- FSA::ageBias(true~bias,data=df,ref.lab="Truth",nref.lab="Biased")
     agree.raw <- ac$agree
     agree.prop <- prop.table(agree.raw,margin=2)
     list(agree=agree.raw,bias=agree.prop)

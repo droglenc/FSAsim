@@ -65,7 +65,7 @@
 #'Thus, this simulation should not be used for research-grade simulations.
 #'@param type A single string that indicates the type or version of simulation that
 #'should be used.  See the details.
-#'@param ricker.mod A single logical value that indicates whether the modification
+#'@param Ricker.mod A single logical value that indicates whether the modification
 #'proposed by Ricker should be used (\code{=TRUE}) or not (\code{=FALSE}, default).
 #'@param rsmpls A single numeric for the number of simulations to run.
 #'@return None.  An interactive graphic with corresponding slider bars, which differs
@@ -86,7 +86,7 @@
 #'if any two are equal then the color first plotted will not be seen.
 #'
 #'In the random version, the graphic is simply the traditional Leslie model graphic
-#'(see \code{\link{depletion}}) with the \dQuote{random} catch-per-unit-effort values
+#'(see \code{\link[FSA]{depletion}}) with the \dQuote{random} catch-per-unit-effort values
 #'plotted against total catch with a best-fit linear regression line shown in blue.
 #'The current estimaes of q and No from the random data are also printed on the graph.
 #'A \bold{\sQuote{Re-Randomize}} button is included with the sliders which can be used
@@ -121,7 +121,7 @@
 #'} # end if interactive
 #'@export
 #'
-leslieSim <- function(type=c("deterministic","random","resampling","montecarlo"),ricker.mod=FALSE,rsmpls=100) {
+leslieSim <- function(type=c("deterministic","random","resampling","montecarlo"),Ricker.mod=FALSE,rsmpls=100) {
   graphLabel <- function(q.adj.const,p.surv,r.prop) {
     viol.q <- viol.surv <- viol.Nocv <- viol.recruits <- FALSE
     if (q.adj.const != 1) {
@@ -168,7 +168,7 @@ leslieSim <- function(type=c("deterministic","random","resampling","montecarlo")
     data.frame(Nt,qt=round(qt,4),Mt,Rt,Et,Ct,Pt=round(Ct/Nt,3))
   } # end leslieRandRun internal
   
-  detLeslieSimPlot <- function(params.def, params.mod, params.ass,q.adj.const,ricker.mod) {
+  detLeslieSimPlot <- function(params.def, params.mod, params.ass,q.adj.const,Ricker.mod) {
     detRun <- function(plist) {
       k <- plist$k
       Nt <- plist$Nt
@@ -194,11 +194,11 @@ leslieSim <- function(type=c("deterministic","random","resampling","montecarlo")
       data.frame(Nt,qt=round(qt,4),Mt,Rt,Et,Ct,Pt=round(Ct/Nt,3))
     } # end detRun internal function inside of detLeslieSimPlot
     
-    detPlot <- function(resdef,res1,res2,ricker.mod=FALSE,glbl) {
+    detPlot <- function(resdef,res1,res2,Ricker.mod=FALSE,glbl) {
       resdef$cpe <- resdef$Ct/resdef$Et
       res1$cpe <- res1$Ct/res1$Et
       res2$cpe <- res2$Ct/res2$Et
-      if (!ricker.mod) {
+      if (!Ricker.mod) {
         resdef$K <- cumsum(resdef$Ct)-resdef$Ct
         res1$K <- cumsum(res1$Ct)-res1$Ct
         res2$K <- cumsum(res2$Ct)-res2$Ct
@@ -218,24 +218,24 @@ leslieSim <- function(type=c("deterministic","random","resampling","montecarlo")
     res.ass <- detRun(params.ass)
     glbl <- graphLabel(q.adj.const,res.ass$p.surv,res.ass$r.prop)
     old.par <- par(mar=c(3.5,3.5,1.5,1.5), mgp=c(2,0.4,0),tcl=-0.2); on.exit(par(old.par))    
-    detPlot(res.def,res.mod,res.ass,ricker.mod,glbl)  # Plot total results
+    detPlot(res.def,res.mod,res.ass,Ricker.mod,glbl)  # Plot total results
     lgndtxt <- c("default","assumptions not met","if assumptions met")
     legend(x="topright",legend=lgndtxt,lwd=2,col=c("gray","red","blue"),pch=19,cex=0.8)
   } # end detLeslieSimPlot internal function
   
-  randLeslieSimPlot <- function(params,ricker.mod,q.adj.const) {
+  randLeslieSimPlot <- function(params,Ricker.mod,q.adj.const) {
     res.ass <- leslieRandRun(params)                      # Results for possible assumptions violations
-    res <- depletion(type="Leslie",res.ass$Ct,res.ass$Et,ricker.mod=ricker.mod)
+    res <- FSA::depletion(type="Leslie",res.ass$Ct,res.ass$Et,Ricker.mod=Ricker.mod)
     old.par <- par(mar=c(3.5,3.5,1.5,1.5), mgp=c(2,0.4,0),tcl=-0.2); on.exit(par(old.par))
     plot(res,xlim=c(0,1000),ylim=c(0,50),main=graphLabel(q.adj.const,params$p.surv,params$r.prop))    
   } # end randLeslieSimPlot internal function
   
-  mcLesliePlot <- function(rsmpls,ricker.mod,plist) {
+  mcLesliePlot <- function(rsmpls,Ricker.mod,plist) {
     res.qhat <- res.N0hat <- NULL
     for (i in 1:rsmpls) {
       res.ass <- leslieRandRun(plist)       # Results for possible assumptions violations
-      if (!ricker.mod) res <- depletion(res.ass$Ct,res.ass$Et,"Leslie")
-      else res <- depletion(res.ass$Ct,res.ass$Et,"Leslie",ricker.mod=ricker.mod)
+      if (!Ricker.mod) res <- FSA::depletion(res.ass$Ct,res.ass$Et,method="Leslie")
+      else res <- FSA::depletion(res.ass$Ct,res.ass$Et,method="Leslie",Ricker.mod=Ricker.mod)
       res.qhat[i] <- res$est["q","Estimate"]
       res.N0hat[i] <- res$est["No","Estimate"]
     }
@@ -276,7 +276,7 @@ leslieSim <- function(type=c("deterministic","random","resampling","montecarlo")
     q.adj.const <- relax::slider(no=5)     # Get catchabitity constant adjustment value
     q <- q*q.adj.const^(0:(k-1))                   # Create vector of catchabilities based on q and q.adj.prop
     params.ass <- list(k=k,Nt=rep(No,k),Et=rep(E,k),qt=q,p.surv=rep(p.surv,k),r.prop=rep(r.prop,k))
-    detLeslieSimPlot(params.def, params.mod, params.ass,q.adj.const,ricker.mod)
+    detLeslieSimPlot(params.def, params.mod, params.ass,q.adj.const,Ricker.mod)
   } # end detRefresh internal function
   
   randRefresh <- function(...) {
@@ -288,7 +288,7 @@ leslieSim <- function(type=c("deterministic","random","resampling","montecarlo")
     r.prop <- rep(relax::slider(no=7),k)          # Get proportional recruitment addition value and put into a vector
     q.adj.const <- relax::slider(no=5)            # Get catchabitity constant adjustment value
     qt <- qt*q.adj.const^(0:(k-1))                        # Create vector of catchabilities based on q and q.adj.prop
-    randLeslieSimPlot(list(k=k,Nt=Nt,Et=Et,qt=qt,p.surv=p.surv,r.prop=r.prop),ricker.mod,q.adj.const)
+    randLeslieSimPlot(list(k=k,Nt=Nt,Et=Et,qt=qt,p.surv=p.surv,r.prop=r.prop),Ricker.mod,q.adj.const)
   } # end randRefresh internal function
 
   mcRefresh <- function(...) {
@@ -301,7 +301,7 @@ leslieSim <- function(type=c("deterministic","random","resampling","montecarlo")
     q.adj.const <- relax::slider(no=5)           # Get catchabitity constant adjustment value
     qt <- qt*q.adj.const^(0:(k-1))                       # Create vector of catchabilities based on q and q.adj.prop
     params <- list(k=k,Nt=Nt,Et=Et,qt=qt,p.surv=p.surv,r.prop=r.prop)
-    mcLesliePlot(rsmpls,ricker.mod,params)
+    mcLesliePlot(rsmpls,Ricker.mod,params)
   } # end sim2Refresh internal function
   
   
