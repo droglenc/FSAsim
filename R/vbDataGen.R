@@ -150,13 +150,25 @@
 #' vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1)
 #' head(vbcap)
 #' plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
+#'  
+#' ###########################################################
+#' ## Tag-recapture data
+#' # no fractional ages
+#' vbtag <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,
+#'                    lendigs=1,dataType="tagrecap")
+#' head(vbtag)
+#' 
+#' # with fractional ages
+#' vbtag <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1,
+#'                    growth.per=growth.per,sample.per=sample.per,dataType="tagrecap")
+#' head(vbtag)
 #' 
 #' @export
 vbDataGen <- function(n,Linf,K,t0,paramCV=0.1,
                       SE=NULL,SECV=NULL,SD=NULL,SDCV=NULL,
                       minAge=1,maxAge=9,agedist=rep(1,maxAge-minAge+1),
                       growth.per=c(1,365),sample.per=1,
-                      dataType=c("atCapture","long","groupedData","wide"),
+                      dataType=c("atCapture","long","groupedData","wide","tagrecap"),
                       lendigs=getOption("digits"),agedigs=2,
                       backcalc=FALSE,seed=NULL) {
   len <- NULL # to avoide "global bindings" warning in rcmd check
@@ -202,10 +214,21 @@ vbDataGen <- function(n,Linf,K,t0,paramCV=0.1,
   d <- data.frame(d,lenCap,len=round(tmp,lendigs))
   ## Return result in format chosen by user (in dataType)
   if (dataType=="atCapture") d <- subset(d,ageCap==agePrev,c("id","ageCap","ageFrac","lenCap"))
-  if (dataType=="groupedData") d <- nlme::groupedData(len~agePrev|id,data=d,labels=list(x="Age",y="Length"))
-  if (dataType=="wide") {
+  else if (dataType=="groupedData") d <- nlme::groupedData(len~agePrev|id,data=d,labels=list(x="Age",y="Length"))
+  else if (dataType=="wide") {
     d$agePrev <- paste0("age",d$agePrev)
     d <- tidyr::spread(d[,-which(names(d)=="ageFrac")],agePrev,len)
+  } else if (dataType=="tagrecap") {
+    ids <- unique(d$id)
+    newd <- matrix(NA,nrow=length(ids),ncol=4)
+    for (i in ids) {
+      tmpdf <- subset(d,id==i)
+      tmp <- sample(1:nrow(tmpdf),2)
+      tmp <- tmp[order(tmp)]
+      newd[i,] <- c(i,tmpdf$len[tmp[1]],tmpdf$len[tmp[2]],tmpdf$ageFrac[tmp[2]]-tmpdf$ageFrac[tmp[1]])
+    }
+    d <- data.frame(newd)
+    names(d) <- c("id","Lm","Lr","atLarge")
   }
   d
 }

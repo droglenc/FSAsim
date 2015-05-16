@@ -7,7 +7,7 @@
 vbDataGen(n, Linf, K, t0, paramCV = 0.1, SE = NULL, SECV = NULL,
   SD = NULL, SDCV = NULL, minAge = 1, maxAge = 9, agedist = rep(1,
   maxAge - minAge + 1), growth.per = c(1, 365), sample.per = 1,
-  dataType = c("atCapture", "long", "groupedData", "wide"),
+  dataType = c("atCapture", "long", "groupedData", "wide", "tagrecap"),
   lendigs = getOption("digits"), agedigs = 2, backcalc = FALSE,
   seed = NULL)
 }
@@ -175,6 +175,18 @@ head(vblong,n=15)
 vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1)
 head(vbcap)
 plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
+
+###########################################################
+## Tag-recapture data
+# no fractional ages
+vbtag <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,
+                   lendigs=1,dataType="tagrecap")
+head(vbtag)
+
+# with fractional ages
+vbtag <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1,
+                   growth.per=growth.per,sample.per=sample.per,dataType="tagrecap")
+head(vbtag)
 }
 \author{
 Derek H. Ogle, \email{dogle@northland.edu}.  This function was motivated by the simulation methodology shown in Box 2 of Vigliola and Meekan (2009).
