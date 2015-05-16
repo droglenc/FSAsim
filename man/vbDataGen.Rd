@@ -6,8 +6,10 @@
 \usage{
 vbDataGen(n, Linf, K, t0, paramCV = 0.1, SE = NULL, SECV = NULL,
   SD = NULL, SDCV = NULL, minAge = 1, maxAge = 9, agedist = rep(1,
-  maxAge - minAge + 1), dataType = c("atCapture", "wide", "long",
-  "groupedData"), digits = getOption("digits"), seed = NULL)
+  maxAge - minAge + 1), growth.per = c(1, 365), sample.per = 1,
+  dataType = c("atCapture", "long", "groupedData", "wide"),
+  lendigs = getOption("digits"), agedigs = 2, backcalc = FALSE,
+  seed = NULL)
 }
 \arguments{
 \item{n}{Number of individuals to simulate data for.}
@@ -34,19 +36,37 @@ vbDataGen(n, Linf, K, t0, paramCV = 0.1, SE = NULL, SECV = NULL,
 
 \item{agedist}{A vector of values that are proportional to the percentage of fish expected for each age.  This vector must have a length equal to \code{maxAge}-\code{minAge}+1.  See examples.}
 
+\item{growth.per}{A vector of length 2 that contains the Julian dates for the beginning and ending dates for the period when the fish grows.  See details and examples.}
+
+\item{sample.per}{A vector of length 1 or 2 that contains the Julian dates for the beginning and ending dates for sampling the fish.  If only one value is given then it is assumed that sampling occurred only on that date.  See details and examples.}
+
 \item{dataType}{The type of data frame that should be returned.  See details.}
 
-\item{digits}{A single numeric to control the number of digits for the length variable.}
+\item{lendigs}{A single numeric to control the number of digits for the length variable.}
+
+\item{agedigs}{A single numeric to control the number of digits for the fractional age variable.}
+
+\item{backcalc}{A logical that indicates whether the lengths at previous ages should be considered to be from back-calculation (\code{TRUE}) or repeated observed (e.g., of tagged fish; \code{FALSE}, DEFAULT).}
 
 \item{seed}{An integer that can be used to control the seed for the random number generator used in the function.  See details.}
 }
 \value{
-A data frame in one of four formats as determined by \code{dataType}:
-\enumerate{
-  \item The \sQuote{atCapture} format returns the fish's ID (\code{id}) and the the age (\code{age}) and length (\code{len}) at the time of capture.
-  \item The \sQuote{wide} format returns the fish's ID (\code{id}), age-at-capture (\code{agecap}), and lengths at age (\code{anuX}; both previous ages and age-at-capture).  In \sQuote{wide} format each row corresponds to a fish and may include several lengths (at previous ages and at-capture).
-  \item In \sQuote{long} format the same data as in \sQuote{wide} format is returned but reshaped to long format where each row contains the fish's ID (\code{id}), age-at-capture (\code{agecap}), age (\code{prvAge}) and length (\code{anu}) in the fish's history.  In \sQuote{long} format the data for an individual fish will be found in as many rows as the age of the fish.  Thus, the data for a five-year-old fish will appear in five rows corresponding to the ages and lengths at each of the fish's five years of life.  The length-at-capture is in the row where \code{agecap} equals \code{anu}.
-  \item The \sQuote{groupedData} format is the same as \sQuote{long} format but as a \code{\link[nlme]{groupedData}} object (from the \pkg{nlme} package).
+A data frame in one of four formats as determined by \code{dataType}.  The variables that may occur in each data.frame are:
+\itemize{
+  \item \code{id}: a unique identification for individual fish.
+  \item \code{ageCap}: the number of completed growing seasons at the time of capture.
+  \item \code{ageFrac}: the age that includes the fractional age of the fish -- i.e., number of completed growing seasons plus a decimal representation of the fraction of the current growing seasons completed.
+  \item \code{agePrev}: an age in the fish's growth history.  Will be a whole number if \code{backcalc=TRUE} (i.e., length was back-calculated to an age that represents the beginning of a growing season) and a fractional number if \code{backcalc=FALSE} (i.e., repeated observations of length may not be at the beginning of a growing season).
+  \item \code{lenCap}: the observed length at the time of capture (corresponds to \code{ageCap}).
+  \item \code{len}: the observed length that corresponds to \code{agePrev}.
+}
+
+Which of these variables is returned depends on the \code{dataTYpe} as follows:
+\itemize{
+  \item \sQuote{atCapture} format: Returns \code{id}, \code{ageCap}, \code{ageFrac}, and \code{lenCap}.  Each row corresponds to the observations for an individual fish at the time of capture.
+  \item \sQuote{long} format: Returns \code{id}, \code{ageCap}, \code{agePrev}, \code{ageFrac}, \code{len}, and \code{lenCap}.  Each row corresponds to one age observation and individual fish are spread across as many rows as \code{ageCap}.  If \code{backcalc=TRUE} then there will be one \code{ageFrac} greater than \code{ageCap} (represents \dQuote{plus} or current season's growth) and all other \code{ageFrac}s will be whole numbers.
+  \item \sQuote{groupedData} format: Returns same as \sQuote{long} format but as a \code{\link[nlme]{groupedData}} object (from the \pkg{nlme} package).
+  \item \sQuote{wide} format: returns \code{id}, \code{ageCap}, \code{lenCap}, and lengths-at-age (\code{ageX}; both previous ages and age-at-capture).  In \sQuote{wide} format each row corresponds to a fish and may include several lengths (at previous ages and at-capture).
 }
 }
 \description{
@@ -56,9 +76,10 @@ Randomly creates a data set according to a typical von Bertalanffy growth functi
 This function can be used to generate random growth data, in one of four formats (see \sQuote{return} section and examples below) controlled by \code{dataType}.  The essential steps for constructing the simulated data are as follows:
 \enumerate{
   \item Use \code{Linf}, \code{K}, and \code{t0} to set \sQuote{true} values for the three parameters in a typical VBGF (see \code{\link[FSA]{vbModels}} in \pkg{FSA} for this model).
-  \item For each fish, generate a random age-at-capture between \code{minage} and \code{maxage} from the probability distribution for each age given in \code{probdist}.
+  \item For each fish, generate a random age-at-capture (completed growing seasons) between \code{minage} and \code{maxage} from the probability distribution for each age given in \code{probdist}.
+  \item Add a fractional age to the previous step and store in \code{ageFrac}.  By defaut, the \code{sample.per} is the first day of the \code{growth.per} so \code{ageCap} and \code{ageFrac} will be the same.  However, if \code{sample.per} is not a single day equal to the first day of the \code{growth.per}, than the \code{ageFrac} will be greater than \code{ageCap}.  See details for more details.
   \item For each fish, generate a random value for Linf, K, and t0 from a normal distribution with a mean from \code{Linf}, \code{K}, and \code{t0} and a standard deviation derived from the value in \code{Linf}, \code{K}, and \code{t0} times the value in \code{paramCV}.  This models different parameter values for individual fish.
-  \item For each fish, generate the mean length at each age in the fish's life (i.e., if the fish is five years old, then a random length for ages one through five) according to the typical VBGF and the random parameters determined above for that fish.  These means are deterministic within a fish, but not among fish (because of the previous step).
+  \item For each fish, generate the mean length at each \code{ageFrac} in the fish's life (i.e., if the fish is five years old, then a random length for ages one through five) according to the typical VBGF and the random parameters determined above for that fish.  These means are deterministic within a fish, but not among fish (because of the previous step).
   \item For each fish, add a random error to the mean lengths-at-age derived in the previous step.  These random errors are from a normal distribution with a mean of 0 and a standard error given by \code{SE} or \code{SECV} times the mean length-at-age.  This models random error in the mean lengths-at-age within an individual fish.
   \item For each fish, add a random error to the mean lengths-at-age derived in the previous step.  These random errors are from a normal distribution with a mean of 0 and a standard deviation given by \code{SD} or \code{SDCV} times the mean length-at-age.  This models random error of individual lengths around the mean lengths-at-age within an individual fish.
   \item Repeat the previous steps (except the first) for all fish to be simulated.
@@ -70,47 +91,48 @@ Note that \code{seed} can be used to control the random seed used by the functio
 \examples{
 ## At-capture (observation) format
 # example using CV as errors for means and individuals
-vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,digits=1)
+vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1)
 head(vbcap)
-plot(len~age,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
+plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
 
 # example using constant errors for means and individuals
-vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SE=2,SD=0.5,digits=1)
+vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SE=2,SD=0.5,lendigs=1)
 head(vbcap)
-plot(len~age,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
-# note the uniform (within randomization) age distribution
-xtabs(~age,data=vbcap)
+plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
+
+# note the uniform (within randomization) age distribution above
+xtabs(~ageCap,data=vbcap)
 
 # example with non-uniform age distribution
 #  (i.e., relatively few young and old fish)
 ad <- c(1,1,2,4,4,4,2,1,1)
-vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,agedist=ad,SECV=0.02,SDCV=0.04,digits=1)
+vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,agedist=ad,SECV=0.02,SDCV=0.04,lendigs=1)
 head(vbcap)
-plot(len~age,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
-xtabs(~age,data=vbcap)
-
-###########################################################
-## wide format ... repeated measures
-vbwide <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="wide",digits=1)
-head(vbwide)
+plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
+xtabs(~ageCap,data=vbcap)
 
 ###########################################################
 ## long (ungrouped format) ... repeated measures
-vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",digits=1)
+vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",lendigs=1)
 head(vblong,n=15)
 
 ###########################################################
 ## long (grouped format) ... repeated measures
-vbgrp <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="groupedData",digits=1)
+vbgrp <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="groupedData",lendigs=1)
 head(vbgrp)
 if (require(lattice)) plot(vbgrp)
 
 # just errors in parameters (i.e., models unique parameters
 # for each fish but no variability around the VBGF for an
 # individual fish).
-vbgrp <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SE=0,SD=0,dataType="groupedData",digits=1)
+vbgrp <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SE=0,SD=0,dataType="groupedData",lendigs=1)
 head(vbgrp)
 if (require(lattice)) plot(vbgrp)
+
+###########################################################
+## wide format ... repeated measures
+vbwide <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="wide",lendigs=1)
+head(vbwide)
 
 ###########################################################
 ## demonstrate use of seed ... can get long, wide, and
@@ -118,14 +140,41 @@ if (require(lattice)) plot(vbgrp)
 # set seed
 sd <- 1534783
 # generate three types of data using same seed
-vbcap <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,digits=1,seed=sd)
-vbwide <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="wide",digits=1,seed=sd)
-vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",digits=1,seed=sd)
+vbcap <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,seed=sd)
+vbwide <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="wide",lendigs=1,seed=sd)
+vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",lendigs=1,seed=sd)
 # look at a couple of fish (same IDs) from each type
 ids <- c(2,8)
 vbcap[vbcap$id \%in\% ids,]
 vbwide[vbwide$id \%in\% ids,]
 vblong[vblong$id \%in\% ids,]
+
+###########################################################
+## Fractional ages
+# age-at-capture format
+growth.per.date <- c("1-Apr-2010","21-Oct-2010")              # Assumed fish growth period
+( growth.per <- strptime(growth.per.date,"\%d-\%b-\%Y")$yday+1 ) # as Julian date
+sample.per.date <- c("15-Apr-2010","1-Jun-2010")              # Assumed sampling period
+( sample.per <- strptime(sample.per.date,"\%d-\%b-\%Y")$yday+1 ) # as Julian date
+vbcap <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
+                   growth.per=growth.per,sample.per=sample.per)
+head(vbcap)
+
+# long format, assuming repeated observations
+vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
+                    growth.per=growth.per,sample.per=sample.per,dataType="long")
+head(vblong,n=15)
+
+# long format, assuming back-calculated ages
+vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
+                    growth.per=growth.per,sample.per=sample.per,dataType="long",backcalc=TRUE)
+head(vblong,n=15)
+
+###########################################################
+# Different minimum age
+vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1)
+head(vbcap)
+plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
 }
 \author{
 Derek H. Ogle, \email{dogle@northland.edu}.  This function was motivated by the simulation methodology shown in Box 2 of Vigliola and Meekan (2009).

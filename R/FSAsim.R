@@ -9,6 +9,7 @@
 #' @importFrom nlme groupedData nfGroupedData nmGroupedData getGroupsFormula
 #' @importFrom relax gslider slider
 #' @importFrom TeachingDemos cnvrt.coords
+#' @importFrom tidyr spread
 #' 
 #' @docType package
 #' @name FSAsim

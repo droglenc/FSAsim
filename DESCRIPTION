@@ -15,6 +15,7 @@ Imports:
     FSA,
     nlme,
     relax,
-    TeachingDemos
+    TeachingDemos,
+    tidyr
 Suggests:
     lattice

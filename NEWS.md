@@ -1,7 +1,8 @@
 # FSAsim 0.0.3 ongoing
 * DESCRIPTION: Updated.
+* Added importFrom for `tidyr` (for `spread()` in `vbDataGen()`).
 * `growthModelSim()`: Modified.  Changed links to `FSA` in the help file.
-* `vbDataGen()`: Modified. Major changes included how the simulations are made (modified from Vigliola and Meekan 2009) to allow different CVs for parameters, means, and individuals; allow a constant SE or SD; allow the user to provide a proportional age distribution (rather than assuming a uniform age distribution); allow user to set the random seed to allow reproducibility; and allowed user to control the digits on the lengths returned.  Major modifications tot he Rd file.
+* `vbDataGen()`: A complete rebuild.  See helpf file.
 
 # FSAsim 0.0.2 ongoing
 * `growthModelSim()`: Added.
