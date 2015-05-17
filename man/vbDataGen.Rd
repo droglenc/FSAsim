@@ -89,104 +89,121 @@ This function can be used to generate random growth data, in one of four formats
 Note that \code{seed} can be used to control the random seed used by the function.  Use the same \code{seed} with different \code{dataType}s to return the same data in different formats.  See examples.
 }
 \examples{
-## At-capture (observation) format
-# example using CV as errors for means and individuals
-vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1)
-head(vbcap)
-plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
+###########################################################
+## At-capture (observation) format examples
+# Use CV as errors for means and individuals, sample at
+#   beginning of growth season, uniform age distribution
+vbcap1 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1)
+head(vbcap1)
+plot(lenCap~ageCap,data=vbcap1,pch=19,col=rgb(0,0,0,1/5))
 
-# example using constant errors for means and individuals
-vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SE=2,SD=0.5,lendigs=1)
-head(vbcap)
-plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
+# Use constant errors for means and individuals, sample at
+#   beginning of growth season, uniform age distribution
+vbcap2 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SE=2,SD=0.5,lendigs=1)
+head(vbcap2)
+plot(lenCap~ageCap,data=vbcap2,pch=19,col=rgb(0,0,0,1/5))
+xtabs(~ageCap,data=vbcap2)
 
-# note the uniform (within randomization) age distribution above
-xtabs(~ageCap,data=vbcap)
-
-# example with non-uniform age distribution
-#  (i.e., relatively few young and old fish)
+# Use constant errors for means and individuals, sample at
+#   beginning of growth season, non-univorm age distribution
+#   (i.e., relatively few young and old fish)
 ad <- c(1,1,2,4,4,4,2,1,1)
-vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,agedist=ad,SECV=0.02,SDCV=0.04,lendigs=1)
-head(vbcap)
-plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
-xtabs(~ageCap,data=vbcap)
+vbcap3 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,agedist=ad,SECV=0.02,SDCV=0.04,lendigs=1)
+head(vbcap3)
+plot(lenCap~ageCap,data=vbcap3,pch=19,col=rgb(0,0,0,1/5))
+xtabs(~ageCap,data=vbcap3)
 
-###########################################################
-## long (ungrouped format) ... repeated measures
-vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",lendigs=1)
-head(vblong,n=15)
-
-###########################################################
-## long (grouped format) ... repeated measures
-vbgrp <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="groupedData",lendigs=1)
-head(vbgrp)
-if (require(lattice)) plot(vbgrp)
-
-# just errors in parameters (i.e., models unique parameters
-# for each fish but no variability around the VBGF for an
-# individual fish).
-vbgrp <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SE=0,SD=0,dataType="groupedData",lendigs=1)
-head(vbgrp)
-if (require(lattice)) plot(vbgrp)
-
-###########################################################
-## wide format ... repeated measures
-vbwide <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="wide",lendigs=1)
-head(vbwide)
-
-###########################################################
-## demonstrate use of seed ... can get long, wide, and
-## atCapture formats for same "fish"
-# set seed
-sd <- 1534783
-# generate three types of data using same seed
-vbcap <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,seed=sd)
-vbwide <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="wide",lendigs=1,seed=sd)
-vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",lendigs=1,seed=sd)
-# look at a couple of fish (same IDs) from each type
-ids <- c(2,8)
-vbcap[vbcap$id \%in\% ids,]
-vbwide[vbwide$id \%in\% ids,]
-vblong[vblong$id \%in\% ids,]
-
-###########################################################
-## Fractional ages
-# age-at-capture format
+# Use CV as errors for means and individuals, uniform age
+#   distribution, sample throughout the growth season,
+#   leads to fractional ages
 growth.per.date <- c("1-Apr-2010","21-Oct-2010")              # Assumed fish growth period
-( growth.per <- strptime(growth.per.date,"\%d-\%b-\%Y")$yday+1 ) # as Julian date
+( growth.per <- strptime(growth.per.date,"\%d-\%b-\%Y")$yday+1 ) #   as Julian date
 sample.per.date <- c("15-Apr-2010","1-Jun-2010")              # Assumed sampling period
-( sample.per <- strptime(sample.per.date,"\%d-\%b-\%Y")$yday+1 ) # as Julian date
-vbcap <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
-                   growth.per=growth.per,sample.per=sample.per)
-head(vbcap)
+( sample.per <- strptime(sample.per.date,"\%d-\%b-\%Y")$yday+1 ) #   as Julian date
+vbcap4 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
+                    growth.per=growth.per,sample.per=sample.per)
+head(vbcap4)
 
-# long format, assuming repeated observations
+# Use CV as errors for means and individuals, sample at
+#   beginning of growth season, uniform age distribution
+#   but set a non-default minimum age
+vbcap5 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1)
+head(vbcap5)
+plot(lenCap~ageCap,data=vbcap5,pch=19,col=rgb(0,0,0,1/5))
+
+###########################################################
+## Long (ungrouped format) ... repeated measures
+# Use CV as errors for means and individuals, sample at
+#   beginning of growth season, uniform age distribution
+vblong1 <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",lendigs=1)
+head(vblong1,n=15)
+
+# Use CV as errors for means and individuals, uniform age
+#   distribution, sample throughout the growth season
+#   (seasons set above), leads to fractional ages
 vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
                     growth.per=growth.per,sample.per=sample.per,dataType="long")
 head(vblong,n=15)
 
-# long format, assuming back-calculated ages
-vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
-                    growth.per=growth.per,sample.per=sample.per,dataType="long",backcalc=TRUE)
-head(vblong,n=15)
+###########################################################
+## long (grouped format) ... repeated measures
+# Use CV as errors for means and individuals, sample at
+#   beginning of growth season, uniform age distribution
+vbgrp1 <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="groupedData",lendigs=1)
+head(vbgrp1)
+if (require(lattice)) plot(vbgrp1)
+
+# Just errors in parameters (i.e., models unique parameters
+# for each fish but no variability around the VBGF for an
+# individual fish).
+vbgrp2 <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SE=0,SD=0,dataType="groupedData",lendigs=1)
+head(vbgrp2)
+if (require(lattice)) plot(vbgrp2)
 
 ###########################################################
-# Different minimum age
-vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1)
-head(vbcap)
-plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
+## wide format ... repeated measures
+# Use CV as errors for means and individuals, sample at
+#   beginning of growth season, uniform age distribution
+vbwide1 <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="wide",lendigs=1)
+head(vbwide1)
 
 ###########################################################
-## Tag-recapture data
-# no fractional ages
-vbtag <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,
-                   lendigs=1,dataType="tagrecap")
-head(vbtag)
+## Tag-recapture format data
+# Use CV as errors for means and individuals, sample at
+#   beginning of growth season, uniform age distribution
+vbtag1 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,
+                    lendigs=1,dataType="tagrecap")
+head(vbtag1)
 
-# with fractional ages
-vbtag <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1,
-                   growth.per=growth.per,sample.per=sample.per,dataType="tagrecap")
-head(vbtag)
+# Use CV as errors for means and individuals, uniform age
+#   distribution, sample throughout the growth season,
+#   leads to fractional ages ... more interesting
+vbtag2 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1,
+                    growth.per=growth.per,sample.per=sample.per,dataType="tagrecap")
+head(vbtag2)
+
+###########################################################
+# Back-calculated-like format
+# Use CV as errors for means and individuals, uniform age
+#   distribution, sample throughout the growth season,
+#   leads to fractional ages
+vbBClong1 <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
+                       growth.per=growth.per,sample.per=sample.per,dataType="long",backcalc=TRUE)
+head(vbBClong1,n=15)
+
+###########################################################
+## Use seed to get same "fish" in different formats
+sd <- 1534756   # set seed
+# generate three types of data using same seed
+( vbcapA <- vbDataGen(3,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
+                      growth.per=growth.per,sample.per=sample.per,seed=sd) )
+( vblongA <- vbDataGen(3,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",
+                       growth.per=growth.per,sample.per=sample.per,lendigs=1,seed=sd) )
+( vbwideA <- vbDataGen(3,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="wide",
+                       growth.per=growth.per,sample.per=sample.per,lendigs=1,seed=sd) )
+( vbBCA <- vbDataGen(3,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",
+                     growth.per=growth.per,sample.per=sample.per,lendigs=1,seed=sd,backcalc=TRUE) )
+# Note that back-calculated results do not maintain same fish measurements
 }
 \author{
 Derek H. Ogle, \email{dogle@northland.edu}.  This function was motivated by the simulation methodology shown in Box 2 of Vigliola and Meekan (2009).

@@ -64,104 +64,121 @@
 #' @keywords manip
 #' 
 #' @examples
-#' ## At-capture (observation) format
-#' # example using CV as errors for means and individuals
-#' vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1)
-#' head(vbcap)
-#' plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
+#' ###########################################################
+#' ## At-capture (observation) format examples
+#' # Use CV as errors for means and individuals, sample at
+#' #   beginning of growth season, uniform age distribution
+#' vbcap1 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1)
+#' head(vbcap1)
+#' plot(lenCap~ageCap,data=vbcap1,pch=19,col=rgb(0,0,0,1/5))
 #' 
-#' # example using constant errors for means and individuals
-#' vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SE=2,SD=0.5,lendigs=1)
-#' head(vbcap)
-#' plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
+#' # Use constant errors for means and individuals, sample at
+#' #   beginning of growth season, uniform age distribution
+#' vbcap2 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SE=2,SD=0.5,lendigs=1)
+#' head(vbcap2)
+#' plot(lenCap~ageCap,data=vbcap2,pch=19,col=rgb(0,0,0,1/5))
+#' xtabs(~ageCap,data=vbcap2)
 #' 
-#' # note the uniform (within randomization) age distribution above
-#' xtabs(~ageCap,data=vbcap)
-#' 
-#' # example with non-uniform age distribution
-#' #  (i.e., relatively few young and old fish)
+#' # Use constant errors for means and individuals, sample at
+#' #   beginning of growth season, non-univorm age distribution
+#' #   (i.e., relatively few young and old fish)
 #' ad <- c(1,1,2,4,4,4,2,1,1)
-#' vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,agedist=ad,SECV=0.02,SDCV=0.04,lendigs=1)
-#' head(vbcap)
-#' plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
-#' xtabs(~ageCap,data=vbcap)
-#'  
-#' ###########################################################
-#' ## long (ungrouped format) ... repeated measures
-#' vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",lendigs=1)
-#' head(vblong,n=15)
+#' vbcap3 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,agedist=ad,SECV=0.02,SDCV=0.04,lendigs=1)
+#' head(vbcap3)
+#' plot(lenCap~ageCap,data=vbcap3,pch=19,col=rgb(0,0,0,1/5))
+#' xtabs(~ageCap,data=vbcap3)
 #' 
-#' ###########################################################
-#' ## long (grouped format) ... repeated measures
-#' vbgrp <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="groupedData",lendigs=1)
-#' head(vbgrp)
-#' if (require(lattice)) plot(vbgrp)
-#' 
-#' # just errors in parameters (i.e., models unique parameters
-#' # for each fish but no variability around the VBGF for an
-#' # individual fish).
-#' vbgrp <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SE=0,SD=0,dataType="groupedData",lendigs=1)
-#' head(vbgrp)
-#' if (require(lattice)) plot(vbgrp)
-#'
-#' ###########################################################
-#' ## wide format ... repeated measures
-#' vbwide <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="wide",lendigs=1)
-#' head(vbwide)
-#' 
-#' ###########################################################
-#' ## demonstrate use of seed ... can get long, wide, and
-#' ## atCapture formats for same "fish"
-#' # set seed
-#' sd <- 1534783
-#' # generate three types of data using same seed
-#' vbcap <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,seed=sd)
-#' vbwide <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="wide",lendigs=1,seed=sd)
-#' vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",lendigs=1,seed=sd)
-#' # look at a couple of fish (same IDs) from each type
-#' ids <- c(2,8)
-#' vbcap[vbcap$id %in% ids,]
-#' vbwide[vbwide$id %in% ids,]
-#' vblong[vblong$id %in% ids,]
-#'
-#' ###########################################################
-#' ## Fractional ages
-#' # age-at-capture format
+#' # Use CV as errors for means and individuals, uniform age
+#' #   distribution, sample throughout the growth season,
+#' #   leads to fractional ages
 #' growth.per.date <- c("1-Apr-2010","21-Oct-2010")              # Assumed fish growth period
-#' ( growth.per <- strptime(growth.per.date,"%d-%b-%Y")$yday+1 ) # as Julian date
+#' ( growth.per <- strptime(growth.per.date,"%d-%b-%Y")$yday+1 ) #   as Julian date
 #' sample.per.date <- c("15-Apr-2010","1-Jun-2010")              # Assumed sampling period
-#' ( sample.per <- strptime(sample.per.date,"%d-%b-%Y")$yday+1 ) # as Julian date
-#' vbcap <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
-#'                    growth.per=growth.per,sample.per=sample.per)
-#' head(vbcap)
+#' ( sample.per <- strptime(sample.per.date,"%d-%b-%Y")$yday+1 ) #   as Julian date
+#' vbcap4 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
+#'                     growth.per=growth.per,sample.per=sample.per)
+#' head(vbcap4)
 #' 
-#' # long format, assuming repeated observations
+#' # Use CV as errors for means and individuals, sample at
+#' #   beginning of growth season, uniform age distribution
+#' #   but set a non-default minimum age
+#' vbcap5 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1)
+#' head(vbcap5)
+#' plot(lenCap~ageCap,data=vbcap5,pch=19,col=rgb(0,0,0,1/5))
+#' 
+#' ###########################################################
+#' ## Long (ungrouped format) ... repeated measures
+#' # Use CV as errors for means and individuals, sample at
+#' #   beginning of growth season, uniform age distribution
+#' vblong1 <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",lendigs=1)
+#' head(vblong1,n=15)
+#' 
+#' # Use CV as errors for means and individuals, uniform age
+#' #   distribution, sample throughout the growth season
+#' #   (seasons set above), leads to fractional ages
 #' vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
 #'                     growth.per=growth.per,sample.per=sample.per,dataType="long")
 #' head(vblong,n=15)
 #' 
-#' # long format, assuming back-calculated ages
-#' vblong <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
-#'                     growth.per=growth.per,sample.per=sample.per,dataType="long",backcalc=TRUE)
-#' head(vblong,n=15)
+#' ###########################################################
+#' ## long (grouped format) ... repeated measures
+#' # Use CV as errors for means and individuals, sample at
+#' #   beginning of growth season, uniform age distribution
+#' vbgrp1 <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="groupedData",lendigs=1)
+#' head(vbgrp1)
+#' if (require(lattice)) plot(vbgrp1)
+#' 
+#' # Just errors in parameters (i.e., models unique parameters
+#' # for each fish but no variability around the VBGF for an
+#' # individual fish).
+#' vbgrp2 <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SE=0,SD=0,dataType="groupedData",lendigs=1)
+#' head(vbgrp2)
+#' if (require(lattice)) plot(vbgrp2)
+#'
+#' ###########################################################
+#' ## wide format ... repeated measures
+#' # Use CV as errors for means and individuals, sample at
+#' #   beginning of growth season, uniform age distribution
+#' vbwide1 <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="wide",lendigs=1)
+#' head(vbwide1)
 #' 
 #' ###########################################################
-#' # Different minimum age
-#' vbcap <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1)
-#' head(vbcap)
-#' plot(lenCap~ageCap,data=vbcap,pch=19,col=rgb(0,0,0,1/5))
-#'  
-#' ###########################################################
-#' ## Tag-recapture data
-#' # no fractional ages
-#' vbtag <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,
-#'                    lendigs=1,dataType="tagrecap")
-#' head(vbtag)
+#' ## Tag-recapture format data
+#' # Use CV as errors for means and individuals, sample at
+#' #   beginning of growth season, uniform age distribution
+#' vbtag1 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,
+#'                     lendigs=1,dataType="tagrecap")
+#' head(vbtag1)
 #' 
-#' # with fractional ages
-#' vbtag <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1,
-#'                    growth.per=growth.per,sample.per=sample.per,dataType="tagrecap")
-#' head(vbtag)
+#' # Use CV as errors for means and individuals, uniform age
+#' #   distribution, sample throughout the growth season,
+#' #   leads to fractional ages ... more interesting
+#' vbtag2 <- vbDataGen(100,Linf=30,K=0.2,t0=-0.2,minAge=3,SECV=0.02,SDCV=0.04,lendigs=1,
+#'                     growth.per=growth.per,sample.per=sample.per,dataType="tagrecap")
+#' head(vbtag2)
+#' 
+#' ###########################################################
+#' # Back-calculated-like format
+#' # Use CV as errors for means and individuals, uniform age
+#' #   distribution, sample throughout the growth season,
+#' #   leads to fractional ages
+#' vbBClong1 <- vbDataGen(10,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
+#'                        growth.per=growth.per,sample.per=sample.per,dataType="long",backcalc=TRUE)
+#' head(vbBClong1,n=15)
+#' 
+#' ###########################################################
+#' ## Use seed to get same "fish" in different formats
+#' sd <- 1534756   # set seed
+#' # generate three types of data using same seed
+#' ( vbcapA <- vbDataGen(3,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,lendigs=1,
+#'                       growth.per=growth.per,sample.per=sample.per,seed=sd) )
+#' ( vblongA <- vbDataGen(3,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",
+#'                        growth.per=growth.per,sample.per=sample.per,lendigs=1,seed=sd) )
+#' ( vbwideA <- vbDataGen(3,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="wide",
+#'                        growth.per=growth.per,sample.per=sample.per,lendigs=1,seed=sd) )
+#' ( vbBCA <- vbDataGen(3,Linf=30,K=0.2,t0=-0.2,SECV=0.02,SDCV=0.04,dataType="long",
+#'                      growth.per=growth.per,sample.per=sample.per,lendigs=1,seed=sd,backcalc=TRUE) )
+#' # Note that back-calculated results do not maintain same fish measurements
 #' 
 #' @export
 vbDataGen <- function(n,Linf,K,t0,paramCV=0.1,
@@ -185,11 +202,11 @@ vbDataGen <- function(n,Linf,K,t0,paramCV=0.1,
   agePrev <- unlist(apply(matrix(ages),MARGIN=1,function(x) seq(from=1,to=x)))
   ## Create fractional ages
   ageFrac <- round(iCreateFracAges(agePrev,growth.per,sample.per),agedigs)
-  ## Deal with considering lengths as back-calculated
-  # put ids and age variables in a data.frame
+  ## Put ids and age variables in a data.frame
   d <- data.frame(id,ageCap,agePrev,ageFrac)
+  ## Handle if back-calculated
   if (backcalc) {
-    d <- iHndlBackcalc(d)
+    d <- iHndlBackcalc(d,ages)
     ages <- ages+1
   }
   ## Generate growth histories for each fish
@@ -208,28 +225,19 @@ vbDataGen <- function(n,Linf,K,t0,paramCV=0.1,
   if (!is.null(SD)) tmp <- tmp + rnorm(length(tmp),0,SD)
     else tmp <- tmp + rnorm(length(tmp),0,SDCV*tmp)
   ## Find length-at-capture, repeat for each agePrev
-  if (!backcalc) lenCap <- round(rep(tmp[d$ageCap==floor(d$ageFrac)],ages),lendigs)
+  plusgrowth <- ifelse(max(sample.per)==growth.per[1],FALSE,TRUE)
+  if (plusgrowth) lenCap <- round(rep(tmp[d$ageFrac>d$ageCap],ages),lendigs)
     else lenCap <- round(rep(tmp[d$ageCap==d$ageFrac],ages),lendigs)
   ## put together as a data.frame
   d <- data.frame(d,lenCap,len=round(tmp,lendigs))
   ## Return result in format chosen by user (in dataType)
   if (dataType=="atCapture") d <- subset(d,ageCap==agePrev,c("id","ageCap","ageFrac","lenCap"))
-  else if (dataType=="groupedData") d <- nlme::groupedData(len~agePrev|id,data=d,labels=list(x="Age",y="Length"))
-  else if (dataType=="wide") {
-    d$agePrev <- paste0("age",d$agePrev)
-    d <- tidyr::spread(d[,-which(names(d)=="ageFrac")],agePrev,len)
-  } else if (dataType=="tagrecap") {
-    ids <- unique(d$id)
-    newd <- matrix(NA,nrow=length(ids),ncol=4)
-    for (i in ids) {
-      tmpdf <- subset(d,id==i)
-      tmp <- sample(1:nrow(tmpdf),2)
-      tmp <- tmp[order(tmp)]
-      newd[i,] <- c(i,tmpdf$len[tmp[1]],tmpdf$len[tmp[2]],tmpdf$ageFrac[tmp[2]]-tmpdf$ageFrac[tmp[1]])
-    }
-    d <- data.frame(newd)
-    names(d) <- c("id","Lm","Lr","atLarge")
-  }
+    else if (dataType=="groupedData") d <- nlme::groupedData(len~agePrev|id,data=d,labels=list(x="Age",y="Length"))
+      else if (dataType=="tagrecap") d <- iCreateTaggedDF(d)
+        else if (dataType=="wide") {
+          d$agePrev <- paste0("age",d$agePrev)
+          d <- tidyr::spread(d[,-which(names(d)=="ageFrac")],agePrev,len)
+        }
   d
 }
 
@@ -280,9 +288,34 @@ iCreateFracAges <- function(age,growth.per,sample.per) {
   age+frac
 }
 
+# ============================================================
+# Create the data.frame of tagged fish
+# ============================================================
+iCreateTaggedDF <- function(d) {
+  ageCap <- NULL # to avoide "global bindings" warning in rcmd check
+  id <- NULL # to avoide "global bindings" warning in rcmd check
+  # reduce to those fish that are at least age-2
+  d <- subset(d,ageCap>=2)
+  # get list of fish
+  ids <- unique(d$id)
+  # create a new matrix to store the data
+  newd <- matrix(NA,nrow=length(ids),ncol=4)
+  # get two ages from each fish and put in new matrix
+  for (i in 1:length(ids)) {
+    tmpdf <- subset(d,id==ids[i])
+    tmp <- sample(1:nrow(tmpdf),2)
+    tmp <- tmp[order(tmp)]
+    newd[i,] <- c(ids[i],tmpdf$len[tmp[1]],tmpdf$len[tmp[2]],tmpdf$ageFrac[tmp[2]]-tmpdf$ageFrac[tmp[1]])
+  }
+  # turn matrix into a data.frame
+  d <- data.frame(newd)
+  names(d) <- c("id","Lm","Lr","atLarge")
+  d
+}
+
 iHndlBackcalc <- function(d,ages) {
   # isolate all at-capture info
-  tmp <- d[d$ageCap==d$agePrev,]
+  tmp <- d[d$ageFrac>d$ageCap,]
   tmp$agePrev <- NA
   # reduce ageFrac to agePrev
   d$ageFrac <- d$agePrev
