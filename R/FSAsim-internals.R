@@ -28,7 +28,7 @@
 
 
 ##################################################################
-### internal functions used for getting variable names from formulas 
+### Get variable names from formulas 
 ##################################################################
 getVarFromFormula <- function(formula,data,expNumVars=NULL) {
   varNms <- names(model.frame(formula,data=data))
@@ -37,3 +37,20 @@ getVarFromFormula <- function(formula,data,expNumVars=NULL) {
   else if (length(varNms)!=expNumVars) stop("Function only works with formulas with ",expNumVars," variable",ifelse(expNumVars==1,".","s."))
   else varNms
 }
+
+##################################################################
+# Check if a required namespace can be loaded and, if not, send
+#   an error message.
+##################################################################
+iChk4Namespace <- function(pkg) {
+  res <- requireNamespace(pkg,quietly=TRUE)
+  if (!res) stop(paste0("The '",pkg," package must be installed."))
+  res
+}
+
+
+##################################################################
+# Try to determine if RStudio is being used.
+##################################################################
+iCheckRStudio <- function () "tools:rstudio" %in% search()
+
