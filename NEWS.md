@@ -1,16 +1,24 @@
-# FSAsim 0.0.3 ongoing
+# FSAsim 0.0.4 ongoing
+* Compiling under R 3.2.3 and using roxygen2 5.0.1
+* DESCRIPTION: Updated.
+* Added Imports for `manipulate` and `relax`.  Added Imports for `graphics`, `grDevices`, `stats`, and `utils`.  Added Suggests for `tcltk`.
+* `growthModelSim()`: Modified.  Fixed links to functions in `FSA` that had changed names.
+* `vbComp()`: Modified.  Reorganized code and deleted bad fishR links in documentation.
+* `vbDataGen()`: Modified.  Removed bad link to `gReshape()` in `FSA`, which no longer exists.
+
+# FSAsim 0.0.3 May15
 * DESCRIPTION: Updated.
 * Added importFrom for `tidyr` (for `spread()` in `vbDataGen()`).
 * `growthModelSim()`: Modified.  Changed links to `FSA` in the help file.
-* `vbDataGen()`: A complete rebuild.  See helpf file.
+* `vbDataGen()`: A complete rebuild.  See help file.
 
-# FSAsim 0.0.2 ongoing
+# FSAsim 0.0.2 Mar15
 * `growthModelSim()`: Added.
 * `leslieSim()`: Modified.  Updated for changes to `depletion()` in `FSA`.
 * `simAgeBias()`: Modified.  Updated for changes to `ageBias()` in `FSA`.
 * `srSim()`: Added.  Still needs work to add functionality for "Shepherd" and "SailaLorda" methods.
 
-# FSAsim 0.0.1 Mar15
+# FSAsim 0.0.1 May14
 * Compiling under R 3.1.0, using roxygen2 4.0.0, and using github as a repository.
 * `catchCurveSim()`: Added.
 * `cohortSim()`: Added.
