@@ -68,61 +68,100 @@
 #'
 #' @export
 #'
-mrClosed1Sim <- function(type=c("Petersen","P","Chapman","C","Ricker","R","Bailey","B"),
-                         N=1000,rsmpls=500,incl.final=TRUE) {
+mrClosed1Sim <- function(sim=c("assumptions","distribution"),
+                         type=c("Petersen","Chapman","Ricker","Bailey"),
+                         N=1000,rsmpls=1000,EM=200,En=200,incl.final=TRUE) {
+  if (!iCheckRStudio()) stop("'mrClosed1Sim()' only works in RStudio.",call.=FALSE)
+  sim <- match.arg(sim)
+  type <- match.arg(type)
+  if (sim=="assumptions") iMRC1Assump(type,N,rsmpls,EM,En,incl.final)
+    else iMRC1Dist(type,N,rsmpls,incl.final)
+}
+
+
+##############################################################
+
+## Internal function for the assumption violations simulation
+iMRC1Assump <- function(type,N,rsmpls,EM,En,incl.final) {
   if (iChk4Namespace("manipulate")) {
-    type <- match.arg(type)
-    N.1 <- round(0.01*N)
-    rerand <- TRUE
     manipulate::manipulate(
       {
-        if (rerand) set.seed(sample(1:100000))
-        iMRC.plotter(type,N,rsmpls,incl.final,
-                     EM,En,mark.loss,surv.mark,surv.unmark,recruits,cap.ratio)        
+        set.seed(sample(1:100000))
+        # Run population simulations
+        mc.df <- iMRC1.genpopn(type,N,EM,En,mark.loss,surv.mark,surv.unmark,recruits,cap.ratio,rsmpls)
+        # Find label for graph
+        hlbl <- iMRC1.title(mark.loss,surv.mark,surv.unmark,recruits,cap.ratio)
+        # Graph the results
+        iMRC1.hist(mc.df,N,incl.final,hlbl)  
+        # Add legend
+        iMRC1.legend("assumptions",mc.df,N,incl.final)
       },
-      EM=manipulate::slider(min=5*N.1,max=40*N.1,step=N.1,initial=20*N.1,label="Tagged (M)"),
-      En=manipulate::slider(min=5*N.1,max=40*N.1,step=N.1,initial=20*N.1,label="Captured (n)"),
       mark.loss=manipulate::slider(min=0,max=0.9,step=0.1,initial=0,label="PR(Tag Loss)"),
       surv.mark=manipulate::slider(min=0.1,max=1,step=0.1,initial=1,label="PR(Surv Tagged)"),
       surv.unmark=manipulate::slider(min=0.1,max=1,step=0.1,initial=1,label="PR(Surv UNtagged)"),
       recruits=manipulate::slider(min=0,max=0.5,step=0.1,initial=0,label="Proportion Recruit"),
-      cap.ratio=manipulate::slider(min=0.2,max=5,step=0.1,initial=1,label="Ratio PR(Capture)")
+      cap.ratio=manipulate::slider(min=0.5,max=2,step=0.1,initial=1,label="Ratio PR(Capture)"),
+      rerand=manipulate::button("Rerandomize")
+    )
+  }
+}
+
+## Internal function for the distribution simulation
+iMRC1Dist <- function(type,N,rsmpls,incl.final) {
+  if (iChk4Namespace("manipulate")) {
+    N.1 <- round(0.01*N)
+    manipulate::manipulate(
+      {
+        set.seed(sample(1:100000))
+        # Run population simulations
+        mc.df <- iMRC1.genpopn(type,N,EM,En,0,1,1,0,1,rsmpls)
+        # Graph the results
+        iMRC1.hist(mc.df,N,incl.final,"")  
+        # Add legend
+        iMRC1.legend("distribution",mc.df,N,incl.final)
+        
+      },
+      EM=manipulate::slider(min=5*N.1,max=40*N.1,step=N.1,initial=20*N.1,label="Tagged (M)"),
+      En=manipulate::slider(min=5*N.1,max=40*N.1,step=N.1,initial=20*N.1,label="Captured (n)"),
+      rerand=manipulate::button("Rerandomize")
     )
   }
 }
 
 
-##############################################################
-## Internal Functions
-
-iMRC.plotter <- function(type,N,rsmpls,incl.final,EM,En,mark.loss,surv.mark,surv.unmark,recruits,cap.ratio) {
-  # Run population simulations
-  mc.df <- iMRC.genpopn(type,N,EM,En,mark.loss,surv.mark,surv.unmark,recruits,cap.ratio,rsmpls)
-  # Find label for graph
-  hlbl <- iMRC.plotlabel(mark.loss,surv.mark,surv.unmark,recruits,cap.ratio)
-  # Graph the results
-  iMRC.plotmain(mc.df,N,incl.final,hlbl)  
-} # end mrCSimPlot internal function
-
-
-iMRC.genpopn <- function(type,N,EM,En,mark.loss,surv.mark,surv.unmark,recruits,cap.ratio,rsmpls) { # Run population simulations
-  M <- n <- m <- N0 <- N1 <- rep(0,rsmpls)                                                # Initialize vector sizes
+## Internal function to create and run the population simulations
+iMRC1.genpopn <- function(type,N,EM,En,mark.loss,surv.mark,surv.unmark,recruits,cap.ratio,rsmpls) {
+  # Initialize vector sizes
+  M <- n <- m <- N0 <- N1 <- rep(0,rsmpls)
   for (i in 1:rsmpls) {
-    adj.M <- M[i] <- length(which(runif(N)<(EM/N)))                                       # Number marked in first sample (EM/N is probability of being marked)
-    adj.U <- N-M[i]                                                                       # Unmarked fish
+    # Number marked in first sample (EM/N is probability of being marked)
+    adj.M <- M[i] <- length(which(runif(N)<(EM/N)))
+    # Unmarked fish
+    adj.U <- N-M[i]
     if (mark.loss>0) {
-      lost.marks <- length(which(runif(M[i])<mark.loss))                                  # Apply tag loss probability
-      adj.M <- adj.M - lost.marks                                                         # Removed lost mark fish from marked popn
-      adj.U <- adj.U + lost.marks                                                         # Put lost mark fish back into unmarked popn
+      # Apply tag loss probability
+      lost.marks <- length(which(runif(M[i])<mark.loss))
+      # Removed lost mark fish from marked popn
+      adj.M <- adj.M - lost.marks
+      # Put lost mark fish back into unmarked popn
+      adj.U <- adj.U + lost.marks
     }
-    if (!surv.mark==1)   adj.M <- adj.M - length(which(runif(M[i])>surv.mark))            # Marked fish survival -- greater than survival prob is mortality
-    if (!surv.unmark==1) adj.U <- adj.U - length(which(runif(adj.U)>surv.unmark))         # UnMarked fish survival
-    if (!recruits==0)    adj.U <- adj.U + recruits                                        # Add recruits to unmarked population
-    N1[i] <- adj.M + adj.U                                                                # Population size just before second capture
-    p.unmark <- En/N1[i]*N1[i]/(M[i]+N1[i])                                               # Probability of capturing unmarked fish in second sample
-    p.mark <- p.unmark*cap.ratio                                                          # Probability of capturing marked fish in second sample
-    m[i] <- length(which(runif(adj.M)<p.mark))                                            # Number of marked fish recaptured in second sample
-    n[i] <- m[i] + length(which(runif(adj.U)<p.unmark))                                   # Total number of fish captured in second sample
+    # Marked fish survival -- greater than survival prob is mortality
+    if (!surv.mark==1)   adj.M <- adj.M - length(which(runif(M[i])>surv.mark))
+    # UnMarked fish survival
+    if (!surv.unmark==1) adj.U <- adj.U - length(which(runif(adj.U)>surv.unmark))
+    # Add recruits to unmarked population
+    if (!recruits==0) adj.U <- adj.U + N*recruits
+    # Population size just before second capture
+    N1[i] <- adj.M + adj.U
+    # Probability of capturing unmarked fish in second sample
+    p.unmark <- En/N1[i]*N1[i]/(M[i]+N1[i])
+    # Probability of capturing marked fish in second sample
+    p.mark <- p.unmark*cap.ratio
+    # Number of marked fish recaptured in second sample
+    m[i] <- length(which(runif(adj.M)<p.mark))
+    # Total number of fish captured in second sample
+    n[i] <- m[i] + length(which(runif(adj.U)<p.unmark))
     # Compute population estimates
     switch(type,
            P=,Petersen={ N0[i] <- round((M[i]*n[i])/m[i],0) },
@@ -132,10 +171,13 @@ iMRC.genpopn <- function(type,N,EM,En,mark.loss,surv.mark,surv.unmark,recruits,c
     )
   }
   data.frame(M,n,m,N,N1,N0)
-} # end iMRC.genpopn internal function in mrCSimPlot internal function
+}
 
-iMRC.plotlabel <- function(mark.loss,surv.mark,surv.unmark,recruits,cap.ratio) {
+## Internal function to make a main label for the plot
+iMRC1.title <- function(mark.loss,surv.mark,surv.unmark,recruits,cap.ratio) {
+  # Initialize
   viol.markloss <- viol.diffmort <- viol.surv <- viol.recruits <- viol.capratio <- FALSE
+  # Identify the violation type and make appropriate label
   if(mark.loss > 0) { viol.markloss <- TRUE; lbl <- "VIOLATION: Loss of Tags" }
   if(surv.mark < 1 || surv.unmark < 1) {
     if (surv.mark == surv.unmark) { viol.surv <- TRUE ; lbl <- "VIOLATION: Mortality" }
@@ -150,20 +192,54 @@ iMRC.plotlabel <- function(mark.loss,surv.mark,surv.unmark,recruits,cap.ratio) {
   if(viol.sum==0) lbl <- "No Assumption Violations"
   else if (viol.sum > 1) lbl <- "VIOLATION: Multiple Assumptions"
   lbl
-} # end iMRC.plotlabel internal function inside of mrCSimPlot internal function
+}
 
-iMRC.plotmain <- function(df,N,incl.final,hlbl) {
-  mn.N0.perr <- paste("% Error Initial = ",round(mean(100*(df$N0-N)/N),1),sep="")
-  mn.N1.perr <- paste("% Error Final = ",round(mean(100*(df$N0-df$N1)/df$N1),1),sep="")
-  # Histogram of population estimates
-  old.par <- par(mar=c(3.5,1.5,1.5,1.5), mgp=c(2,0.4,0), tcl=-0.2); on.exit(par(old.par))
-  h <- hist(df$N0,plot=FALSE)
-  hist(df$N0,main=hlbl,xlab="Population Estimate",yaxt="n",ylab="",xlim=range(c(mean(df$N1),mean(df$N0),N,h$breaks)),col="gray90")
-  abline(v=N,col="red",lwd=4,lty=2); abline(v=mean(df$N0),col="green",lwd=4)
-  if (incl.final) {
-    abline(v=mean(df$N1),col="blue",lwd=4,lty=3)
-    legend("topright",legend=c(paste("Initial Pop (",N,")",sep=""),"Mean Final Pop","Mean Pop Est","",mn.N0.perr,mn.N1.perr),col=c("red","blue","green",NA,NA,NA),lwd=2,lty=c(2,3,1,NA,NA,NA),bty="n")
+## Internal function to make the main histogram
+iMRC1.hist <- function(df,N,incl.final,hlbl) {
+  # Set the graphing parameters
+  old.par <- graphics::par(mar=c(3.5,1.1,1.5,1.1),mgp=c(2,0.4,0),tcl=-0.2,yaxs="i")
+  # Make the histogram
+  h <- graphics::hist(df$N0,plot=FALSE,right=FALSE)
+  graphics::hist(df$N0,right=FALSE,main=hlbl,xlab="Population Estimate",ylab="",yaxt="n",
+                 xlim=range(c(mean(df$N1),mean(df$N0),N,h$breaks)),col="gray90")
+  # Put vertical line for set initial pop
+  graphics::abline(v=N,col="red",lwd=4,lty=2)
+  # Put vertical line for mean estimate of initial pop
+  graphics::abline(v=mean(df$N0),col="green",lwd=4)
+  # Put vertical line for mean estimate of final pop (if requested by user)
+  if (incl.final) graphics::abline(v=mean(df$N1),col="blue",lwd=4,lty=3)
+  # Return to original graphing parameters
+  graphics::par(old.par)
+}
+
+# Internal function to add the legend to the plot
+iMRC1.legend <- function(sim,df,N,incl.final) {
+  if (sim=="assumptions") {
+    # Compute error percentages
+    mn.N0.perr <- paste("% Error Initial = ",round(mean(100*(df$N0-N)/N),1),sep="")
+    mn.N1.perr <- paste("% Error Final = ",round(mean(100*(df$N0-df$N1)/df$N1),1),sep="")
+    # Add legend
+    if (incl.final) {
+      graphics::legend("topright",legend=c(paste("Initial Pop (",N,")",sep=""),"Mean Final Pop",
+                                           "Mean Pop Est","",mn.N0.perr,mn.N1.perr),
+                       col=c("red","blue","green",NA,NA,NA),lwd=2,lty=c(2,3,1,NA,NA,NA),
+                       box.col="white",bg="white")
+    } else {
+      graphics::legend("topright",legend=c(paste("Initial Pop (",N,")",sep=""),
+                                           "Mean Pop Est","",mn.N0.perr),
+                       col=c("red","green",NA,NA),lwd=2,lty=c(2,1,NA,NA),
+                       box.col="white",bg="white")
+    }
   } else {
-    legend("topright",legend=c(paste("Initial Pop (",N,")",sep=""),"Mean Pop Est","",mn.N0.perr),col=c("red","green",NA,NA),lwd=2,lty=c(2,1,NA,NA),bty="n")
+    if (incl.final) {
+      graphics::legend("topright",legend=c(paste("Initial Pop (",N,")",sep=""),
+                                           "Mean Final Pop","Mean Pop Est"),
+                       col=c("red","blue","green"),lwd=2,lty=c(2,3,1),
+                       box.col="white",bg="white")
+    } else {
+      graphics::legend("topright",legend=c(paste("Initial Pop (",N,")",sep=""),"Mean Pop Est"),
+                       col=c("red","green"),lwd=2,lty=c(2,1),
+                       box.col="white",bg="white")
+    }
   }
-} # end iMRC.plotmain internal function inside of mrCSimPlot internal function
+}
