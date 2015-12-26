@@ -2,137 +2,76 @@
 % Please edit documentation in R/mrClosed1Sim.R
 \name{mrClosed1Sim}
 \alias{mrClosed1Sim}
-\title{Dynamics plots to explore single-census mark-recapture models.}
+\title{Dynamic plots to explore single-census mark-recapture models.}
 \usage{
-mrClosed1Sim(type = c("Petersen", "P", "Chapman", "C", "Ricker", "R",
-  "Bailey", "B"), N = 1000, rsmpls = 500, incl.final = TRUE)
+mrClosed1Sim(sim = c("assumptions", "distribution"), N = 1000,
+  rsmpls = 2000, EM = 200, En = 200, incl.final = TRUE,
+  conf.level = 0.95)
 }
 \arguments{
-\item{type}{A single string that identifies the type of calculation method to use (see details).}
+\item{sim}{A single string that identifies the type of simulation to perform (see details).}
 
-\item{N}{A single number that represents the \dQuote{known} size of the simulated population
-just prior to the first sample.}
+\item{N}{A single number that represents the known size of the simulated population just prior to the first sample.}
 
 \item{rsmpls}{A single number that indicates the number of simulations to run.}
 
-\item{incl.final}{A single logical that indicates whether the mean final population size
-and histogram of percent error from the final population size should be shown.}
+\item{EM}{A single number that indicates the expected number of fish to capture (and mark) in the first sample.  Only used if \code{sim="assumptions"}.}
+
+\item{En}{A single number that indicates the expected number of fish to capture (and check for marks) in the second sample.  Only used if \code{sim="assumptions"}.}
+
+\item{incl.final}{A single logical that indicates whether the mean final population size should be shown on the plot produce (only used if \code{sim="assumptions"}).}
+
+\item{conf.level}{A single number that indicates the quantiles to compute and label on the x-axis of the histogram when \code{sim="distribution"}.}
 }
 \value{
-None.  However, a dynamic graphic is produced that is controlled by
-slider bars as described in the details.  The dynamic graphic is a histogram
-of the population estimate from all resamples with a red vertical line at the
-initial population size (provided by the user), a blue vertical line at the
-population size just prior to the final sample (N1; if \code{incl.final=TRUE}),
-and a green vertical line at the mean population estimate.  The vertical blue 
-and red lines may not be visible under some scenarios because of overprinting.
+None.  However, a dynamic graphic is produced that is controlled by slider bars as described in the details.  The dynamic graphic is a histogram of the population estimate from all resamples with a red vertical line at the initial population size (provided by the user), a blue vertical line at the population size just prior to the final sample (N1; if \code{incl.final=TRUE}), and a green vertical line at the mean population estimate.  The vertical blue and red lines may not be visible under some scenarios because of overprinting.  The x-axis will be labelled with only the quantiles computed with \code{conf.level} when \code{sim="distrib"}.
 }
 \description{
-This function is used to simulate multiple results for single census mark-recapture
-study.  The user can control many aspects of the simulation including simulating
-the loss of marks, differential survival rates for tagged and untagged fish, the
-addition of recruits, and differential probabilities of capture for tagged and
-untagged fish.  In addition, Petersen, Chapman, and Bailey estimates of population
-size can be made.
+This simulates multiple results for a single census mark-recapture study.  The user can control aspects of the sampling including the number of marked animals (animals in the first sample) and the number of animals examined for marks (animals in the second sample) and aspects of the population including loss of marks on marked animals, survival rates for marked and unmarked fish, the addition of recruits, and differential probabilities of capture for marked and unmarked fish.  In addition, Petersen, Chapman, Ricker, and Bailey estimates of population size can be made (see \code{\link[FSA]{FSA}}).  \textbf{Function can only be used with RStudio.}
 }
 \details{
-The user can use slider bars to choose values for the expected number of fish
-to capture in the first (i.e., the marking or tagging) sample, the expected
-number of fish to be captured in the second or final (i.e., the recapture)
-sample, a probablity that a tagged fish loses the tag, the probability of
-survival for tagged fish, the probability of survival for untagged fish, a
-proportion of the initial population size to recruit to the population
-between the first and final samples, and the ratio of the probability of
-capture of tagged fish to the probability of capture of untagged fish in the
-final sample.  The user selects the \dQuote{true} initial population size,
-the method of population estimator, and the number of resamples to use with
-arguments to the function.  The simulation can be re-run without changing any
-of the slider buttons by pressing the \bold{\sQuote{Re-Randomize}} button.
+Two types of simulations can be conducted.  The first is primarily used to examine characteristics of the sampling distrubtion of the population estimates.  These simulations are selected with \code{sim="distribution"} and allow the user to dynamically select the expected number of fish to capture in the first (i.e., the marking or tagging) sample and the expected number of fish to be captured in the second (i.e., the recapture) sample.  The resulting plot (discussed more below) allows the user to examine the shape of the sampling distribution, see the width of chosen quantiles on the distribution (defaults to 95%), and the bias from the initial population size.
+
+The second type of simulation is primarily used to examine the effect of assumption violations on the bias of the population estimates.  These simulations are selected with \code{sim="assumptions"} and allow the user to dynamically select the probablity that a marked fish loses the mark, the probability of survival for marked fish, the probability of survival for unmarked fish, a proportion of the initial population size to recruit to the population between the first and second samples, and the ratio of the probability of capture of marked fish to the probability of capture of unmarked fish in the second sample.
+In both types of simulations, the user can dynamically select the type of population estimation method (Petersen, Chapman, Ricker, or Bailey; see \code{\link[FSA]{FSA}}) and rerun the simulation without changing any of the other items by selecting the \code{Rerandomize} button.  The user can also select the population size with the \code{N=} argument and the number of resamples use to construct the sampling distribution with the \code{rsmpls=} argument.  In the simulations to assess the assumptions the user can also set the the expected number of fish to capture in the first sample with the \code{EM} argument and the expected number of fish to be captured in the second sample with the \code{En} argument.
 
 In general, the simulation follows these steps:
 \enumerate{
-\item a population of N fish is created;
-\item randomly select M fish in the first sample to be tagged such that the average
-of all M values should be equal to the user-supplied \bold{\sQuote{Tagged (M)}} value;
-\item randomly select m fish to lose tags according to the user-supplied probability of
-tag loss (\bold{\sQuote{PR(Tag Loss)}});
-\item randomly select fish to die according to the user-supplied probabilities of
-survival for tagged (\bold{\sQuote{PR(Surv Tagged)}}) and untagged fish
-(\bold{\sQuote{PR(Surv UNTagged)}});
-\item add recruits to the population in proportion to N and in accordance to the
-user-supplied proportion of recruits (\bold{\sQuote{Proportion Recruit}}) to add;
-\item identify the actual population size just before taking the final sample (N1);
-\item randomly select n fish in the second sample such that the average of all
-n values should be equal to the user-supplied \bold{\sQuote{Captured (n)}}
-value (see note below about how differential probabilties of capture are
-incorporated into the model);
-\item count the number of tagged fish in the second sample; and 
-\item compute the population estimate using the chosen method (see below).
+   \item a population of N fish is created;
+   \item randomly select M fish in the first sample to be marked such that the average of all M values should be equal to the user-supplied \bold{\sQuote{Marked (M)}} (first type of simulations) or \code{EM} (second type of simulations) value;
+   \item randomly select m fish to lose marks according to the user-supplied probability of mark loss (\bold{\sQuote{PR(Mark Loss)}});
+   \item randomly select fish to die according to the user-supplied probabilities of survival for marked (\bold{\sQuote{PR(Surv Marked)}}) and unmarked fish (\bold{\sQuote{PR(Surv UNMarked)}});
+   \item add recruits to the population in proportion to N and in accordance to the user-supplied proportion of recruits (\bold{\sQuote{Proportion Recruit}}) to add;
+   \item identify the actual population size just before taking the final sample (N1);
+   \item randomly select n fish in the second sample such that the average of all n values should be equal to the user-supplied \bold{\sQuote{Captured (n)}} (first type of simulations) or \code{En} (second type of simulations) value (see note below about how differential probabilties of capture are incorporated into the model);
+   \item count the number of marked fish in the second sample; and 
+   \item compute the population estimate using the chosen method (see below).
 }
 
 The methods for estimating the population size are
 
 \tabular{ll}{
-\code{type="P"} \tab naive Petersen.\cr
-\code{type="C"} \tab Chapman(1951) modification of the Petersen.\cr
-\code{type="CR"} \tab Ricker(1975) modification of the Chapman modification.\cr
-\code{type="B"} \tab Bailey(1951,1952) modification of the Petersen. 
+\code{type="Petersen"} \tab naive Petersen.\cr
+\code{type="Chapman"} \tab Chapman(1951) modification of the Petersen.\cr
+\code{type="Ricker"} \tab Ricker(1975) modification of the Chapman modification.\cr
+\code{type="Bailey"} \tab Bailey(1951,1952) modification of the Petersen. 
 }
 
-The effect of violating the assumption of tag loss is simulated by changing the 
-probability of tag loss slider to a value greater than 0 but less than 1.  For
-example, setting \bold{\sQuote{PR(Tag Loss)}} to 0.1 is used to simulate a 10 
-percent probability of losing the tag.
+The effect of violating the assumption of mark loss is simulated by changing the probability of mark loss slider to a value greater than 0 but less than 1.  For example, setting \bold{\sQuote{PR(Mark Loss)}} to 0.1 is used to simulate a 10 percent probability of losing the mark.
 
-The effect of violating the assumption of no mortality from the first to
-second sample is simulated by changing one or both of the probabilities
-of survival for tagged and untagged fish to values less than 1 (but greater
-than 0).  For example, setting \bold{\sQuote{PR(Surv Tagged)}} AND
-\bold{\sQuote{PR(Surv UNTagged)}} to 0.8 will simulate mortality between the
-first and final sample but NOT differential mortality between the tagged and
-untagged fish (i.e., the mortalities are the same for both groups of fish).
-The effect of differential mortalities between tagged and untagged fish can
-be simulated by using different survival probabilities for tagged and untagged fish.
+The effect of violating the assumption of no mortality from the first to second sample is simulated by changing one or both of the probabilities of survival for marked and unmarked fish to values less than 1 (but greater than 0).  For example, setting \bold{\sQuote{PR(Surv Marked)}} AND \bold{\sQuote{PR(Surv UNmarked)}} to 0.8 will simulate mortality between the first and final sample but NOT differential mortality between the marked and unmarked fish (i.e., the mortalities are the same for both groups of fish).  The effect of differential mortalities between marked and unmarked fish can be simulated by using different survival probabilities for marked and unmarked fish.
 
-The effect of violating the assumption of no recruitment from the first to
-final sample is simulated by changing the Proportion Recruit slider to a
-value greater than 0.  For example, setting \bold{\sQuote{Proportion Recruit}}
-to 0.1 will simulate 10 percent of N recruiting to the population just before 
-the final sample.
+The effect of violating the assumption of no recruitment from the first to second sample is simulated by changing the \bold{\sQuote{Proportion Recruit}} slider to a value greater than 0.  For example, setting \bold{\sQuote{Proportion Recruit}} to 0.1 will simulate 10 percent of N recruiting to the population just before the second sample.
 
-The effect of violating the assumption of equal catchabilities in the final
-sample for tagged and untagged fish is simulated by changing the
-\bold{\sQuote{Ratio PR(Capture)}} slider to a value different than 1.  Values
-greater than 1 indicate that the catchability of tagged fish is greater than
-the catchability of untagged fish.  Values less than 1 indicate that the
-catchability of tagged fish is less than that of untagged fish.  For example,
-setting \bold{\sQuote{Ratio PR(Capture)}} to 0.8 will simulate a situation
-where the capture probability of tagged fish is 80 percent of the capture
-probablity of untagged fish (i.e., simulates the situation where marked fish
-are less likely to be captured).
+The effect of violating the assumption of equal catchabilities in the second sample for marked and unmarked fish is simulated by changing the \bold{\sQuote{Ratio PR(Capture)}} slider to a value different than 1.  Values greater than 1 indicate that the catchability of marked fish is greater than the catchability of unmarked fish.  Values less than 1 indicate that the catchability of marked fish is less than that of unmarked fish.  For example, setting \bold{\sQuote{Ratio PR(Capture)}} to 0.8 will simulate a situation where the capture probability of marked fish is 80 percent of the capture probablity of unmarked fish (i.e., simulates the situation where marked fish are less likely to be captured in the second sample than unmarked fish).
 
-The probability of capture in the final sample is equal to the expected number
-of fish to be collected in the final sample (set with \bold{\sQuote{Captured (n)}})
-divided by the actual population size just prior to the final sample (N1) as long
-as \bold{\sQuote{Ratio PR(Capture)}} is 1.  The probabilities of capture for the
-tagged and untagged fish are carefully adjusted if the \bold{\sQuote{Ratio PR(Capture)}}
-value is different than 1.  Because of the different numbers of tagged and untagged
-individuals in the population, the probability of capture for tagged and
-untagged individuals must be computed by adjusting the overall probability of
-capture to assure that, on average, the user-provided expected number
-captured in the final sample is met.  This modification is found by solving
-the following system of equations for the probabilities of capture for the
-tagged (PM) and untagged fish (PU), respectively,
+The probability of capture in the final sample is equal to the expected number of fish to be collected in the final sample (set with \bold{\sQuote{Captured (n)}} or \code{En}) divided by the actual population size just prior to the final sample (N1) as long as \bold{\sQuote{Ratio PR(Capture)}} is 1.  The probabilities of capture for the marked and unmarked fish are carefully adjusted if the \bold{\sQuote{Ratio PR(Capture)}} value is different than 1.  Because of the different numbers of marked and unmarked individuals in the population, the probability of capture for marked and unmarked individuals must be computed by adjusting the overall probability of capture to assure that, on average, the user-provided expected number captured in the final sample is met.  This modification is found by solving the following system of equations for the probabilities of capture for the marked (PM) and unmarked (PU) fish, respectively,
 
 \deqn{PM*M + PU*(N-M) = P*N}
 
 \deqn{\frac{PM}{PU} = k}
 
-where M is the number of tagged animals, and N-M is the number of untagged
-animals, k is the \bold{\sQuote{Ratio PR(Capture)}} value, and P is the
-overall probability of capture if there was no difference in catchability
-between tagged and untagged animals.  The solutions to this system, which are 
-used in this function, are
+where M is the number of marked animals, and N-M is the number of unmarked animals, k is the \bold{\sQuote{Ratio PR(Capture)}} value, and P is the overall probability of capture if there was no difference in catchability between marked and unmarked animals.  The solutions to this system, which are used in this function, are
 
 \deqn{PU = \frac{PN}{M+N}}
 
@@ -140,10 +79,8 @@ used in this function, are
 }
 \examples{
 if (interactive()) {
-
-mrClosed1Sim()
-mrClosed1Sim(type="C")  # use Chapman modification
-
+  mrClosed1Sim()
+  mrClosed1Sim(type="C")  # use Chapman modification
 } # end if interactive
 
 }
@@ -151,7 +88,7 @@ mrClosed1Sim(type="C")  # use Chapman modification
 Derek H. Ogle, \email{dogle@northland.edu}
 }
 \seealso{
-\code{mrClosed} in \pkg{FSA}.
+\code{\link[FSA]{mrClosed}}.
 }
 \keyword{iplot}
 
