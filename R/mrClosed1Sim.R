@@ -69,20 +69,18 @@
 #' @export
 #'
 mrClosed1Sim <- function(sim=c("assumptions","distribution"),
-                         type=c("Petersen","Chapman","Ricker","Bailey"),
-                         N=1000,rsmpls=1000,EM=200,En=200,incl.final=TRUE) {
+                         N=1000,rsmpls=2000,EM=200,En=200,incl.final=TRUE) {
   if (!iCheckRStudio()) stop("'mrClosed1Sim()' only works in RStudio.",call.=FALSE)
   sim <- match.arg(sim)
-  type <- match.arg(type)
-  if (sim=="assumptions") iMRC1Assump(type,N,rsmpls,EM,En,incl.final)
-    else iMRC1Dist(type,N,rsmpls,incl.final)
+  if (sim=="assumptions") iMRC1Assump(N,rsmpls,EM,En,incl.final)
+    else iMRC1Dist(N,rsmpls,incl.final)
 }
 
 
 ##############################################################
 
 ## Internal function for the assumption violations simulation
-iMRC1Assump <- function(type,N,rsmpls,EM,En,incl.final) {
+iMRC1Assump <- function(N,rsmpls,EM,En,incl.final) {
   if (iChk4Namespace("manipulate")) {
     manipulate::manipulate(
       {
@@ -96,6 +94,7 @@ iMRC1Assump <- function(type,N,rsmpls,EM,En,incl.final) {
         # Add legend
         iMRC1.legend("assumptions",mc.df,N,incl.final)
       },
+      type=manipulate::picker("Petersen","Chapman","Ricker","Bailey",label="Method"),
       mark.loss=manipulate::slider(min=0,max=0.9,step=0.1,initial=0,label="PR(Tag Loss)"),
       surv.mark=manipulate::slider(min=0.1,max=1,step=0.1,initial=1,label="PR(Surv Tagged)"),
       surv.unmark=manipulate::slider(min=0.1,max=1,step=0.1,initial=1,label="PR(Surv UNtagged)"),
@@ -107,7 +106,7 @@ iMRC1Assump <- function(type,N,rsmpls,EM,En,incl.final) {
 }
 
 ## Internal function for the distribution simulation
-iMRC1Dist <- function(type,N,rsmpls,incl.final) {
+iMRC1Dist <- function(N,rsmpls,incl.final) {
   if (iChk4Namespace("manipulate")) {
     N.1 <- round(0.01*N)
     manipulate::manipulate(
@@ -121,6 +120,7 @@ iMRC1Dist <- function(type,N,rsmpls,incl.final) {
         iMRC1.legend("distribution",mc.df,N,incl.final)
         
       },
+      type=manipulate::picker("Petersen","Chapman","Ricker","Bailey",label="Method"),
       EM=manipulate::slider(min=5*N.1,max=40*N.1,step=N.1,initial=20*N.1,label="Tagged (M)"),
       En=manipulate::slider(min=5*N.1,max=40*N.1,step=N.1,initial=20*N.1,label="Captured (n)"),
       rerand=manipulate::button("Rerandomize")
@@ -214,32 +214,21 @@ iMRC1.hist <- function(df,N,incl.final,hlbl) {
 
 # Internal function to add the legend to the plot
 iMRC1.legend <- function(sim,df,N,incl.final) {
-  if (sim=="assumptions") {
-    # Compute error percentages
-    mn.N0.perr <- paste("% Error Initial = ",round(mean(100*(df$N0-N)/N),1),sep="")
-    mn.N1.perr <- paste("% Error Final = ",round(mean(100*(df$N0-df$N1)/df$N1),1),sep="")
-    # Add legend
-    if (incl.final) {
-      graphics::legend("topright",legend=c(paste("Initial Pop (",N,")",sep=""),"Mean Final Pop",
-                                           "Mean Pop Est","",mn.N0.perr,mn.N1.perr),
-                       col=c("red","blue","green",NA,NA,NA),lwd=2,lty=c(2,3,1,NA,NA,NA),
-                       box.col="white",bg="white")
-    } else {
-      graphics::legend("topright",legend=c(paste("Initial Pop (",N,")",sep=""),
-                                           "Mean Pop Est","",mn.N0.perr),
-                       col=c("red","green",NA,NA),lwd=2,lty=c(2,1,NA,NA),
-                       box.col="white",bg="white")
-    }
+  # Make legend labels
+  mn.N0hat <- paste0("Mean Pop Est (=",round(mean(df$N0),0),")")
+  init.N <- paste0("Initial Pop (=",N,")")
+  mn.N0.perr <- paste0("  % Error = ",round(mean(100*(df$N0-N)/N),1))
+  mn.N1 <- paste0("Mean Final Pop (=",round(mean(df$N1),0),")")
+  mn.N1.perr <- paste0("  % Error = ",round(mean(100*(df$N0-df$N1)/df$N1),1))
+  # Make legend values
+  legs <- c(mn.N0hat,NA,init.N,mn.N0.perr,NA,mn.N1,mn.N1.perr)
+  cols <- c("green",NA,"red",NA,NA,"blue",NA)
+  ltys <- c(1,NA,2,NA,NA,3,NA)
+  # Add legend
+  if (incl.final) {
+    graphics::legend("topright",legend=legs,col=cols,lty=ltys,lwd=2,box.col="white",bg="white")
   } else {
-    if (incl.final) {
-      graphics::legend("topright",legend=c(paste("Initial Pop (",N,")",sep=""),
-                                           "Mean Final Pop","Mean Pop Est"),
-                       col=c("red","blue","green"),lwd=2,lty=c(2,3,1),
-                       box.col="white",bg="white")
-    } else {
-      graphics::legend("topright",legend=c(paste("Initial Pop (",N,")",sep=""),"Mean Pop Est"),
-                       col=c("red","green"),lwd=2,lty=c(2,1),
-                       box.col="white",bg="white")
-    }
+    graphics::legend("topright",legend=legs[-c(4:6)],col=cols[-c(4:6)],lty=ltys[-c(4:6)],
+                     lwd=2,box.col="white",bg="white")
   }
 }
