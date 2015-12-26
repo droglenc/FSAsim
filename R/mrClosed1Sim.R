@@ -1,6 +1,6 @@
 #' @title Dynamic plots to explore single-census mark-recapture models.
 #'
-#' @description This simulates multiple results for a single census mark-recapture study.  The user can control aspects of the sampling including the number of marked animals (animals in the first sample) and the number of animals examined for marks (animals in the second sample) and aspects of the population including loss of marks on marked animals, survival rates for marked and unmarked fish, the addition of recruits, and differential probabilities of capture for marked and unmarked fish.  In addition, Petersen, Chapman, Ricker, and Bailey estimates of population size can be made (see \code{\link[FSA]{FSA}}).  \textbf{Function can only be used with RStudio.}
+#' @description This simulates multiple results for a single census mark-recapture study.  The user can control aspects of the sampling including the number of marked animals (animals in the first sample) and the number of animals examined for marks (animals in the second sample) and aspects of the population including loss of marks on marked animals, survival rates for marked and unmarked fish, the addition of recruits, and differential probabilities of capture for marked and unmarked fish.  In addition, Petersen, Chapman, Ricker, and Bailey estimates of population size can be made (see \code{\link[FSA]{FSA}}).  \bold{Function can only be used with RStudio.}
 #'
 #' @details Two types of simulations can be conducted.  The first is primarily used to examine characteristics of the sampling distrubtion of the population estimates.  These simulations are selected with \code{sim="distribution"} and allow the user to dynamically select the expected number of fish to capture in the first (i.e., the marking or tagging) sample and the expected number of fish to be captured in the second (i.e., the recapture) sample.  The resulting plot (discussed more below) allows the user to examine the shape of the sampling distribution, see the width of chosen quantiles on the distribution (defaults to 95%), and the bias from the initial population size.
 #' 
@@ -208,8 +208,8 @@ iMRC1.hist <- function(df,N,incl.final,hlbl,xaxis,conf.level) {
   # Set the graphing parameters
   old.par <- graphics::par(mar=c(3.5,1.1,1.5,1.1),mgp=c(2,0.4,0),tcl=-0.2,yaxs="i")
   # Make the histogram
-  h <- graphics::hist(df$N0,plot=FALSE,right=FALSE)
-  graphics::hist(df$N0,right=FALSE,col="gray90",main=hlbl,
+  h <- graphics::hist(df$N0,plot=FALSE,breaks=20,right=FALSE)
+  graphics::hist(df$N0,breaks=20,right=FALSE,col="gray90",main=hlbl,
                  yaxt="n",ylab="",
                  xaxt="n",xlab="Population Estimate",xlim=range(c(mean(df$N1),mean(df$N0),N,h$breaks)))
   # Handle x-axis
