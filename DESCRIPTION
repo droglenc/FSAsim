@@ -10,10 +10,7 @@ Depends:
     R (>= 3.0.0)
 Imports:
     graphics,
-    grDevices,
     stats,
-    tools,
-    utils,
     FSA,
     manipulate,
     nlme,

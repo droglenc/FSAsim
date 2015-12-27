@@ -31,7 +31,7 @@
 ### Get variable names from formulas 
 ##################################################################
 getVarFromFormula <- function(formula,data,expNumVars=NULL) {
-  varNms <- names(model.frame(formula,data=data))
+  varNms <- names(stats::model.frame(formula,data=data))
   # don't "error" check the number of variables
   if (is.null(expNumVars)) varNms
   else if (length(varNms)!=expNumVars) stop("Function only works with formulas with ",expNumVars," variable",ifelse(expNumVars==1,".","s."))

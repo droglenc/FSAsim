@@ -212,7 +212,8 @@ iMRC1.hist <- function(df,N,incl.final,hlbl,xaxis,conf.level) {
   h <- graphics::hist(df$N0,plot=FALSE,breaks=20,right=FALSE)
   graphics::hist(df$N0,breaks=20,right=FALSE,col="gray90",main=hlbl,
                  yaxt="n",ylab="",
-                 xaxt="n",xlab="Population Estimate",xlim=range(c(mean(df$N1),mean(df$N0),N,h$breaks)))
+                 xaxt="n",xlab="Population Estimate",
+                 xlim=range(c(mean(df$N1),mean(df$N0),N,h$breaks)))
   # Handle x-axis
   if (is.null(xaxis)) axis(1)
   else axis(1,c(N,round(quantile(df$N0,0.5+c(-1,1)*conf.level/2),0)),lwd=3)
