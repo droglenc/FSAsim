@@ -56,6 +56,7 @@ catchCurveSim <- function(max.age=15,v=rep(1,max.age),Zycl=FALSE,
                           deltaAge=round(max.age/2,0),recruit.age=3) {
   # Attempt to deal with global binding issue
   Z.mean <- No.mean <- Z.delta <- No.delta <- Z.cv <- No.cv <- steady <- NULL
+  if (!iCheckRStudio()) stop("'catchCurveSim' only works in RStudio.",call.=FALSE)
   if (iChk4Namespace("manipulate")) {
     manipulate::manipulate(
       {
