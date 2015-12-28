@@ -3,6 +3,8 @@
 \name{.onAttach}
 \alias{.onAttach}
 \alias{getVarFromFormula}
+\alias{iCheckRStudio}
+\alias{iChk4Namespace}
 \title{Internal functions used in FSAsim.}
 \usage{
 .onAttach(lib, pkg, ...)

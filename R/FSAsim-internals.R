@@ -1,10 +1,10 @@
-#'Internal functions used in FSAsim.
+#' @title Internal functions used in FSAsim.
 #'
-#'Internal functions used in FSAsim
+#' @description Internal functions used in FSAsim
 #'
-#'@rdname FSA-internals
-#'@keywords internal
-#'@aliases .onAttach getVarFromFormula
+#' @rdname FSA-internals
+#' @keywords internal
+#' @aliases .onAttach getVarFromFormula iChk4Namespace iCheckRStudio
 #'
 
 ##################################################################
@@ -53,4 +53,3 @@ iChk4Namespace <- function(pkg) {
 # Try to determine if RStudio is being used.
 ##################################################################
 iCheckRStudio <- function () "tools:rstudio" %in% search()
-
