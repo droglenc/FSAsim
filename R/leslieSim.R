@@ -66,6 +66,7 @@ leslieSim <- function(sim=c("deterministic","random","resampling","montecarlo"),
 iLeslie.DET <- function(k,Ricker.mod) {
   # Trying to deal with no visible bindings problem
   No <- E <- q.adj.const <- p.surv <- r.prop <- NULL
+  if (!iCheckRStudio()) stop("'leslieSim' only works in RStudio.",call.=FALSE)
   if (iChk4Namespace("manipulate")) {
     manipulate::manipulate(
       {
@@ -170,6 +171,7 @@ iLeslie.detPlot <- function(resdef,res1,res2,Ricker.mod=FALSE,glbl) {
 iLeslie.RAND <- function(k,Ricker.mod) {
   # Trying to deal with no visible bindings problem
   No <- E <- q.adj.const <- p.surv <- r.prop <- NULL
+  if (!iCheckRStudio()) stop("'leslieSim' only works in RStudio.",call.=FALSE)
   if (iChk4Namespace("manipulate")) {
     manipulate::manipulate(
       {
@@ -237,6 +239,7 @@ iLeslie.randRun <- function(params) {
 iLeslie.MC <- function(k,Ricker.mod,rsmpls) {
   # Trying to deal with no visible bindings problem
   No <- E <- q.adj.const <- p.surv <- r.prop <- NULL
+  if (!iCheckRStudio()) stop("'leslieSim' only works in RStudio.",call.=FALSE)
   if (iChk4Namespace("manipulate")) {
     manipulate::manipulate(
       {
