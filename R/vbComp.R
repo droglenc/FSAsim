@@ -28,7 +28,7 @@
 #' # same three species but with varying maximum ages
 #' vbComp(v,ages=c(10,20,25))
 #'
-#'@ export
+#' @export
 #'
 vbComp <- function(df,ages=20,...) {
   # put given data into a temporary df

@@ -37,7 +37,7 @@
 #'
 lengthWeightSim <- function(x=NULL,y=NULL,wt.max=50) {
   # Trying to deal with no visible bindings problem
-  No <- Z <- NULL
+  len.min <- len.max <- a <- b <- NULL
   if (!iCheckRStudio()) stop("'cohortSim' only works in RStudio.",call.=FALSE)
   if (iChk4Namespace("manipulate")) {
     manipulate::manipulate(

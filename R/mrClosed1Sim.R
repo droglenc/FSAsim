@@ -129,7 +129,6 @@ iMRC1Dist <- function(N,rsmpls,conf.level) {
         iMRC1.hist(mc.df,N,FALSE,"","intervals",conf.level)
         # Add legend
         iMRC1.legend("distribution",mc.df,N,FALSE)
-        
       },
       type=manipulate::picker("Petersen","Chapman","Ricker","Bailey",label="Method"),
       EM=manipulate::slider(min=5*N.1,max=40*N.1,step=N.1,initial=20*N.1,label="Marked (M)"),
