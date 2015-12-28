@@ -2,7 +2,7 @@
 % Please edit documentation in R/cohortSim.R
 \name{cohortSim}
 \alias{cohortSim}
-\title{Dynamics plots to explore numbers in a cohort over time.}
+\title{Dynamic plot to explore numbers in a cohort over time.}
 \usage{
 cohortSim(age.max = 15)
 }
@@ -13,9 +13,7 @@ cohortSim(age.max = 15)
 None.  An interactive graphic connected to slider controls is produced.
 }
 \description{
-Constructs a plot of the hypothetical number of individuals in a cohort over
-time.  The initial size of the cohort and the instantaneous mortality rate
-are controlled by slider bars.
+Constructs a plot of the hypothetical number of individuals in a cohort over time.  The initial size of the cohort and the instantaneous mortality rate are controlled by slider bars.
 }
 \examples{
 if (interactive()) {
@@ -23,6 +21,7 @@ if (interactive()) {
 cohortSim()
 
 } # end if interactive
+
 }
 \author{
 Derek H. Ogle, \email{dogle@northland.edu}
