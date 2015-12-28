@@ -76,7 +76,6 @@
 #'
 mrClosed1Sim <- function(sim=c("assumptions","distribution"),N=1000,rsmpls=2000,
                          EM=200,En=200,incl.final=TRUE,conf.level=0.95) {
-  if (!iCheckRStudio()) stop("'mrClosed1Sim()' only works in RStudio.",call.=FALSE)
   sim <- match.arg(sim)
   if (sim=="assumptions") iMRC1Assump(N,rsmpls,EM,En,incl.final)
     else iMRC1Dist(N,rsmpls,conf.level)
@@ -89,6 +88,7 @@ mrClosed1Sim <- function(sim=c("assumptions","distribution"),N=1000,rsmpls=2000,
 iMRC1Assump <- function(N,rsmpls,EM,En,incl.final) {
   # Trying to deal with no visible bindings problem
   type <- mark.loss <- surv.mark <- surv.unmark <- recruits <- cap.ratio <- NULL
+  if (!iCheckRStudio()) stop("'mrClosed1Sim' only works in RStudio.",call.=FALSE)
   if (iChk4Namespace("manipulate")) {
     manipulate::manipulate(
       {
@@ -117,6 +117,7 @@ iMRC1Assump <- function(N,rsmpls,EM,En,incl.final) {
 iMRC1Dist <- function(N,rsmpls,conf.level) {
   # Trying to deal with no visible bindings problem
   type <- EM <- En <- NULL
+  if (!iCheckRStudio()) stop("'mrClosed1Sim' only works in RStudio.",call.=FALSE)
   if (iChk4Namespace("manipulate")) {
     N.1 <- round(0.01*N)
     manipulate::manipulate(
