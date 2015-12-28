@@ -72,167 +72,144 @@
 #' @export growthModelSim
 #' 
 ## Main function
-growthModelSim <- function(formula=NULL,data=NULL,
-                           type=c("vbTypical","vbOriginal","vbGQ","vbGallucciQuinn","vbMooij",
+growthModelSim <- function(type=c("vbTypical","vbOriginal","vbGQ","vbGallucciQuinn","vbMooij",
                                   "vbWeisberg","vbSchnute","vbTypicalW","vbOriginalW",
                                   "Gompertz1","Gompertz2","Gompertz3",
                                   "Schnute"),
                            max.len=500,max.wt=500) {
-  ## Internal refresh function
-  refresh <- function(...) {
-    p1 <- relax::slider(no=1)
-    p2 <- relax::slider(no=2)
-    p3 <- relax::slider(no=3)
-    if (type %in% c("vbSchnute","vbTypicalW","vbOriginalW","Schnute")) {
-      p4 <- relax::slider(no=4)
-      t.max <- relax::slider(no=5)
-    } else {
-      p4 <- 1
-      t.max <- relax::slider(no=4)
-    }
-  iGrowthSimPlot(type,x,y,max.y,t.max,p1,p2,p3,p4)
-  } ## end Internal refresh
-
-  ## begin main growthModelSim
-  # some checks and handle the formula
-  if (!is.null(formula)) {
-    # this allows the user to enter a type as the first argument as long as data is not given
-    if (is.character(formula) & is.null(data)) type <- formula
-    else {
-      tmp <- FSA:::iHndlFormula(formula,data,expNumR=1,expNumE=1)
-      if (!tmp$metExpNumR) stop("'vbStarts' must have only one LHS variable.",call.=FALSE)
-      if (!tmp$Rclass %in% c("numeric","integer")) stop("LHS variable must be numeric.",call.=FALSE)
-      if (!tmp$metExpNumE) stop("'vbStarts' must have only one RHS variable.",call.=FALSE)
-      if (!tmp$Eclass %in% c("numeric","integer")) stop("RHS variable must be numeric.",call.=FALSE)
-      # get the length and age vectors
-      y <- tmp$mf[,tmp$Rname[1]]
-      x <- tmp$mf[,tmp$Enames[1]]
-      # set maximum size to max observed data
-      max.len <- max.wt <- max(y,na.rm=TRUE)
-    }
-  } else {
-    # if no formula given then set x, y vectors to NULL
-    x <- y <- NULL
-  }
+  # Trying to deal with no visible bindings problem
+  p1 <- p2 <- p3 <- p4 <- t.max <- NULL
   type <- match.arg(type)
-  t.max <- ifelse(!is.null(x),max(x,na.rm=TRUE),20)
-  max.y <- ifelse (type %in% c("vbTypicalW","vbOriginalW"),max.wt,max.len)
-  if (!is.null(y)) max.y <- 1.1*max(y,na.rm=TRUE)
-  min.y <- floor(max.y/10)
-  delta.y <- (max.y-min.y)/50
-  switch(type,
-    vbOriginal= {
-      relax::gslider(refresh,prompt=TRUE,
-             sl.names=   c("L_inf",    "L_0",  "K", "Max Age"),
-             sl.mins=    c(  min.y,        0,    0,         5),
-             sl.maxs=    c(  max.y,    min.y,  0.5,       100),
-             sl.deltas=  c(delta.y, min.y/50,  0.01,        1),
-             sl.defaults=c(  max.y,    min.y,  0.3,     t.max),
-             title = "Original Von Bertalanffy",pos.of.panel="left")    
-      }, # end vbOriginal
-    vbTypical= {
-      relax::gslider(refresh,prompt=TRUE,
-             sl.names=   c("L_inf",  "K", "t_0", "Max Age"),
-             sl.mins=    c(  min.y,    0,   -10,         5),
-             sl.maxs=    c(  max.y,  0.5,    10,       100),
-             sl.deltas=  c(delta.y, 0.01,   0.1,         1),
-             sl.defaults=c(  max.y,  0.3,     0,     t.max),
-             title = "Typical Von Bertalanffy",pos.of.panel="left")    
-      }, # end vbTypical
-    vbOriginalW= {
-      relax::gslider(refresh,prompt=TRUE,
-             sl.names=   c("W_inf",    "W_0",  "K",  "b", "Max Age"),
-             sl.mins=    c(  min.y,        0,    0, 0.25,         5),
-             sl.maxs=    c(  max.y,    min.y,  0.5,    4,       100),
-             sl.deltas=  c(delta.y, min.y/50, 0.01, 0.05,         1),
-             sl.defaults=c(  max.y,    min.y,  0.3,    1,     t.max),
-             title = "Original Von Bertalanffy Weight",pos.of.panel="left")
-      }, # end vbOriginal
-    vbTypicalW= {
-      relax::gslider(refresh,prompt=TRUE,
-             sl.names=   c("W_inf",  "K", "t_0",  "b", "Max Age"),
-             sl.mins=    c(  min.y,    0,   -10, 0.25,         5),
-             sl.maxs=    c(  max.y,  0.5,    10,    4,       100),
-             sl.deltas=  c(delta.y, 0.01,   0.1, 0.05,         1),
-             sl.defaults=c(  max.y,  0.3,     0,    1,     t.max),
-             title = "Typical Von Bertalanffy Weight",pos.of.panel="left")
-      }, # end vbTypical
-    vbGQ=, vbGallucciQuinn= {
-      relax::gslider(refresh,prompt=TRUE,
-             sl.names=   c("omega",  "K", "t_0", "Max Age"),
-             sl.mins=    c(      0,    0,   -10,         5),
-             sl.maxs=    c(    250,  0.5,    10,       100),
-             sl.deltas=  c(      5, 0.01,   0.1,         1),
-             sl.defaults=c(     75,  0.3,     0,     t.max),
-             title = "Gallucci & Quinn Von Bertalanffy",pos.of.panel="left")
-      }, # end vbGallucciQuinn
-    vbMooij= {
-      relax::gslider(refresh,prompt=TRUE,
-             sl.names=   c("L_inf",    "L_0", "omega", "Max Age"),
-             sl.mins=    c(  min.y,        0,       0,         5),
-             sl.maxs=    c(  max.y,    min.y,     250,       100),
-             sl.deltas=  c(delta.y, min.y/50,       5,         1),
-             sl.defaults=c(  max.y,    min.y,      75,     t.max),
-             title = "Mooij et al. Von Bertalanffy",pos.of.panel="left")
-      }, # end vbMooij
-    vbWeisberg= {
-      relax::gslider(refresh,prompt=TRUE,
-                     sl.names=   c("L_inf",           "t50", "t_0", "Max Age"),
-                     sl.mins=    c(  min.y,               1,   -10,         5),
-                     sl.maxs=    c(  max.y,         t.max-1,    10,       100),
-                     sl.deltas=  c(delta.y,             0.1,   0.1,         1),
-                     sl.defaults=c(  max.y,round(t.max/2,0),     0,     t.max),
-                     title = "Weisberg et al. Von Bertalanffy",pos.of.panel="left")    
-    }, # end vbWeisberg
-    vbSchnute= {
-      relax::gslider(refresh,prompt=TRUE,
-             sl.names=   c(            "L_1",            "L_2",  "K",  "b", "Max Age"),
-             sl.mins=    c(            min.y, floor(0.5*max.y),    0, 0.25,         5),
-             sl.maxs=    c(floor(0.75*max.y),            max.y,  0.5,    4,       100),
-             sl.deltas=  c(                5,               10, 0.01, 0.05,         1),
-             sl.defaults=c(               50,              200,  0.3,    1,     t.max),
-             title = "Schnute-like Von Bertalanffy",pos.of.panel="left")
-      }, # end vbSchnute
-    Gompertz1= {
-      relax::gslider(refresh,prompt=TRUE,
-             sl.names=   c(  "L_0",  "G",  "g", "Max Age"),
-             sl.mins=    c(  min.y,    0,    0,         5),
-             sl.maxs=    c(  max.y,    2,    2,       100),
-             sl.deltas=  c(delta.y, 0.01, 0.01,         1),
-             sl.defaults=c(  min.y,  1.5,  0.5,     t.max),
-             title = "Gompertz Growth #1",pos.of.panel="left")    
-    }, # end g1
-    Gompertz2= {
-      relax::gslider(refresh,prompt=TRUE,
-             sl.names=   c("L_inf",  "g", "t*", "Max Age"),
-             sl.mins=    c(  min.y,    0,    0,         5),
-             sl.maxs=    c(  max.y,    2,   10,       100),
-             sl.deltas=  c(delta.y, 0.01, 0.01,         1),
-             sl.defaults=c(  max.y,  0.5,    2,     t.max),
-             title = "Gompertz Growth #2",pos.of.panel="left")    
-    }, # end g2
-    Gompertz3= {
-      relax::gslider(refresh,prompt=TRUE,
-             sl.names=   c("L_inf",  "g", "t_0", "Max Age"),
-             sl.mins=    c(  min.y,    0,   -10,         5),
-             sl.maxs=    c(  max.y,    2,    10,       100),
-             sl.deltas=  c(delta.y, 0.01,  0.01,         1),
-             sl.defaults=c(  max.y,  0.5,     0,     t.max),
-             title = "Gompertz Growth #3",pos.of.panel="left")    
-    }, # end g3
-    Schnute= {
-      relax::gslider(refresh,prompt=TRUE,
-             sl.names=   c(  "L_1",   "L_2",   "c", "d", "Max Age"),
-             sl.mins=    c(  min.y,     100,   -3,   -3,         5),
-             sl.maxs=    c(    200,   max.y,    3,    3,       100),
-             sl.deltas=  c(delta.y, delta.y, 0.01, 0.01,         1),
-             sl.defaults=c(     50,   max.y,    1,  0.5,     t.max),
-             title = "Schnute 4-Parameter Model",pos.of.panel="left") 
-    } # end Schnute
-  ) # end switch
+  if (!iCheckRStudio()) stop("'growthModelSim' only works in RStudio.",call.=FALSE)
+  if (iChk4Namespace("manipulate")) {
+    switch(type,
+           vbOriginal= {
+             manipulate::manipulate(
+               {
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
+               },
+               p1=manipulate::slider(100,1000,step=10,initial=500,label="L_inf"),
+               p2=manipulate::slider(0,90,step=10,initial=0,label="L_0"),
+               p3=manipulate::slider(0,0.5,step=0.05,initial=0.3,label="K"),
+               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+             )},
+           vbTypical= {
+             manipulate::manipulate(
+               {
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
+               },
+               p1=manipulate::slider(100,1000,step=10,initial=500,label="L_inf"),
+               p2=manipulate::slider(0,0.5,step=0.05,initial=0.3,label="K"),
+               p3=manipulate::slider(-10,10,step=0.5,initial=0,label="t_0"),
+               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+             )},
+           vbOriginalW= {
+             manipulate::manipulate(
+               {
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,p4)
+               },
+               p1=manipulate::slider(100,1000,step=10,initial=500,label="W_inf"),
+               p2=manipulate::slider(0,90,step=10,initial=0,label="W_0"),
+               p3=manipulate::slider(0,0.5,step=0.05,initial=0.3,label="K"),
+               p4=manipulate::slider(0.25,4,step=0.05,initial=3,label="b"),
+               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+             )},
+           vbTypicalW= {
+             manipulate::manipulate(
+               {
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,p4)
+               },
+               p1=manipulate::slider(100,1000,step=10,initial=500,label="W_inf"),
+               p2=manipulate::slider(0,0.5,step=0.05,initial=0.3,label="K"),
+               p3=manipulate::slider(-10,10,step=0.5,initial=0,label="t_0"),
+               p4=manipulate::slider(0.25,4,step=0.05,initial=3,label="b"),
+               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+             )},
+           vbGQ=, vbGallucciQuinn= {
+             manipulate::manipulate(
+               {
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
+               },
+               p1=manipulate::slider(0,250,step=5,initial=75,label="omega"),
+               p2=manipulate::slider(0,0.5,step=0.05,initial=0.3,label="K"),
+               p3=manipulate::slider(-10,10,step=0.5,initial=0,label="t_0"),
+               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+             )},
+           vbMooij= {
+             manipulate::manipulate(
+               {
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
+               },
+               p1=manipulate::slider(100,1000,step=10,initial=500,label="L_inf"),
+               p2=manipulate::slider(0,90,step=10,initial=0,label="L_0"),
+               p3=manipulate::slider(0,250,step=5,initial=75,label="omega"),
+               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+             )},
+           vbWeisberg= {
+             manipulate::manipulate(
+               {
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
+               },
+               p1=manipulate::slider(100,1000,step=10,initial=500,label="L_inf"),
+               p2=manipulate::slider(1,50,step=0.1,initial=5,label="t_50"),
+               p3=manipulate::slider(-10,10,step=0.5,initial=0,label="t_0"),
+               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+             )},
+           vbSchnute= {
+             manipulate::manipulate(
+               {
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,p4)
+               },
+               p1=manipulate::slider(0,90,step=10,initial=0,label="L_1"),
+               p2=manipulate::slider(100,1000,step=10,initial=500,label="L_2"),
+               p3=manipulate::slider(0,0.5,step=0.05,initial=0.3,label="K"),
+               p4=manipulate::slider(0.25,4,step=0.05,initial=1,label="b"),
+               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+             )},
+           Gompertz1= {
+             manipulate::manipulate(
+               {
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
+               },
+               p1=manipulate::slider(0,90,step=10,initial=0,label="L_0"),
+               p2=manipulate::slider(0,2,step=0.01,initial=1.5,label="G"),
+               p3=manipulate::slider(0,2,step=0.01,initial=0.5,label="g"),
+               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+             )},
+           Gompertz2= {
+             manipulate::manipulate(
+               {
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
+               },
+               p1=manipulate::slider(100,1000,step=10,initial=500,label="L_inf"),
+               p2=manipulate::slider(0,2,step=0.01,initial=0.5,label="g"),
+               p3=manipulate::slider(0,10,step=0.05,initial=2,label="t*"),
+               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+             )},
+           Gompertz3= {
+             manipulate::manipulate(
+               {
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
+               },
+               p1=manipulate::slider(100,1000,step=10,initial=500,label="L_inf"),
+               p2=manipulate::slider(0,2,step=0.01,initial=0.5,label="g"),
+               p3=manipulate::slider(-10,10,step=0.5,initial=0,label="t_0"),
+               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+             )},
+           Schnute= {
+             manipulate::manipulate(
+               {
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
+               },
+               p1=manipulate::slider(0,90,step=10,initial=0,label="L_1"),
+               p2=manipulate::slider(100,1000,step=10,initial=500,label="L_2"),
+               p3=manipulate::slider(-3,3,step=0.5,initial=1,label="c"),
+               p4=manipulate::slider(-3,3,step=0.5,initial=0.5,label="d"),
+               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+             )}
+    ) # end switch
+  }
 }
-
-
 
 
 ## Internal function to predict length/weight for plotting -- used in iGrowthSimPlot
@@ -291,15 +268,11 @@ iPredLength <- function(type,t,p1,p2,p3,p4) {
 } ## end iPredLength internal function
 
 ## internal function for constructing the plot
-iGrowthSimPlot <- function(type,x,y,max.y,t.max,p1,p2,p3,p4) {
+iGrowthSimPlot <- function(type,t.max,p1,p2,p3,p4) {
   t <- seq(0,t.max,length.out=t.max*20)
   vals <- iPredLength(type,t,p1,p2,p3,p4)
   ylbl <- ifelse (type %in% c("vbTypicalW","vbOriginalW"),"Weight","Length")
-  opar <- par(mar=c(3.5,3.5,1,1), mgp=c(2,0.4,0), tcl=-0.2)
-  if (is.null(x)||is.null(y)) plot(t,vals,xlab="Age",ylab=paste("Mean",ylbl),type="l",lwd=2,col="blue",ylim=c(0,max.y))
-  else {
-    plot(x,y,xlab="Age",ylab=ylbl,ylim=c(0,max.y),xlim=c(0,t.max))
-    lines(t,vals,type="l",lwd=2,col="blue")
-  }
-  par(opar)
+  opar <- graphics::par(mar=c(3.5,3.5,1,1),mgp=c(2,0.4,0),tcl=-0.2)
+  graphics::plot(t,vals,type="l",lwd=2,col="blue",xlab="Age",ylab=ylbl,xlim=c(0,t.max))
+  graphics::par(opar)
 } ## end iGrowthSimPlot internal function
