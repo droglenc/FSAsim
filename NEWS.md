@@ -4,7 +4,7 @@
 * Added Imports for `manipulate`, `relax`, `graphics`, and `stats`.  Added Suggests for `tcltk` (ultimately want to get rid of this and `relax`).
 * `catchCurveSim()`: Modified.  Major overhaul including changing to use `manipulate` rather than `relax`, removed `Zsteady=` and `NoSteady=` in favor of a checkbox (but must be the same for both Z and No), removed `ZDeltaAge=` and `NoDeltaAge=` in favor of one `deltaAge=` to be used for both Z and No.
 * `cohortSim()`: Modified.  Changed to use `manipulate` rather than `relax`.
-* `growthModelSim()`: Modified.  Fixed links to functions in `FSA` that had changed names.
+* `growthModelSim()`: Modified.  Changed to use `manipulate` rather than `relax`.  Removed the ability to plot actual data (see `vbStarts`) for this functionality.  Changed parameter limits for most models.  Fixed links to functions in `FSA` that had changed names.
 * `lengthWeightSim()`: Modified.  Changed to use `manipulate` rather than `relax`.
 * `leslieSim()`: Modified.  Major overhaul including changing to use `manipulate` rather than `relax`, moved `removals` to an argument rather than a slider bar, chagned `type=` to `sim=`, and dramatically changed the plot for `sim="montecarlo"`.
 * `lwModelSim()`: Deleted.  Same as `lengthWeightSim()`.

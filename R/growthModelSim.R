@@ -88,20 +88,20 @@ growthModelSim <- function(type=c("vbTypical","vbOriginal","vbGQ","vbGallucciQui
                {
                  iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
                },
-               p1=manipulate::slider(100,1000,step=10,initial=500,label="L_inf"),
+               p1=manipulate::slider(100,800,step=10,initial=500,label="L_inf"),
                p2=manipulate::slider(0,90,step=10,initial=0,label="L_0"),
                p3=manipulate::slider(0,0.5,step=0.05,initial=0.3,label="K"),
-               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+               t.max=manipulate::slider(5,60,step=1,initial=10,label="Max Age")
              )},
            vbTypical= {
              manipulate::manipulate(
                {
                  iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
                },
-               p1=manipulate::slider(100,1000,step=10,initial=500,label="L_inf"),
+               p1=manipulate::slider(100,800,step=10,initial=500,label="L_inf"),
                p2=manipulate::slider(0,0.5,step=0.05,initial=0.3,label="K"),
-               p3=manipulate::slider(-10,10,step=0.5,initial=0,label="t_0"),
-               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+               p3=manipulate::slider(-4,4,step=0.5,initial=0,label="t_0"),
+               t.max=manipulate::slider(5,60,step=1,initial=10,label="Max Age")
              )},
            vbOriginalW= {
              manipulate::manipulate(
@@ -112,48 +112,48 @@ growthModelSim <- function(type=c("vbTypical","vbOriginal","vbGQ","vbGallucciQui
                p2=manipulate::slider(0,90,step=10,initial=0,label="W_0"),
                p3=manipulate::slider(0,0.5,step=0.05,initial=0.3,label="K"),
                p4=manipulate::slider(0.25,4,step=0.05,initial=3,label="b"),
-               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+               t.max=manipulate::slider(5,60,step=1,initial=10,label="Max Age")
              )},
            vbTypicalW= {
              manipulate::manipulate(
                {
                  iGrowthSimPlot(type,t.max,p1,p2,p3,p4)
                },
-               p1=manipulate::slider(100,1000,step=10,initial=500,label="W_inf"),
+               p1=manipulate::slider(100,800,step=10,initial=500,label="W_inf"),
                p2=manipulate::slider(0,0.5,step=0.05,initial=0.3,label="K"),
-               p3=manipulate::slider(-10,10,step=0.5,initial=0,label="t_0"),
+               p3=manipulate::slider(-4,4,step=0.5,initial=0,label="t_0"),
                p4=manipulate::slider(0.25,4,step=0.05,initial=3,label="b"),
-               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+               t.max=manipulate::slider(5,60,step=1,initial=10,label="Max Age")
              )},
            vbGQ=, vbGallucciQuinn= {
              manipulate::manipulate(
                {
                  iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
                },
-               p1=manipulate::slider(0,250,step=5,initial=75,label="omega"),
+               p1=manipulate::slider(0,200,step=5,initial=75,label="omega"),
                p2=manipulate::slider(0,0.5,step=0.05,initial=0.3,label="K"),
-               p3=manipulate::slider(-10,10,step=0.5,initial=0,label="t_0"),
-               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+               p3=manipulate::slider(-4,4,step=0.5,initial=0,label="t_0"),
+               t.max=manipulate::slider(5,60,step=1,initial=10,label="Max Age")
              )},
            vbMooij= {
              manipulate::manipulate(
                {
                  iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
                },
-               p1=manipulate::slider(100,1000,step=10,initial=500,label="L_inf"),
+               p1=manipulate::slider(100,800,step=10,initial=500,label="L_inf"),
                p2=manipulate::slider(0,90,step=10,initial=0,label="L_0"),
-               p3=manipulate::slider(0,250,step=5,initial=75,label="omega"),
-               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+               p3=manipulate::slider(0,200,step=5,initial=75,label="omega"),
+               t.max=manipulate::slider(5,60,step=1,initial=10,label="Max Age")
              )},
            vbWeisberg= {
              manipulate::manipulate(
                {
                  iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
                },
-               p1=manipulate::slider(100,1000,step=10,initial=500,label="L_inf"),
+               p1=manipulate::slider(100,800,step=10,initial=500,label="L_inf"),
                p2=manipulate::slider(1,50,step=0.1,initial=5,label="t_50"),
-               p3=manipulate::slider(-10,10,step=0.5,initial=0,label="t_0"),
-               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+               p3=manipulate::slider(-4,4,step=0.5,initial=0,label="t_0"),
+               t.max=manipulate::slider(5,60,step=1,initial=10,label="Max Age")
              )},
            vbSchnute= {
              manipulate::manipulate(
@@ -161,10 +161,10 @@ growthModelSim <- function(type=c("vbTypical","vbOriginal","vbGQ","vbGallucciQui
                  iGrowthSimPlot(type,t.max,p1,p2,p3,p4)
                },
                p1=manipulate::slider(0,90,step=10,initial=0,label="L_1"),
-               p2=manipulate::slider(100,1000,step=10,initial=500,label="L_2"),
+               p2=manipulate::slider(100,800,step=10,initial=500,label="L_2"),
                p3=manipulate::slider(0,0.5,step=0.05,initial=0.3,label="K"),
-               p4=manipulate::slider(0.25,4,step=0.05,initial=1,label="b"),
-               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+               p4=manipulate::slider(0.1,3,step=0.1,initial=1,label="b"),
+               t.max=manipulate::slider(5,60,step=1,initial=10,label="Max Age")
              )},
            Gompertz1= {
              manipulate::manipulate(
@@ -174,38 +174,38 @@ growthModelSim <- function(type=c("vbTypical","vbOriginal","vbGQ","vbGallucciQui
                p1=manipulate::slider(0,90,step=10,initial=0,label="L_0"),
                p2=manipulate::slider(0,2,step=0.01,initial=1.5,label="G"),
                p3=manipulate::slider(0,2,step=0.01,initial=0.5,label="g"),
-               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+               t.max=manipulate::slider(5,60,step=1,initial=10,label="Max Age")
              )},
            Gompertz2= {
              manipulate::manipulate(
                {
                  iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
                },
-               p1=manipulate::slider(100,1000,step=10,initial=500,label="L_inf"),
+               p1=manipulate::slider(100,800,step=10,initial=500,label="L_inf"),
                p2=manipulate::slider(0,2,step=0.01,initial=0.5,label="g"),
                p3=manipulate::slider(0,10,step=0.05,initial=2,label="t*"),
-               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+               t.max=manipulate::slider(5,60,step=1,initial=10,label="Max Age")
              )},
            Gompertz3= {
              manipulate::manipulate(
                {
                  iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
                },
-               p1=manipulate::slider(100,1000,step=10,initial=500,label="L_inf"),
+               p1=manipulate::slider(100,800,step=10,initial=500,label="L_inf"),
                p2=manipulate::slider(0,2,step=0.01,initial=0.5,label="g"),
-               p3=manipulate::slider(-10,10,step=0.5,initial=0,label="t_0"),
-               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+               p3=manipulate::slider(-4,4,step=0.5,initial=0,label="t_0"),
+               t.max=manipulate::slider(5,60,step=1,initial=10,label="Max Age")
              )},
            Schnute= {
              manipulate::manipulate(
                {
-                 iGrowthSimPlot(type,t.max,p1,p2,p3,NULL)
+                 iGrowthSimPlot(type,t.max,p1,p2,p3,p4)
                },
                p1=manipulate::slider(0,90,step=10,initial=0,label="L_1"),
-               p2=manipulate::slider(100,1000,step=10,initial=500,label="L_2"),
-               p3=manipulate::slider(-3,3,step=0.5,initial=1,label="c"),
-               p4=manipulate::slider(-3,3,step=0.5,initial=0.5,label="d"),
-               t.max=manipulate::slider(5,100,step=1,initial=10,label="Max Age")
+               p2=manipulate::slider(100,800,step=10,initial=500,label="L_2"),
+               p3=manipulate::slider(-2,1,step=0.1,initial=0.1,label="c"),
+               p4=manipulate::slider(0.1,2,step=0.1,initial=1,label="d"),
+               t.max=manipulate::slider(5,60,step=1,initial=10,label="Max Age")
              )}
     ) # end switch
   }
@@ -272,7 +272,9 @@ iGrowthSimPlot <- function(type,t.max,p1,p2,p3,p4) {
   t <- seq(0,t.max,length.out=t.max*20)
   vals <- iPredLength(type,t,p1,p2,p3,p4)
   ylbl <- ifelse (type %in% c("vbTypicalW","vbOriginalW"),"Weight","Length")
-  opar <- graphics::par(mar=c(3.5,3.5,1,1),mgp=c(2,0.4,0),tcl=-0.2)
-  graphics::plot(t,vals,type="l",lwd=2,col="blue",xlab="Age",ylab=ylbl,xlim=c(0,t.max))
+  opar <- graphics::par(mar=c(3.5,3.5,1,1),mgp=c(2,0.4,0),tcl=-0.2,xaxs="i",yaxs="i")
+  graphics::plot(t,vals,type="l",lwd=2,col="blue",
+                 xlab="Age",xlim=c(0,t.max),
+                 ylab=ylbl,ylim=c(0,800))
   graphics::par(opar)
 } ## end iGrowthSimPlot internal function
