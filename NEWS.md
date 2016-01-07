@@ -2,7 +2,7 @@
 * Compiling under R 3.2.3 and using roxygen2 5.0.1
 * DESCRIPTION: Updated.
 * Added Imports for `manipulate`, `relax`, `graphics`, and `stats`.  Added Suggests for `tcltk` (ultimately want to get rid of this and `relax`).
-* `catchCurveSim()`: Modified.  Major overhaul including changing to use `manipulate` rather than `relax`, removed `Zsteady=` and `NoSteady=` in favor of a checkbox (but must be the same for both Z and No), removed `ZDeltaAge=` and `NoDeltaAge=` in favor of one `deltaAge=` to be used for both Z and No.
+* `catchCurveSim()`: Modified.  Major overhaul including changing to use `manipulate` rather than `relax`, removed `Zsteady=` and `NoSteady=` in favor of a checkbox (but must be the same for both Z and No), removed `ZDeltaAge=` and `NoDeltaAge=` in favor of one `deltaAge=` to be used for both Z and No.  Moved legend to bottomleft.  Changed lines such that including randomness in Z or No is considered an assumption violation.
 * `cohortSim()`: Modified.  Changed to use `manipulate` rather than `relax`.
 * `growthModelSim()`: Modified.  Changed to use `manipulate` rather than `relax`.  Removed the ability to plot actual data (see `vbStarts`) for this functionality.  Changed parameter limits for most models.  Fixed links to functions in `FSA` that had changed names.
 * `lengthWeightSim()`: Modified.  Changed to use `manipulate` rather than `relax`.

@@ -67,11 +67,11 @@ catchCurveSim <- function(max.age=15,v=rep(1,max.age),Zycl=FALSE,
       },
       Z.mean=manipulate::slider(0.1,0.8,step=0.05,initial=0.4,label="Z mean"),
       No.mean=manipulate::slider(100,1000,step=100,initial=700,label="No mean"),
-      Z.delta=manipulate::slider(0.3,2,step=0.1,initial=1,label="Z delta"),
-      No.delta=manipulate::slider(0.3,2,step=0.1,initial=1,label="No delta"),
-      steady=manipulate::checkbox(TRUE,label="Steady?"),
       Z.cv=manipulate::slider(0,0.2,step=0.05,initial=0,label="Z CV"),
       No.cv=manipulate::slider(0,0.5,step=0.05,initial=0,label="No CV"),
+      steady=manipulate::checkbox(TRUE,label="Steady?"),
+      Z.delta=manipulate::slider(0.3,2,step=0.1,initial=1,label="Z delta"),
+      No.delta=manipulate::slider(0.3,2,step=0.1,initial=1,label="No delta"),
       rerand=manipulate::button("Rerandomize")
     )
   }
@@ -88,23 +88,17 @@ iCC.plot <- function(max.age,v,Zycl,deltaAge,recruit.age,Z.param,No.param) {
   Z.param.def <- list(mean=0.40,cv=0,delta=1,deltaAge=deltaAge,dstdy=TRUE)
   No.param.def <- list(mean=700,cv=0,delta=1,deltaAge=deltaAge,dstdy=TRUE)
   C.def <- iCC.makeCatch(Ages,v,Zycl,recruit.age,Z.param.def,No.param.def)
-  # Make catches for the modified graph but wihout assumption violations
-  # if no assumption violations, make same as actual so no extra line due to randomization
-  if ((Z.param$delta==1) & (No.param$delta==1)) C.mod <- C.ass  
-  else {
-    Z.param.mod <- list(mean=Z.param$mean,cv=Z.param$cv,delta=1,
-                        deltaAge=deltaAge,dstdy=TRUE)
-    No.param.mod <- list(mean=No.param$mean,cv=No.param$cv,delta=1,
-                         deltaAge=deltaAge,dstdy=TRUE)    
-    C.mod <- iCC.makeCatch(Ages,v,Zycl,recruit.age,Z.param.mod,No.param.mod)
-  }
+  # Make catches for the modified graph but without assumption violations
+  Z.param.mod <- list(mean=Z.param$mean,cv=0,delta=1,deltaAge=deltaAge,dstdy=TRUE)
+  No.param.mod <- list(mean=No.param$mean,cv=0,delta=1,deltaAge=deltaAge,dstdy=TRUE)    
+  C.mod <- iCC.makeCatch(Ages,v,Zycl,recruit.age,Z.param.mod,No.param.mod)
   # Make the plot
   op <- graphics::par(mar=c(3,3,1.5,1),mgp=c(1.9,0.4,0),tcl=-0.2,cex.main=1)
   graphics::plot(Ages,log(C.def),type="o",col="gray",pch=16,lwd=3,
                  ylab="log(Catch)",ylim=c(-3,6.2),main=iCC.title(Z.param,No.param))
   graphics::lines(Ages,log(C.ass),type="o",col="red",pch=19,lwd=3)
   graphics::lines(Ages,log(C.mod),type="o",col="blue",pch=19,lwd=3)
-  graphics::legend("topright",c("assumptions not met","if assumptions met","default"),
+  graphics::legend("bottomleft",c("assumptions not met","if assumptions met","default"),
                    lwd=2,pch=16,col=c("red","blue","gray"),
                    bg="white",box.col="white",inset=0.02)
   graphics::par(op)
@@ -220,37 +214,42 @@ iCC.makeZage <- function(Ages,param) {
 
 ## Internal function to create
 iCC.title <- function(Z.param,No.param) {
-  viol.Zdelta <- viol.Nodelta <- viol.rand <- FALSE
-  lbl <- "VIOLATION:"
-  if (Z.param$delta != 1) {
+  if (isTRUE(all.equal(1,Z.param$delta))) {
+    viol.Zdelta <- FALSE
+  } else {
     viol.Zdelta <- TRUE
     if (Z.param$dstdy) {
-      if (Z.param$delta < 1) { lbl <- paste(lbl,"Constant decreased mortality") }
-      else { lbl <- paste(lbl,"Constant increased mortalilty") }        
+      if (Z.param$delta < 1) lbl <- "VIOLATION: Constant decreased mortality"
+      else lbl <- "VIOLATION: Constant increased mortalilty"
     } else {
-      if (Z.param$delta < 1) { lbl <- paste(lbl,"Constantly decreasing mortality") }
-      else { lbl <- paste(lbl,"Constantly increasing mortalilty") }         
+      if (Z.param$delta < 1) lbl <- "VIOLATION: Constantly decreasing mortality"
+      else lbl <- "VIOLATION: Constantly increasing mortalilty"
     }
   }
-  if (No.param$delta != 1) {
+  if (isTRUE(all.equal(1,No.param$delta))) {
+    viol.Nodelta <- FALSE
+  } else {
     viol.Nodelta <- TRUE
     if (No.param$dstdy) {
-      if (No.param$delta < 1) { lbl <- paste(lbl,"Constant decreased recruitment") }
-      else { lbl <- paste(lbl,"Constant increased recruitment") }        
+      if (No.param$delta < 1) lbl <- "VIOLATION: Constant decreased recruitment"
+      else lbl <- "VIOLATION: Constant increased recruitment"
     } else {
-      if (No.param$delta < 1) { lbl <- paste(lbl,"Constantly decreasing recruitment") }
-      else { lbl <- paste(lbl,"Constantly increasing recruitment") }         
+      if (No.param$delta < 1) lbl <- "VIOLATION: Constantly decreasing recruitment"
+      else lbl <- "VIOLATION: Constantly increasing recruitment"
     }
-  }    
+  }
   viol.sum <- sum(c(viol.Zdelta,viol.Nodelta))
   if(viol.sum==0) {
-    lbl <- "No Assumptions Violations"
+    if (Z.param$cv==0 & No.param$cv==0) lbl <- "No Assumptions Violations"
+    else {
+      if (Z.param$cv!=0 & No.param$cv!=0) lbl <- "VIOLATION: Randomness in Z and No"
+      else if (Z.param$cv!=0) lbl <- "VIOLATION: Randomness in Z"
+      else lbl <- "VIOLATION: Randomness in No"
+    }
   } else if (viol.sum > 1) {
     lbl <- "VIOLATION: Multiple Assumptions"
-  }
-  if (Z.param$cv!=0 | No.param$cv!=0) {
-    viol.rand <- TRUE
-    lbl <- paste(lbl,", with randomness",sep="")
+  } else {
+    if (Z.param$cv!=0 | No.param$cv!=0) { lbl <- paste0(lbl,", with randomness") }
   }
   lbl
 } # end iCC.title

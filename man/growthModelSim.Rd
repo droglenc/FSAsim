@@ -4,21 +4,21 @@
 \alias{growthModelSim}
 \title{Dynamics plots to explore typical fisheries growth models.}
 \usage{
-growthModelSim(formula = NULL, data = NULL, type = c("vbTypical",
-  "vbOriginal", "vbGQ", "vbGallucciQuinn", "vbMooij", "vbWeisberg", "vbSchnute",
-  "vbTypicalW", "vbOriginalW", "Gompertz1", "Gompertz2", "Gompertz3",
-  "Schnute"), max.len = 500, max.wt = 500)
+growthModelSim(type = c("vbTypical", "vbOriginal", "vbGQ", "vbGallucciQuinn",
+  "vbMooij", "vbWeisberg", "vbSchnute", "vbTypicalW", "vbOriginalW",
+  "Gompertz1", "Gompertz2", "Gompertz3", "Schnute"), max.len = 500,
+  max.wt = 500)
 }
 \arguments{
-\item{formula}{An optional formula of the form \code{len~age}.  See details.}
-
-\item{data}{A data frame from which the variables in the formula should be drawn.}
-
 \item{type}{A single character string that indicates which growth model to use.  See details.}
 
 \item{max.len}{A single numeric that indicates the maximum length to use in the simulations.}
 
 \item{max.wt}{A single numeric that indicates the maximum weight to use in the simulations (only used of \code{type=} \code{"vbTypicalW"} or \code{"vbOriginalW"}.}
+
+\item{formula}{An optional formula of the form \code{len~age}.  See details.}
+
+\item{data}{A data frame from which the variables in the formula should be drawn.}
 }
 \value{
 None.  However a dynamic graphic connected to slider bar controls in which the user can change the maximum age over which the growth model is evaluated and change the parameters specific to the chosen growth model.
