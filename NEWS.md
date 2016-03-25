@@ -1,4 +1,8 @@
-# FSAsim 0.0.4 ongoing
+# FSAsim 0.0.5 ongoing
+* `srStartsDP()`: Added from `FSA`.
+* `vbStartsDP()`: Added from `FSA`.
+
+# FSAsim 0.0.4 1-Feb-16
 * Compiling under R 3.2.3 and using roxygen2 5.0.1
 * DESCRIPTION: Updated.
 * Added Imports for `manipulate`, `relax`, `graphics`, and `stats`.  Added Suggests for `tcltk` (ultimately want to get rid of this and `relax`).
