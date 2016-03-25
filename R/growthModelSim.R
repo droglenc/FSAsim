@@ -21,8 +21,6 @@
 #' \code{"schnute"} \tab The Schnute(1981) four-parameter general growth model.
 #' }
 #'
-#' @param formula An optional formula of the form \code{len~age}.  See details.
-#' @param data A data frame from which the variables in the formula should be drawn.
 #' @param type A single character string that indicates which growth model to use.  See details.
 #' @param max.len A single numeric that indicates the maximum length to use in the simulations.
 #' @param max.wt A single numeric that indicates the maximum weight to use in the simulations (only used of \code{type=} \code{"vbTypicalW"} or \code{"vbOriginalW"}.
