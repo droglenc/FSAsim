@@ -50,27 +50,27 @@ srCobWeb <- function(type=c("BevertonHolt","Ricker"),param=1,N=100,initS=50,N2ig
   S[1] <- initS
   for (i in 2:N) S[i] <- mdl(S[i-1],...)
   
-  opar <- par(mfrow=c(2,1),mar=c(3.5,3.5,0.5,0.5),mgp=c(2,0.75,0)); on.exit(par <- opar)
+  opar <- graphics::par(mfrow=c(2,1),mar=c(3.5,3.5,0.5,0.5),mgp=c(2,0.75,0)); on.exit(graphics::par(opar))
   # make base cobweb plot
   x <- 0:ceiling(max(S))
   y <- mdl(x,...)
   # The curve
-  plot(y~x,type="l",lwd=4,col="blue",xlim=c(0,max(c(x,y))),ylim=c(0,max(c(x,y))),xlab="Spawners / Stock",ylab="Recruits")
+  graphics::plot(y~x,type="l",lwd=4,col="blue",xlim=c(0,max(c(x,y))),ylim=c(0,max(c(x,y))),xlab="Spawners / Stock",ylab="Recruits")
   # The replacement line
-  abline(a=0,b=1,lwd=3,col="red")
+  graphics::abline(a=0,b=1,lwd=3,col="red")
   # add cobwebs
-  clrs <- rgb(0,0,0,1/(N/20))
+  clrs <- grDevices::rgb(0,0,0,1/(N/20))
   for (i in (N2ignore+1):(N-1)) {
     # go vertical to the function line
     if (i==1) {
-      points(S[i],0,col="green",pch=19)                              # mark start
-      lines(c(S[i],S[i]),c(0,S[i+1]),lwd=2,col=clrs)
-    } else lines(c(S[i],S[i]),c(S[i],S[i+1]),lwd=2,col=clrs)
+      graphics::points(S[i],0,col="green",pch=19)                              # mark start
+      graphics::lines(c(S[i],S[i]),c(0,S[i+1]),lwd=2,col=clrs)
+    } else graphics::lines(c(S[i],S[i]),c(S[i],S[i+1]),lwd=2,col=clrs)
     # go horizontal to replacement line
-    if (i==(N-1)) points(S[i],S[i+1],col="red",pch=19)               # mark end
-    else lines(c(S[i],S[i+1]),c(S[i+1],S[i+1]),lwd=2,col=clrs)
+    if (i==(N-1)) graphics::points(S[i],S[i+1],col="red",pch=19)               # mark end
+    else graphics::lines(c(S[i],S[i+1]),c(S[i+1],S[i+1]),lwd=2,col=clrs)
   }
   # Time plot
-  plot(S,type="l",xlab="Time",ylab="Spawners / Stock")
-  points(((N2ignore+1):N),S[(N2ignore+1):N],pch=16,cex=0.75)
+  graphics::plot(S,type="l",xlab="Time",ylab="Spawners / Stock")
+  graphics::points(((N2ignore+1):N),S[(N2ignore+1):N],pch=16,cex=0.75)
 }

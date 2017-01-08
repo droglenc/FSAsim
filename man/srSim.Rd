@@ -31,7 +31,7 @@ This function can be used to explore the dynamics of stock-recruitment models fo
 
 This function can  also be used to visually \dQuote{fit} a stock-recruit model to a set of observed stock and recruitment data to determine reasonable starting values for non-linear model fitting.  In this use, observed data are plotted by including the vectors of observed stock sizes and recruits in a formula of the form \code{S~R}, in conjunction with the \code{data=} argument.
 
-The \code{type=} argument is used to choose either the \code{"BevertonHolt"}, \code{"Ricker"}, \code{"Shepherd"}, or \code{"SailaLorda"} stock-recruitment models.  Common parameterizations of the \code{"BevertonHolt"} and \code{"Ricker"} models can be chosen with \code{param=}.  Four paramaterizations of the Beverton-Holt model and three parameterizations of the Ricker model are allowed.  Type \code{srModels()} to see equations for each model.
+The \code{type=} argument is used to choose either the \code{"BevertonHolt"}, \code{"Ricker"}, \code{"Shepherd"}, or \code{"SailaLorda"} stock-recruitment models.  Common parameterizations of the \code{"BevertonHolt"} and \code{"Ricker"} models can be chosen with \code{param=}.  Four paramaterizations of the Beverton-Holt model and three parameterizations of the Ricker model are allowed.  See \code{\link[FSA]{srFunShow}} to see equations for each model.
 }
 \examples{
 ## ONLY RUN IN INTERACTIVE MODE
@@ -59,7 +59,7 @@ srSim(recruits~stock,data=CodNorwegian,type="Ricker",param=3)
 Derek H. Ogle, \email{dogle@northland.edu}
 }
 \seealso{
-\code{\link[FSA]{srModels}}
+\code{\link[FSA]{srFunShow}}
 }
 \keyword{iplot}
 

@@ -6,7 +6,7 @@
 #' 
 #' This function can  also be used to visually \dQuote{fit} a stock-recruit model to a set of observed stock and recruitment data to determine reasonable starting values for non-linear model fitting.  In this use, observed data are plotted by including the vectors of observed stock sizes and recruits in a formula of the form \code{S~R}, in conjunction with the \code{data=} argument.
 #'
-#' The \code{type=} argument is used to choose either the \code{"BevertonHolt"}, \code{"Ricker"}, \code{"Shepherd"}, or \code{"SailaLorda"} stock-recruitment models.  Common parameterizations of the \code{"BevertonHolt"} and \code{"Ricker"} models can be chosen with \code{param=}.  Four paramaterizations of the Beverton-Holt model and three parameterizations of the Ricker model are allowed.  Type \code{srModels()} to see equations for each model.
+#' The \code{type=} argument is used to choose either the \code{"BevertonHolt"}, \code{"Ricker"}, \code{"Shepherd"}, or \code{"SailaLorda"} stock-recruitment models.  Common parameterizations of the \code{"BevertonHolt"} and \code{"Ricker"} models can be chosen with \code{param=}.  Four paramaterizations of the Beverton-Holt model and three parameterizations of the Ricker model are allowed.  See \code{\link[FSA]{srFunShow}} to see equations for each model.
 #'
 #' @param formula Formula of the form \code{Recruits~Stock}.
 #' @param data A data frame from which the vectors of observed stock and recruitment levels can be found.
@@ -19,7 +19,7 @@
 #'
 #' @author Derek H. Ogle, \email{dogle@@northland.edu}
 #'
-#' @seealso \code{\link[FSA]{srModels}}
+#' @seealso \code{\link[FSA]{srFunShow}}
 #'
 #' @aliases srSim
 #'
@@ -207,16 +207,16 @@ srSimPlot <- function(type,param,S,R,max.S,max.R,max.rds,a,b,c) {
               y <- a*x*exp(-a*x/(Rp*exp(1))) }
            ) # end Ricker switch
   }
-  old.par <- par(mfrow=c(1,2), mar=c(3.5,3.5,1.25,1.25), mgp=c(2,0.4,0), tcl=-0.2, pch=19)
-  plot(x,y,xlab="Parental (Spawner) Stock",ylab="Recruits",type="l",lwd=2,col="blue",ylim=c(0,max.R),xlim=c(0,max.S))
-  if (!(is.null(R)||is.null(S))) { points(S,R,pch=19) }
-  abline(h=Rp,lwd=2,lty=3,col="red")
-  axis(4,Rp,"Rp",col.ticks="red",col.axis="red",las=1)
+  old.par <- graphics::par(mfrow=c(1,2), mar=c(3.5,3.5,1.25,1.25), mgp=c(2,0.4,0), tcl=-0.2, pch=19)
+  graphics::plot(x,y,xlab="Parental (Spawner) Stock",ylab="Recruits",type="l",lwd=2,col="blue",ylim=c(0,max.R),xlim=c(0,max.S))
+  if (!(is.null(R)||is.null(S))) { graphics::points(S,R,pch=19) }
+  graphics::abline(h=Rp,lwd=2,lty=3,col="red")
+  graphics::axis(4,Rp,"Rp",col.ticks="red",col.axis="red",las=1)
   if (type=="Ricker") {
-    abline(v=Sp,lwd=2,lty=3,col="red")
-    axis(3,Sp,"Sp",col.ticks="red",col.axis="red")
+    graphics::abline(v=Sp,lwd=2,lty=3,col="red")
+    graphics::axis(3,Sp,"Sp",col.ticks="red",col.axis="red")
   }
-  plot(x,y/x,xlab="Parental (Spawner) Stock",ylab="Recruits/Spawner",type="l",lwd=2,col="blue",ylim=c(0,max.rds),xlim=c(0,max.S))
-  if (!(is.null(R)||is.null(S))) { points(S,R/S,pch=19) } 
-  par(old.par)
+  graphics::plot(x,y/x,xlab="Parental (Spawner) Stock",ylab="Recruits/Spawner",type="l",lwd=2,col="blue",ylim=c(0,max.rds),xlim=c(0,max.S))
+  if (!(is.null(R)||is.null(S))) { graphics::points(S,R/S,pch=19) } 
+  graphics::par(old.par)
 } # end srSimPlot internal function

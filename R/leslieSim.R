@@ -213,7 +213,7 @@ iLeslie.randRun <- function(params) {
   Ct <- Mt <- Rt <- rep(0,k)      
   for (i in 1:k) {
     # Determine whether caught or not -- capture probability is q*E*N/N or just q*E
-    Ct[i] <- length(which(runif(Nt[i])<qt[i]*Et[i]))
+    Ct[i] <- length(which(stats::runif(Nt[i])<qt[i]*Et[i]))
     # Update population size after catch for next pass
     if(i<k) {
       # Reduce by catch in current time
@@ -221,7 +221,7 @@ iLeslie.randRun <- function(params) {
       # Reduce by mortality, if any, in current time
       if (any(p.surv<1)) {
         # Mortality
-        Mt[i] <- length(which(runif(Nt[i+1])<(1-p.surv[i])))
+        Mt[i] <- length(which(stats::runif(Nt[i+1])<(1-p.surv[i])))
         Nt[i+1] <- Nt[i+1]-Mt[i]
       }  
       # Increase by recruitment, if any, in current time
@@ -280,7 +280,7 @@ iLeslie.mcPlotMain <- function(params,Ricker.mod,rsmpls) {
   graphics::layout(matrix(c(2,4,1,3),nrow=2,byrow=TRUE),c(1.5,1),c(1,1.5),TRUE)
   ## Scatterplot of No vs q
   op <- graphics::par(mar=c(3,3,0,0),mgp=c(1.7,0.4,0),tcl=-0.2) 
-  graphics::plot(res.qhat,res.N0hat,pch=16,cex=1.1,col=rgb(0,0,0,0.8),
+  graphics::plot(res.qhat,res.N0hat,pch=16,cex=1.1,col=grDevices::rgb(0,0,0,0.8),
                  xlab="Catchability Estimate",xlim=qrng,
                  ylab="Estimated Population Size",ylim=Norng)
   # Add reference lines

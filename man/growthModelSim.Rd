@@ -25,7 +25,7 @@ Plots hypothetical size-at-age for one of seven possible parameterizations of th
 \details{
 This function can be used to explore the \dQuote{shape} of the growth models for various choices of the parameters.  In this usage the \code{x} and \code{y} arguments should be (left) set at \code{NULL}.  This function can also be used to visually \dQuote{fit} a growth model to a set of observed lengths and ages.  This usage may be used to provide reasonable starting values for the parameters when fitting the growth model to the data with non-linear least-squares.  The observed data are plotted by including a formula of the form \code{length~age} in \code{x} and a data frame from which to draw the variables in the formula in the \code{data} arguments.
 
-The \code{type} argument is used to choose a type of growth model and must be one of the following (the models can be seen with \code{\link[FSA]{vbModels}}, \code{\link[FSA]{GompertzModels}}, and \code{\link[FSA]{SchnuteModels}}):
+The \code{type} argument is used to choose a type of growth model and must be one of the following (the models can be seen with \code{\link[FSA]{growthFunShow}}:
 
 \tabular{ll}{
 \code{"vbTypical"} \tab The "typical" Beverton-Holt parameterized von Bertalanffy model.\cr
@@ -82,7 +82,7 @@ Schnute, J. and D. Fournier. 1980.  A new approach to length-frequency analysis:
 Weisberg, S., G.R. Spangler, and L. S. Richmond. 2010. Mixed effects models for fish growth. Canadian Journal of Fisheries And Aquatic Sciences 67:269-277.
 }
 \seealso{
-See model equations with \code{\link[FSA]{vbModels}}, \code{\link[FSA]{GompertzModels}}, and \code{\link[FSA]{SchnuteModels}}.  See similar functionality for von Bertalanffy models in \code{\link[FSA]{vbStarts}}.
+See model equations with \code{\link[FSA]{growthFunShow}}.  See similar functionality for von Bertalanffy models in \code{\link[FSA]{vbStarts}}.
 }
 \keyword{iplot}
 

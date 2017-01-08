@@ -26,7 +26,7 @@
 #' 
 #' The essential steps for constructing the simulated data are as follows:
 #' \enumerate{
-#'   \item Use \code{Linf}, \code{K}, and \code{t0} to set \sQuote{true} values for the three parameters in a typical VBGF (see \code{\link[FSA]{vbModels}} in \pkg{FSA} for the equation of this parameterization).
+#'   \item Use \code{Linf}, \code{K}, and \code{t0} to set \sQuote{true} values for the three parameters in a typical VBGF (see \code{\link[FSA]{growthFunShow}} in \pkg{FSA} for the equation of this parameterization).
 #'   \item For each fish, generate a random age-at-capture (i.e., number of completed growing seasons) between \code{minage} and \code{maxage} from the probability distribution for each age in \code{probdist}.
 #'   \item Add a fractional age to the ages from the previous step and store in \code{ageFracG}.  By defaut, the \code{sample.per} is the first day of the \code{growth.per}, so \code{ageCap} and \code{ageFracG} will be the same.  However, if \code{sample.per} is not a single day equal to the first day of the \code{growth.per}, then \code{ageFracG} will be greater than \code{ageCap}.
 #'   \item For each fish, generate random values for Linf, K, and t0 from a normal distribution with a mean of \code{Linf}, \code{K}, and \code{t0} and a standard deviation derived from each of \code{Linf}, \code{K}, and \code{t0}, respectively, times \code{paramCV}.  This step is used to model different parameter values for each fish.
@@ -227,17 +227,17 @@ vbDataGen <- function(n,Linf,K,t0,paramCV=0.1,
   # get typical von Bertalanffy model from vbFuns
   LVB <- vbFuns("typical")
   # Generate random parameters for each fish
-  iLinf <- rep(rnorm(n,Linf,Linf*paramCV),ages)
-  iK <- rep(rnorm(n,K,K*paramCV),ages)
-  it0 <- rep(rnorm(n,t0,abs(t0)*paramCV),ages)
+  iLinf <- rep(stats::rnorm(n,Linf,Linf*paramCV),ages)
+  iK <- rep(stats::rnorm(n,K,K*paramCV),ages)
+  it0 <- rep(stats::rnorm(n,t0,abs(t0)*paramCV),ages)
   # Generage mean lengths-at-ages based on typical VBGF
   tmp <- LVB(d$ageFracG,iLinf,iK,it0)
   # add some error to model for the mean ....
-  if (!is.null(SE)) tmp <- tmp + rnorm(length(tmp),0,SE)
-    else tmp <- tmp + rnorm(length(tmp),0,SECV*tmp)
+  if (!is.null(SE)) tmp <- tmp + stats::rnorm(length(tmp),0,SE)
+    else tmp <- tmp + stats::rnorm(length(tmp),0,SECV*tmp)
   # ... and for the individual fish
-  if (!is.null(SD)) tmp <- tmp + rnorm(length(tmp),0,SD)
-    else tmp <- tmp + rnorm(length(tmp),0,SDCV*tmp)
+  if (!is.null(SD)) tmp <- tmp + stats::rnorm(length(tmp),0,SD)
+    else tmp <- tmp + stats::rnorm(length(tmp),0,SDCV*tmp)
   ## Find length-at-capture, repeat for each agePrev
 #  plusgrowth <- ifelse(max(sample.per)==growth.per[1],FALSE,TRUE)
 #  if (plusgrowth) lenCap <- round(rep(tmp[d$ageFracY>=d$ageCap],ages),lendigs)

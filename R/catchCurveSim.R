@@ -120,7 +120,7 @@ iCC.makeCatch <- function(Ages,v,Zycl,recruit.age,Z.param,No.param) {
     # or if Z varies by age (irrespective of year-class)
     #   Create Z vector with randomly select values from a Normal Distribution
     ifelse(Z.param$cv==0,Z <- rep(Z.param$mean,length(Ages)),
-           Z <- rnorm(length(Ages),Z.param$mean,Z.param$mean*Z.param$cv))
+           Z <- stats::rnorm(length(Ages),Z.param$mean,Z.param$mean*Z.param$cv))
     #   Adjust age vector for handling change in Zs by age
     Ages.adj <- iCC.makeZage(Ages,Z.param)
     #   Population sizes for each age
@@ -147,7 +147,7 @@ iCC.makeV <- function(Ages,recruit.age) {
 iCC.makeNoycl <- function(Ages,param) {
   #   Initiate No vector with randomly select values from a Normal Distribution
   ifelse(param$cv==0,No <- rep(param$mean,length(Ages)),
-         No <- rnorm(length(Ages),param$mean,param$mean*param$cv))
+         No <- stats::rnorm(length(Ages),param$mean,param$mean*param$cv))
   #   Initiate the multiplication vector with 1s
   md <- rep(1,length(Ages))
   if (param$delta!=1) {
@@ -172,7 +172,7 @@ iCC.makeNoycl <- function(Ages,param) {
 iCC.makeZycl <- function(Ages,param) {
   #   Initiate Z vector with randomly select values from a Normal Distribution
   ifelse(param$cv==0,Z <- rep(param$mean,length(Ages)),
-         Z <- rnorm(length(Ages),param$mean,param$mean*param$cv))
+         Z <- stats::rnorm(length(Ages),param$mean,param$mean*param$cv))
   #   Initiate the multiplication vector with 1s
   md <- rep(1,length(Ages))
   if (param$delta!=1) {

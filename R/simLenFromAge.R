@@ -60,10 +60,10 @@ simLenFromAge <- function(ages,Linf,K,t0,sigma,additive=TRUE,digits=0) {
   mns <- Linf*(1-exp(-K*(ages-t0)))
   if (additive) {
    # simulate lengths assuming additive normal deviates
-    lens <- rnorm(length(mns),mean=mns,sd=sigma) 
+    lens <- stats::rnorm(length(mns),mean=mns,sd=sigma) 
   } else {
    # simulate lengths assuming multiplicative normal deviates
-    lens <- exp(rnorm(length(mns),mean=log(mns),sd=sigma))
+    lens <- exp(stats::rnorm(length(mns),mean=log(mns),sd=sigma))
   }
   round(lens,digits)
 }

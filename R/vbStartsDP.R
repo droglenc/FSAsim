@@ -51,7 +51,7 @@ vbStartsDP <- function(formula,data=NULL,
                        ...) {
   ## some checks of arguments
   type <- match.arg(type)
-  type <- FSA:::capFirst(type)
+  type <- FSA::capFirst(type)
   if (type=="BevertonHolt") type <- "Typical"
   if (type=="vonBertalanffy") type <- "Original"
   methEV <- match.arg(methEV)

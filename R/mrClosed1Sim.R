@@ -74,7 +74,7 @@
 #'
 #' @export
 #'
-mrClosed1Sim <- function(sim=c("assumptions","distribution"),N=1000,rsmpls=2000,
+mrClosed1Sim <- function(sim=c("assumptions","distribution"),N=1000,rsmpls=5000,
                          EM=200,En=200,incl.final=TRUE,conf.level=0.95) {
   sim <- match.arg(sim)
   if (sim=="assumptions") iMRC1Assump(N,rsmpls,EM,En,incl.final)
@@ -145,21 +145,21 @@ iMRC1.genpopn <- function(type,N,EM,En,mark.loss,surv.mark,surv.unmark,recruits,
   M <- n <- m <- N0 <- N1 <- rep(0,rsmpls)
   for (i in 1:rsmpls) {
     # Number marked in first sample (EM/N is probability of being marked)
-    adj.M <- M[i] <- length(which(runif(N)<(EM/N)))
+    adj.M <- M[i] <- length(which(stats::runif(N)<(EM/N)))
     # Unmarked fish
     adj.U <- N-M[i]
     if (mark.loss>0) {
       # Apply mark loss probability
-      lost.marks <- length(which(runif(M[i])<mark.loss))
+      lost.marks <- length(which(stats::runif(M[i])<mark.loss))
       # Removed lost mark fish from marked popn
       adj.M <- adj.M - lost.marks
       # Put lost mark fish back into unmarked popn
       adj.U <- adj.U + lost.marks
     }
     # Marked fish survival -- greater than survival prob is mortality
-    if (!surv.mark==1)   adj.M <- adj.M - length(which(runif(M[i])>surv.mark))
+    if (!surv.mark==1)   adj.M <- adj.M - length(which(stats::runif(M[i])>surv.mark))
     # UnMarked fish survival
-    if (!surv.unmark==1) adj.U <- adj.U - length(which(runif(adj.U)>surv.unmark))
+    if (!surv.unmark==1) adj.U <- adj.U - length(which(stats::runif(adj.U)>surv.unmark))
     # Add recruits to unmarked population
     if (!recruits==0) adj.U <- adj.U + N*recruits
     # Population size just before second capture
@@ -169,9 +169,9 @@ iMRC1.genpopn <- function(type,N,EM,En,mark.loss,surv.mark,surv.unmark,recruits,
     # Probability of capturing marked fish in second sample
     p.mark <- p.unmark*cap.ratio
     # Number of marked fish recaptured in second sample
-    m[i] <- length(which(runif(adj.M)<p.mark))
+    m[i] <- length(which(stats::runif(adj.M)<p.mark))
     # Total number of fish captured in second sample
-    n[i] <- m[i] + length(which(runif(adj.U)<p.unmark))
+    n[i] <- m[i] + length(which(stats::runif(adj.U)<p.unmark))
     # Compute population estimates
     switch(type,
            P=,Petersen={ N0[i] <- round((M[i]*n[i])/m[i],0) },
@@ -215,8 +215,8 @@ iMRC1.hist <- function(df,N,incl.final,hlbl,xaxis,conf.level) {
                  xaxt="n",xlab="Population Estimate",
                  xlim=range(c(mean(df$N1),mean(df$N0),N,h$breaks)))
   # Handle x-axis
-  if (is.null(xaxis)) axis(1)
-  else axis(1,c(N,round(quantile(df$N0,0.5+c(-1,1)*conf.level/2),0)),lwd=3)
+  if (is.null(xaxis)) graphics::axis(1)
+  else graphics::axis(1,c(N,round(stats::quantile(df$N0,0.5+c(-1,1)*conf.level/2),0)),lwd=3)
   # Put vertical line for set initial pop
   graphics::abline(v=N,col="red",lwd=4,lty=2)
   # Put vertical line for mean estimate of initial pop

@@ -102,13 +102,13 @@ simLenSelectP <- function(lens,alpha=1,beta=1,max.height=1,show=FALSE) {
  # show plot
   if (show) {
     lens.show <- seq(min(lens),max(lens),length.out=200)
-    vulns.show <- dbeta(lens.show/max(lens.show),alpha,beta)
+    vulns.show <- stats::dbeta(lens.show/max(lens.show),alpha,beta)
     vulns.show <- vulns.show/max(vulns.show)
-    plot(vulns.show~lens.show,type="l",xlab="Length",ylab="Probability of Capture",lwd=2)
+    graphics::plot(vulns.show~lens.show,type="l",xlab="Length",ylab="Probability of Capture",lwd=2)
   }
  # generate results
  # get densities from beta distribution, with lengths put on 0-1 scale
-  vulns <- dbeta(lens/max(lens),alpha,beta)
+  vulns <- stats::dbeta(lens/max(lens),alpha,beta)
  # scale vulnerabilities so that maximum vulnerability = max.height
   if (max.height > 1) {
     max.height <- 1
@@ -116,7 +116,7 @@ simLenSelectP <- function(lens,alpha=1,beta=1,max.height=1,show=FALSE) {
   }
   vulns <- vulns/max(vulns)*max.height
  # generate random number between 0 and 1
-  rands <- runif(length(vulns))
+  rands <- stats::runif(length(vulns))
  # if random number is less than vulnerability then fish is captured (TRUE)
   rands < vulns
 }
@@ -125,30 +125,30 @@ simLenSelectP <- function(lens,alpha=1,beta=1,max.height=1,show=FALSE) {
 #'@export simLenSelectM
 simLenSelectM <- function(lens,breaks,probs=rep(max.height,length(breaks)),max.height=1,interact=TRUE,digits=2) {
   if (interact) {
-    old.par <- par(no.readonly=TRUE) 
-    on.exit(par(old.par))
+    old.par <- graphics::par(no.readonly=TRUE) 
+    on.exit(graphics::par(old.par))
     options(locatorBell=FALSE)
-    layout(matrix(c(1,2),nrow=2),heights=c(1,15))
+    graphics::layout(matrix(c(1,2),nrow=2),heights=c(1,15))
     repeat {
      # setup the top panel
-      par(mar=c(0.05,0.4,0.1,0.4),usr=c(0,1,0,1))
-      frame()
-      box(col="red",lwd=2)
-      text(0.5,0.5,"Stop Interactive Choices & Perform Selections",col="red")
+      graphics::par(mar=c(0.05,0.4,0.1,0.4),usr=c(0,1,0,1))
+      graphics::frame()
+      graphics::box(col="red",lwd=2)
+      graphics::text(0.5,0.5,"Stop Interactive Choices & Perform Selections",col="red")
      # setup the plot
-      par(mar=c(3.5,3.5,0.1,3.5),mgp=c(2,0.75,0))
-      plot(breaks,probs,xlim=range(breaks),ylim=c(0,max.height),xlab='Length Categories',ylab='Probability of Capture',type="n")
-      aty <- axTicks(2)
-      axis(side=4,at=aty,labels=formatC(aty/aty[length(aty)]*100,format="f",digits=0))
-      mtext("Percentage of Maximum Probability",side=4,line=2)
-      abline(v=breaks,lty=3,lwd=1,col="gray90")
-      abline(h=aty,lty=3,lwd=1,col="gray90")
-      abline(h=c(0,max.height),lty=2,lwd=1,col="red")
-      lines(breaks,probs,col="gray",lwd=2)
-      points(breaks,probs,pch=16)
+      graphics::par(mar=c(3.5,3.5,0.1,3.5),mgp=c(2,0.75,0))
+      graphics::plot(breaks,probs,xlim=range(breaks),ylim=c(0,max.height),xlab='Length Categories',ylab='Probability of Capture',type="n")
+      aty <- graphics::axTicks(2)
+      graphics::axis(side=4,at=aty,labels=formatC(aty/aty[length(aty)]*100,format="f",digits=0))
+      graphics::mtext("Percentage of Maximum Probability",side=4,line=2)
+      graphics::abline(v=breaks,lty=3,lwd=1,col="gray90")
+      graphics::abline(h=aty,lty=3,lwd=1,col="gray90")
+      graphics::abline(h=c(0,max.height),lty=2,lwd=1,col="red")
+      graphics::lines(breaks,probs,col="gray",lwd=2)
+      graphics::points(breaks,probs,pch=16)
      # get point
-      pnt <- locator(1)
-      if (pnt$y > par('usr')[4]) { ## clicked in top panel
+      pnt <- graphics::locator(1)
+      if (pnt$y > graphics::par('usr')[4]) { ## clicked in top panel
         break
       } else { ## clicked in bottom panel
        # move the point
@@ -162,11 +162,11 @@ simLenSelectM <- function(lens,breaks,probs=rep(max.height,length(breaks)),max.h
   } ## end interact
  # generate results
  # find length categories for each length
-  df <- lencat(as.formula("~lens"),data=data.frame(lens),breaks=breaks,as.fact=FALSE)
+  df <- FSA::lencat(stats::as.formula("~lens"),data=data.frame(lens),breaks=breaks,as.fact=FALSE)
  # find probability of capture corresponding to each length category
   vulns <- probs[match(df$LCat,breaks)]
  # generate random number between 0 and 1
-  rands <- runif(length(lens))
+  rands <- stats::runif(length(lens))
  # if random number is less than vulnerability then fish is captured (TRUE)
   smpld <- rands < vulns
  # return results

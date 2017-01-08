@@ -90,8 +90,8 @@ sample4ALK <- function(formula,data,type=c("fixed","random"),
     n <- nrow(data)
     notAged <- sample(1:n,n-n.random)
   } else {
-    LCat <- lencat(df[,cl],w=w,breaks=breaks,startcat=startcat)
-    notAged <- !as.logical(ave(LCat,LCat,FUN=function(x) fsample(x,nwant=n.fixed)))
+    LCat <- lencat(data[,cl],w=w,breaks=breaks,startcat=startcat)
+    notAged <- !as.logical(stats::ave(LCat,LCat,FUN=function(x) fsample(x,nwant=n.fixed)))
   }
   data[notAged,ca] <- NA
   data

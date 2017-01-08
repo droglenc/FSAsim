@@ -43,48 +43,48 @@
 #' @export simAgeBias
 simAgeBias <- function(max.age=10,show.props=TRUE,scale=TRUE) {
   Freq <- NULL  # attempting to get by bindings warning in RCMD CHECK
-  old.par <- par(no.readonly=TRUE)
-  on.exit(par(old.par))
+  old.par <- graphics::par(no.readonly=TRUE)
+  on.exit(graphics::par(old.par))
   options(locatorBell=FALSE)
   x <- y <- NULL
   mode <- "add"
-  layout(matrix(c(2,1),nrow=1),widths=c(5,1))
+  graphics::layout(matrix(c(2,1),nrow=1),widths=c(5,1))
   repeat { ## right panel
-    par(mar=c(3.5,0,1,0.5),usr=c(0,1,0,1))
-    frame()
-    box()
-    text(rep(0.5,4),c(0.8,0.625,0.425,0.225),lab=c("Stop\nInteraction","Add","Delete","Move") )
-    lines(c(0.05,0.05,0.95,0.95,0.05),c(0.75,0.85,0.85,0.75,0.75)) 
-    points(rep(0.5,3),c(0.575,0.375,0.175),
+    graphics::par(mar=c(3.5,0,1,0.5),usr=c(0,1,0,1))
+    graphics::frame()
+    graphics::box()
+    graphics::text(rep(0.5,4),c(0.8,0.625,0.425,0.225),lab=c("Stop\nInteraction","Add","Delete","Move") )
+    graphics::lines(c(0.05,0.05,0.95,0.95,0.05),c(0.75,0.85,0.85,0.75,0.75)) 
+    graphics::points(rep(0.5,3),c(0.575,0.375,0.175),
            pch=c(ifelse(mode=="add",16,1),
                  ifelse(mode=="del",16,1),
                  ifelse(mode=="mov",16,1)),cex=2.5 )
     ## left panel
-    par(mar=c(3.5,3.5,1,1),mgp=c(2,0.75,0))
-    plot(0,0,type="n",xlim=c(0,max.age),ylim=c(0,max.age),xlab="True Age",ylab="Biased Age")
-    abline(a=0,b=1,lwd=1,col="gray50")
-    abline(h=0:max.age,lty=3,lwd=1,col="gray90")
-    abline(v=0:max.age,lty=3,lwd=1,col="gray90")  
+    graphics::par(mar=c(3.5,3.5,1,1),mgp=c(2,0.75,0))
+    graphics::plot(0,0,type="n",xlim=c(0,max.age),ylim=c(0,max.age),xlab="True Age",ylab="Biased Age")
+    graphics::abline(a=0,b=1,lwd=1,col="gray50")
+    graphics::abline(h=0:max.age,lty=3,lwd=1,col="gray90")
+    graphics::abline(v=0:max.age,lty=3,lwd=1,col="gray90")  
     if (length(x)>0) {
       vals <- table(y,x)
       props <- prop.table(vals,margin=2)
       vals <- data.frame(vals)
       props <- data.frame(props)
-      vals <- Subset(vals,Freq>0)
-      props <- Subset(props,Freq>0)
+      vals <- FSA::Subset(vals,Freq>0)
+      props <- FSA::Subset(props,Freq>0)
       ifelse(scale,cxs <- 0.5*props$Freq+0.5,cxs <- 1)   # rescale props to be between 0.5 and 1 for plotting size
       if (show.props) {
-        with(props,text(fact2num(x),fact2num(y),formatC(Freq,format="f",digits=2),cex=cxs))
+        with(props,graphics::text(FSA::fact2num(x),fact2num(y),formatC(Freq,format="f",digits=2),cex=cxs))
       } else {
-        with(vals,text(fact2num(x),fact2num(y),formatC(Freq,format="f",digits=0),cex=cxs))
+        with(vals,graphics::text(FSA::fact2num(x),fact2num(y),formatC(Freq,format="f",digits=0),cex=cxs))
       }
     }
     ns <- table(factor(x,levels=0:max.age))
-    text(0:max.age,rep(0,max.age+1),ns,col="blue")
+    graphics::text(0:max.age,rep(0,max.age+1),ns,col="blue")
     # get point
-    pnt <- locator(1)
-    if (pnt$x > par('usr')[2]) { ## clicked in left panel
-      pnt2 <- cnvrt.coords(pnt)$fig
+    pnt <- graphics::locator(1)
+    if (pnt$x > graphics::par('usr')[2]) { ## clicked in left panel
+      pnt2 <- TeachingDemos::cnvrt.coords(pnt)$fig
       if (pnt2$y>0.7) { break }
       if (pnt2$y>0.5) { mode <- "add"
                         next  }
@@ -106,8 +106,8 @@ simAgeBias <- function(max.age=10,show.props=TRUE,scale=TRUE) {
       }
       if(mode=="mov") {
         mov.i <- which.min((x-pnt$x)^2+(y-pnt$y)^2)
-        points(x[mov.i],y[mov.i],pch=16)
-        pnt <- locator(1)
+        graphics::points(x[mov.i],y[mov.i],pch=16)
+        pnt <- graphics::locator(1)
         x[mov.i] <- round(pnt$x,0)
         y[mov.i] <- round(pnt$y,0)
         next
@@ -141,7 +141,7 @@ simApplyAgeBias <- function(ages,bias.table=NULL,agree.table=NULL) {
     bias.table <- prop.table(agree.table,margin=2)
   }
  # find the ages present in the bias table
-  ages.in.table <- fact2num(colnames(bias.table))
+  ages.in.table <- FSA::fact2num(colnames(bias.table))
  # some more checking
   if (max(ages) > max(ages.in.table)) {
     stop("An observed age is greater than the maximum age in the bias table.",call.=FALSE)

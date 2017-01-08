@@ -1,6 +1,9 @@
 # FSAsim 0.0.5 ongoing
+* Added `::` to functions in many functions.
+* `.onAttach()`: Removed.
+* `sample4ALK()`: Modified. Fixed misuse of `df` where should have been `data`.
 * `srStartsDP()`: Added from `FSA`.
-* `vbDataGen()`: Modifications.  Changed ouput variable `ageFrac` to `ageFracG` and added `ageFracY`.  Fixed a bug related to repeating the lengths-at-capture (appeared only when the sampling season was the whole year and a fish happened to be sampled on the first day).  Streamlined some code and updated the documentation.
+* `vbDataGen()`: Modified.  Changed ouput variable `ageFrac` to `ageFracG` and added `ageFracY`.  Fixed a bug related to repeating the lengths-at-capture (appeared only when the sampling season was the whole year and a fish happened to be sampled on the first day).  Streamlined some code and updated the documentation.
 * `vbStartsDP()`: Added from `FSA`.
 
 # FSAsim 0.0.4 1-Feb-16

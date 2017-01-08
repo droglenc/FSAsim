@@ -29,7 +29,7 @@ srStartsDP(formula, data = NULL, type = c("BevertonHolt", "Ricker",
 Nothing, but a dynamic plot is created.
 }
 \description{
-Uses dynamic plots to find reasonable starting values for parameters in specific parameterizations of the \dQuote{Beverton-Holt}, \dQuote{Ricker},  \dQuote{Shepherd}, or \dQuote{Saila-Lorda} stock-recruitment models.  Use \code{\link[FSA]{srModels}} for the equations of each model.
+Uses dynamic plots to find reasonable starting values for parameters in specific parameterizations of the \dQuote{Beverton-Holt}, \dQuote{Ricker},  \dQuote{Shepherd}, or \dQuote{Saila-Lorda} stock-recruitment models.  Use \code{\link[FSA]{srFunShow}} for the equations of each model.
 }
 \details{
 Starting values can be obtained by plotting the data with the model superimposed but tied to slider bars for changing parameters.  One can change the parameters until a reasonable fit is observed and then use those valeus as starting values.  The initial parameters for the slider bars are the starting values constructed as described in \code{\link[FSA]{srStarts}}.  The range for the sliders will have a minimum that is \code{min.prop} times the initial value and a maximum that is \code{max.mult} times the initial value.  The step or interval of the slider bar is \code{delta.mult} times the initial value.  It should be noted that the dynamic plot may show an error of \dQuote{[tcl] can't get device image}, but the plot will correctly update if the slider bar is adjusted.

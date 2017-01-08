@@ -78,7 +78,7 @@ This function can be used to generate random growth data, in one of four formats
 
 The essential steps for constructing the simulated data are as follows:
 \enumerate{
-  \item Use \code{Linf}, \code{K}, and \code{t0} to set \sQuote{true} values for the three parameters in a typical VBGF (see \code{\link[FSA]{vbModels}} in \pkg{FSA} for the equation of this parameterization).
+  \item Use \code{Linf}, \code{K}, and \code{t0} to set \sQuote{true} values for the three parameters in a typical VBGF (see \code{\link[FSA]{growthFunShow}} in \pkg{FSA} for the equation of this parameterization).
   \item For each fish, generate a random age-at-capture (i.e., number of completed growing seasons) between \code{minage} and \code{maxage} from the probability distribution for each age in \code{probdist}.
   \item Add a fractional age to the ages from the previous step and store in \code{ageFracG}.  By defaut, the \code{sample.per} is the first day of the \code{growth.per}, so \code{ageCap} and \code{ageFracG} will be the same.  However, if \code{sample.per} is not a single day equal to the first day of the \code{growth.per}, then \code{ageFracG} will be greater than \code{ageCap}.
   \item For each fish, generate random values for Linf, K, and t0 from a normal distribution with a mean of \code{Linf}, \code{K}, and \code{t0} and a standard deviation derived from each of \code{Linf}, \code{K}, and \code{t0}, respectively, times \code{paramCV}.  This step is used to model different parameter values for each fish.
