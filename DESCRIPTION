@@ -4,7 +4,7 @@ Version: 0.0.5
 Date: 2017-1-10
 Description: Simulate data or visualize models for fisheries stock assessment methods.
 Authors@R: person("Derek","Ogle",email="dogle@northland.edu",role=c("aut","cre"))
-URL: http://fishr.wordpress.com/, https://github.com/droglenc/FSAsim
+URL: http://derekogle.com/fishr, https://github.com/droglenc/FSAsim
 BugReports: https://github.com/droglenc/FSAsim/issues
 Depends:
     R (>= 3.0.0)
