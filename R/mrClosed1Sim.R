@@ -122,7 +122,7 @@ iMRC1Dist <- function(N,rsmpls,conf.level) {
     N.1 <- round(0.01*N)
     manipulate::manipulate(
       {
-        set.seed(sample(1:100000))
+        set.seed(sample(1:100000,1))
         # Run population simulations
         mc.df <- iMRC1.genpopn(type,N,EM,En,0,1,1,0,1,rsmpls)
         # Graph the results
@@ -145,21 +145,21 @@ iMRC1.genpopn <- function(type,N,EM,En,mark.loss,surv.mark,surv.unmark,recruits,
   M <- n <- m <- N0 <- N1 <- rep(0,rsmpls)
   for (i in 1:rsmpls) {
     # Number marked in first sample (EM/N is probability of being marked)
-    adj.M <- M[i] <- length(which(stats::runif(N)<(EM/N)))
+    adj.M <- M[i] <- sum(stats::runif(N)<(EM/N))
     # Unmarked fish
     adj.U <- N-M[i]
     if (mark.loss>0) {
       # Apply mark loss probability
-      lost.marks <- length(which(stats::runif(M[i])<mark.loss))
+      lost.marks <- sum(stats::runif(M[i])<mark.loss)
       # Removed lost mark fish from marked popn
       adj.M <- adj.M - lost.marks
       # Put lost mark fish back into unmarked popn
       adj.U <- adj.U + lost.marks
     }
     # Marked fish survival -- greater than survival prob is mortality
-    if (!surv.mark==1)   adj.M <- adj.M - length(which(stats::runif(M[i])>surv.mark))
+    if (!surv.mark==1)   adj.M <- adj.M - sum(stats::runif(M[i])>surv.mark)
     # UnMarked fish survival
-    if (!surv.unmark==1) adj.U <- adj.U - length(which(stats::runif(adj.U)>surv.unmark))
+    if (!surv.unmark==1) adj.U <- adj.U - sum(stats::runif(adj.U)>surv.unmark)
     # Add recruits to unmarked population
     if (!recruits==0) adj.U <- adj.U + N*recruits
     # Population size just before second capture
@@ -169,18 +169,18 @@ iMRC1.genpopn <- function(type,N,EM,En,mark.loss,surv.mark,surv.unmark,recruits,
     # Probability of capturing marked fish in second sample
     p.mark <- p.unmark*cap.ratio
     # Number of marked fish recaptured in second sample
-    m[i] <- length(which(stats::runif(adj.M)<p.mark))
+    m[i] <- sum(stats::runif(adj.M)<p.mark)
     # Total number of fish captured in second sample
-    n[i] <- m[i] + length(which(stats::runif(adj.U)<p.unmark))
-    # Compute population estimates
-    switch(type,
-           P=,Petersen={ N0[i] <- round((M[i]*n[i])/m[i],0) },
-           C=,Chapman={ N0[i] <- round((M[i]+1)*(n[i]+1)/(m[i]+1)-1,0) },
-           R=,Ricker={ N0[i] <- round((M[i]+1)*(n[i]+1)/(m[i]+1),0) },
-           B=,Bailey={ N0[i] <- round(M[i]*(n[i]+1)/(m[i]+1),0) }
-    )
+    n[i] <- m[i] + sum(stats::runif(adj.U)<p.unmark)
   }
-  data.frame(M,n,m,N,N1,N0)
+  # Compute population estimates
+  switch(type,
+         P=,Petersen={ N0 <- (M*n)/m },
+         C=,Chapman={  N0 <- (M+1)*(n+1)/(m+1)-1 },
+         R=,Ricker={   N0 <- (M+1)*(n+1)/(m+1) },
+         B=,Bailey={   N0 <- M*(n+1)/(m+1) }
+  )
+  data.frame(M,n,m,N,N1,N0=round(N0,0))
 }
 
 ## Internal function to make a main label for the plot
@@ -206,15 +206,16 @@ iMRC1.title <- function(mark.loss,surv.mark,surv.unmark,recruits,cap.ratio) {
 
 ## Internal function to make the main histogram
 iMRC1.hist <- function(df,N,incl.final,hlbl,xaxis,conf.level) {
-  # Set the graphing parameters
   old.par <- graphics::par(mar=c(3.5,1.1,1.5,1.1),mgp=c(2,0.4,0),tcl=-0.2,yaxs="i")
-  # Make the histogram
+  ## Make the histogram
+  # handle the dynamics x-axis (and correct for possible Infs)
   h <- graphics::hist(df$N0,plot=FALSE,breaks=20,right=FALSE)
+  xlmt <- c(mean(df$N1),mean(df$N0),N,h$breaks)
+  xlmt <- range(xlmt[xlmt<Inf])
   graphics::hist(df$N0,breaks=20,right=FALSE,col="gray90",main=hlbl,
                  yaxt="n",ylab="",
-                 xaxt="n",xlab="Population Estimate",
-                 xlim=range(c(mean(df$N1),mean(df$N0),N,h$breaks)))
-  # Handle x-axis
+                 xaxt="n",xlab="Population Estimate",xlim=xlmt)
+  # Add an x-axis
   if (is.null(xaxis)) graphics::axis(1)
   else graphics::axis(1,c(N,round(stats::quantile(df$N0,0.5+c(-1,1)*conf.level/2),0)),lwd=3)
   # Put vertical line for set initial pop
@@ -241,7 +242,8 @@ iMRC1.legend <- function(sim,df,N,incl.final) {
   ltys <- c(1,NA,2,NA,NA,3,NA)
   # Add legend
   if (incl.final) {
-    graphics::legend("topright",legend=legs,col=cols,lty=ltys,lwd=2,box.col="white",bg="white")
+    graphics::legend("topright",legend=legs,col=cols,lty=ltys,
+                     lwd=2,box.col="white",bg="white")
   } else {
     graphics::legend("topright",legend=legs[-c(4:6)],col=cols[-c(4:6)],lty=ltys[-c(4:6)],
                      lwd=2,box.col="white",bg="white")

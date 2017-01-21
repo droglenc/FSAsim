@@ -5,7 +5,7 @@
 \title{Dynamic plots to explore single-census mark-recapture models.}
 \usage{
 mrClosed1Sim(sim = c("assumptions", "distribution"), N = 1000,
-  rsmpls = 2000, EM = 200, En = 200, incl.final = TRUE,
+  rsmpls = 5000, EM = 200, En = 200, incl.final = TRUE,
   conf.level = 0.95)
 }
 \arguments{
