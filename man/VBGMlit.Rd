@@ -30,6 +30,7 @@ Several species have \code{NA} for the \code{t0} parameter.
 \item von Bertalanffy
 }
 }
+
 \examples{
 
 data(VBGMlit)
@@ -41,4 +42,3 @@ head(VBGMlit)
 Growth 'von Bertalanffy'
 }
 \keyword{datasets}
-

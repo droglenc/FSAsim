@@ -53,11 +53,10 @@ srCobWeb(type="Ricker",param=3,a=13,Rp=300)
 srCobWeb(type="BevertonHolt",param=1,a=20,b=0.01)
 
 }
-\author{
-Derek H. Ogle, \email{dogle@northland.edu}
-}
 \seealso{
 \code{\link{srSim}}; \code{srModels} and \code{srFuns} in \pkg{FSA}.
 }
+\author{
+Derek H. Ogle, \email{dogle@northland.edu}
+}
 \keyword{iplot}
-

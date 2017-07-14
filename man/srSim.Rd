@@ -55,11 +55,10 @@ srSim(recruits~stock,data=CodNorwegian,type="Ricker",param=3)
 }  ## END IF INTERACTIVE MODE
 
 }
-\author{
-Derek H. Ogle, \email{dogle@northland.edu}
-}
 \seealso{
 \code{\link[FSA]{srFunShow}}
 }
+\author{
+Derek H. Ogle, \email{dogle@northland.edu}
+}
 \keyword{iplot}
-

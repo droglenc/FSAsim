@@ -11,4 +11,3 @@ Functions to simulate data for fisheries stock assessment methods.
 \details{
 This package can be used to simulate data for fisheries stock assessment methods.
 }
-

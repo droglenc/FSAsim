@@ -37,6 +37,7 @@ Starting values can be obtained by plotting the data with the model superimposed
 \section{IFAR Chapter}{
  13-Recruitment.
 }
+
 \examples{
 ## Dynamic Plots Method -- ONLY RUN IN INTERACTIVE MODE
 if (interactive()) {
@@ -58,14 +59,13 @@ if (interactive()) {
 } ## END .. ONLY INTERACTIVE
 
 }
-\author{
-Derek H. Ogle, \email{derek@derekogle.com}
-}
 \references{
 Ogle, D.H.  2016.  \href{http://derekogle.com/IFAR}{Introductory Fisheries Analyses with R}.  Chapman & Hall/CRC, Boca Raton, FL.
 }
 \seealso{
 See \code{\link[FSA]{srStarts}} for related functionality.
 }
+\author{
+Derek H. Ogle, \email{derek@derekogle.com}
+}
 \keyword{manip}
-

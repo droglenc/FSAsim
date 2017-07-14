@@ -27,4 +27,3 @@ cohortSim()
 Derek H. Ogle, \email{dogle@northland.edu}
 }
 \keyword{iplot}
-

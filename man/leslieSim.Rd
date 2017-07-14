@@ -58,11 +58,10 @@ leslieSim(type="resampling")
 } # end if interactive
 
 }
-\author{
-Derek H. Ogle, \email{dogle@northland.edu}
-}
 \seealso{
 \code{\link[FSA]{depletion}} in \pkg{FSA}.
 }
+\author{
+Derek H. Ogle, \email{dogle@northland.edu}
+}
 \keyword{iplot}
-

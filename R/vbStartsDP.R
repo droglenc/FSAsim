@@ -61,7 +61,8 @@ vbStartsDP <- function(formula,data=NULL,
   len <- tmp$mf[,tmp$Rname[1]]
   age <- tmp$mf[,tmp$Enames[1]]
   ## Get starting values
-  sv <- vbStarts(formula,data,type,ages2use,methEV,meth0)
+  sv <- vbStarts(formula,data,type=type,ages2use=ages2use,
+                 methEV=methEV,meth0=meth0)
   if (!requireNamespace("relax")) stop("'vbStarts' requires the 'relax' package to be installed to construct the dynamic plot.",call.=FALSE)
   else iVBStartsDynPlot(age,len,type,sv,ages2use)
 }

@@ -40,6 +40,7 @@ The \sQuote{original} and \sQuote{vonBertalanffy} and the \sQuote{typical} and \
 \section{IFAR Chapter}{
  12-Individual Growth.
 }
+
 \examples{
 ## Dynamic Plots Method -- ONLY RUN IN INTERACTIVE MODE
 if (interactive()) {
@@ -55,9 +56,6 @@ if (interactive()) {
 } 
 
 }
-\author{
-Derek H. Ogle, \email{derek@derekogle.com}
-}
 \references{
 Ogle, D.H.  2016.  \href{http://derekogle.com/IFAR}{Introductory Fisheries Analyses with R}.  Chapman & Hall/CRC, Boca Raton, FL.
 
@@ -66,5 +64,7 @@ See references in \code{\link{vbFuns}}.
 \seealso{
 See \code{\link[FSA]{vbStarts}} for related functionality.
 }
+\author{
+Derek H. Ogle, \email{derek@derekogle.com}
+}
 \keyword{manip}
-

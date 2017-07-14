@@ -5,7 +5,7 @@
 * `sample4ALK()`: Modified. Fixed misuse of `df` where should have been `data`.
 * `srStartsDP()`: Added from `FSA`.
 * `vbDataGen()`: Modified.  Changed ouput variable `ageFrac` to `ageFracG` and added `ageFracY`.  Fixed a bug related to repeating the lengths-at-capture (appeared only when the sampling season was the whole year and a fish happened to be sampled on the first day).  Streamlined some code and updated the documentation.
-* `vbStartsDP()`: Added from `FSA`.
+* `vbStartsDP()`: Added from `FSA`. Fixed a bug related to call to `vbStarts()`.
 
 # FSAsim 0.0.4 1-Feb-16
 * Compiling under R 3.2.3 and using roxygen2 5.0.1

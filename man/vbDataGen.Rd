@@ -219,14 +219,13 @@ sd <- 1534756   # set seed
 # Note that back-calculated results do not maintain same fish measurements
 
 }
-\author{
-Derek H. Ogle, \email{dogle@northland.edu}.  This function was motivated by the simulation methodology shown in Box 2 of Vigliola and Meekan (2009).
-}
 \references{
 Vigliola, L. and M.G. Meekan.  2009.  The back-calculation of fish growth from otoliths.  Chapter 6 (pp. 174-211) in B.S. Green et al. (eds.), Tropical Fish Otoliths: Information for Assessment, Management and Ecology, Reviews: Methods and Technologies in Fish Biology and Fisheries 11.
 }
 \seealso{
 See \code{\link[nlme]{groupedData}} from \pkg{nlme} for how to analyze data in \sQuote{groupedData} format.
 }
+\author{
+Derek H. Ogle, \email{dogle@northland.edu}.  This function was motivated by the simulation methodology shown in Box 2 of Vigliola and Meekan (2009).
+}
 \keyword{manip}
-

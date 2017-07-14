@@ -47,4 +47,3 @@ lengthWeightSim(x=r1$fl,y=r1$wt)
 Derek H. Ogle, \email{dogle@northland.edu}
 }
 \keyword{iplot}
-

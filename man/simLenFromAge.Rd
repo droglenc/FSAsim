@@ -66,4 +66,3 @@ plot(len~age,data=df,pch=16,col=rgb(0,0,0,0.1),xlab="Age",ylab="Length")
 \code{\link{simLenSelectM}}
 }
 \keyword{misc}
-

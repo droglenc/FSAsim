@@ -65,9 +65,6 @@ growthModelSim(lencap~agecap,data=SMBassWB,type="Gompertz2")
 } ## END IF INTERACTIVE MODE
 
 }
-\author{
-Derek H. Ogle, \email{dogle@northland.edu}
-}
 \references{
 Francis, R.I.C.C.  1988.  Are growth parameters estimated from tagging and age-length data comparable?  Canadian Journal of Fisheries and Aquatic Sciences, 45:936-942.
 
@@ -84,5 +81,7 @@ Weisberg, S., G.R. Spangler, and L. S. Richmond. 2010. Mixed effects models for 
 \seealso{
 See model equations with \code{\link[FSA]{growthFunShow}}.  See similar functionality for von Bertalanffy models in \code{\link[FSA]{vbStarts}}.
 }
+\author{
+Derek H. Ogle, \email{dogle@northland.edu}
+}
 \keyword{iplot}
-

@@ -2,8 +2,8 @@
 % Please edit documentation in R/FSAsim-internals.R
 \name{getVarFromFormula}
 \alias{getVarFromFormula}
-\alias{iCheckRStudio}
 \alias{iChk4Namespace}
+\alias{iCheckRStudio}
 \title{Internal functions used in FSAsim.}
 \usage{
 getVarFromFormula(formula, data, expNumVars = NULL)
@@ -12,4 +12,3 @@ getVarFromFormula(formula, data, expNumVars = NULL)
 Internal functions used in FSAsim
 }
 \keyword{internal}
-

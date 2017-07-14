@@ -35,12 +35,11 @@ vbComp(v)
 vbComp(v,ages=c(10,20,25))
 
 }
-\author{
-Derek H. Ogle, \email{dogle@northland.edu}
-}
 \seealso{
 \code{\link{VBGMlit}}.
 }
+\author{
+Derek H. Ogle, \email{dogle@northland.edu}
+}
 \keyword{hplot}
 \keyword{manip}
-

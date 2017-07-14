@@ -3,6 +3,7 @@
 \name{simAgeBias}
 \alias{simAgeBias}
 \alias{simApplyAgeBias}
+\alias{simApplyAgeBias}
 \title{Simulate an age bias and simulate the ages of fish using the age bias.}
 \usage{
 simAgeBias(max.age = 10, show.props = TRUE, scale = TRUE)
@@ -57,4 +58,3 @@ summary(bg.ages2)
 See \code{\link{simAges}} for related functionality and \code{\link[FSA]{ageBias}} and \code{\link[FSA]{agePrecision}} in \pkg{FSA} for analyzing this type of data.
 }
 \keyword{misc}
-

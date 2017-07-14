@@ -77,4 +77,3 @@ table(bg.ages2)
 \code{\link{simLenSelectM}}
 }
 \keyword{misc}
-
