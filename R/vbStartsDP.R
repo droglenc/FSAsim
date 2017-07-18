@@ -33,8 +33,16 @@
 #'   require(FSA)
 #'   data(SpotVA1)
 #'   vbStartsDP(tl~age,data=SpotVA1)
+#'   vbStartsDP(tl~age,data=SpotVA1,type="typical")
+#'   vbStartsDP(tl~age,data=SpotVA1,type="Typical")
+#'   vbStartsDP(tl~age,data=SpotVA1,type="traditional")
+#'   vbStartsDP(tl~age,data=SpotVA1,type="Traditional")
+#'   vbStartsDP(tl~age,data=SpotVA1,type="BevertonHolt")
 #'   vbStartsDP(tl~age,data=SpotVA1,type="original")
+#'   vbStartsDP(tl~age,data=SpotVA1,type="Original")
+#'   vbStartsDP(tl~age,data=SpotVA1,type="vonBertalanffy")
 #'   vbStartsDP(tl~age,data=SpotVA1,type="GQ")
+#'   vbStartsDP(tl~age,data=SpotVA1,type="GallucciQuinn")
 #'   vbStartsDP(tl~age,data=SpotVA1,type="Mooij")
 #'   vbStartsDP(tl~age,data=SpotVA1,type="Weisberg")
 #'   vbStartsDP(tl~age,data=SpotVA1,type="Francis",ages2use=c(0,5))
@@ -43,17 +51,17 @@
 #' 
 #' @export vbStartsDP
 vbStartsDP <- function(formula,data=NULL,
-                       type=c("Typical","typical","BevertonHolt",
+                       type=c("Typical","typical","Traditional","traditional","BevertonHolt",
                               "Original","original","vonBertalanffy",
                               "GQ","GallucciQuinn","Mooij","Weisberg",
                               "Schnute","Francis","Somers","Somers2"),
                        ages2use=NULL,methEV=c("means","poly"),meth0=c("yngAge","poly"),
                        ...) {
   ## some checks of arguments
-  type <- match.arg(type)
-  type <- FSA::capFirst(type)
-  if (type=="BevertonHolt") type <- "Typical"
-  if (type=="vonBertalanffy") type <- "Original"
+  type <- match.arg(type,c("Typical","typical","Traditional","traditional","BevertonHolt",
+                           "Original","original","vonBertalanffy",
+                           "GQ","GallucciQuinn","Mooij","Weisberg",
+                           "Schnute","Francis","Somers","Somers2"))
   methEV <- match.arg(methEV)
   meth0 <- match.arg(meth0)
   ## get the length and age vectors
@@ -173,7 +181,7 @@ iVBDynPlot <- function(age,len,type,p1,p2,p3,ages2use) {
   ## the model type and param
   y <- iVBDynPlot_makeL(x,type,p1,p2,p3,ages2use)
   ## Construct the scatterplot with superimposed model
-  opar <- graphics::par(mar=c(3.5,3.5,1.25,1.25), mgp=c(2,0.4,0), tcl=-0.2, pch=19)
+  opar <- graphics::par(mar=c(3.5,3.5,1.25,1.25),mgp=c(2,0.4,0),tcl=-0.2,pch=19)
   graphics::plot(age,len,xlab="Age",ylab="Mean Length")
   graphics::lines(x,y,lwd=2,lty=1,col="blue")
   graphics::par(opar)
@@ -185,13 +193,15 @@ iVBDynPlot <- function(age,len,type,p1,p2,p3,ages2use) {
 #=============================================================
 iVBDynPlot_makeL <- function(x,type,p1,p2,p3,ages2use){
   switch(type,
-         Typical=            { # p1=Linf, p2=K,  p3=to
+         Typical=, typical=, Traditional=, traditional=, BevertonHolt= {
+                               # p1=Linf, p2=K, p3=to
                                y <- p1*(1-exp(-p2*(x-p3))) },
-         Original=           { # p1=Linf, p2=L0, p3=K
-                               y <- (p1-(p1-p2)*exp(-p3*x)) },
-         GQ=, GallucciQuinn= { # p1=omega,p2=K,  p3=t0
+         Original=, original=, vonBertalanffy= {
+                               # p1=Linf, p2=K, p3=L0
+                               y <- (p1-(p1-p3)*exp(-p2*x)) },
+         GQ=, GallucciQuinn= { # p1=omega, p2=K, p3=t0
                                y <- (p1/p2)*(1-exp(-p2*(x-p3))) },
-         Weisberg=           { # p1=Linf, p2=t50,  p3=to
+         Weisberg=           { # p1=Linf, p2=t50, p3=to
                                y <- p1*(1-exp(-(log(2)/(p2-p3))*(x-p3))) },
          Mooij=              { # p1=Linf, p2=L0, p3=omega
                                y <- p1-(p1-p2)*exp(-(p3/p1)*x) },
