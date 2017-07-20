@@ -93,27 +93,24 @@
 simLenSelectP <- function(lens,alpha=1,beta=1,max.height=1,show=FALSE) {
  # some error catching
   if (length(alpha)>1) stop("'alpha' must contain one and only one value",call.=FALSE)
-  if (alpha<0) stop("'alpha' must be a postive number",call.=FALSE)
+  if (alpha<0) stop("'alpha' must be a positive number",call.=FALSE)
   if (length(beta)>1) stop("'beta' must contain one and only one value",call.=FALSE)
-  if (beta<0) stop("'beta' must be a postive number",call.=FALSE)
+  if (beta<0) stop("'beta' must be a positive number",call.=FALSE)
   if (length(max.height)>1) stop("'max.height' must contain one and only one value",call.=FALSE)
-  if (max.height<=0 | max.height>1) stop("'max.height' must be a strictly postive number less than or equal to 1",call.=FALSE)
+  if (max.height<=0 | max.height>1) stop("'max.height' must be a strictly positive number less than or equal to 1",call.=FALSE)
 
  # show plot
   if (show) {
     lens.show <- seq(min(lens),max(lens),length.out=200)
-    vulns.show <- stats::dbeta(lens.show/max(lens.show),alpha,beta)
-    vulns.show <- vulns.show/max(vulns.show)
+    vulns.show <- stats::dbeta((lens.show-min(lens.show))/(max(lens.show)-min(lens.show)),
+                               alpha,beta)
+    vulns.show <- vulns.show/max(vulns.show)*max.height
     graphics::plot(vulns.show~lens.show,type="l",xlab="Length",ylab="Probability of Capture",lwd=2)
   }
  # generate results
  # get densities from beta distribution, with lengths put on 0-1 scale
-  vulns <- stats::dbeta(lens/max(lens),alpha,beta)
+  vulns <- stats::dbeta((lens-min(lens))/(max(lens)-min(lens)),alpha,beta)
  # scale vulnerabilities so that maximum vulnerability = max.height
-  if (max.height > 1) {
-    max.height <- 1
-    warning("max.height was greater than 1; it has been rest to 1.",call.=FALSE)
-  }
   vulns <- vulns/max(vulns)*max.height
  # generate random number between 0 and 1
   rands <- stats::runif(length(vulns))

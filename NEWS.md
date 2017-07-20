@@ -3,6 +3,7 @@
 * `.onAttach()`: Removed.
 * `mrClosed1Sim()`: Modified. Fixed bug in plot when an infinite population was estimated. Tried to streamline code some (did not seem to make faster).
 * `sample4ALK()`: Modified. Fixed misuse of `df` where should have been `data`.
+* `simLenSelectP()`: Modified. Changed plot with `show=TRUE` and actual probabilities so that they actually represent the beta distribution over the range of values. Removed an unnecessary catch for `max.height=`. Minor spelling corrections.
 * `srStartsDP()`: Added from `FSA`.
 * `vbDataGen()`: Modified.  Changed ouput variable `ageFrac` to `ageFracG` and added `ageFracY`.  Fixed a bug related to repeating the lengths-at-capture (appeared only when the sampling season was the whole year and a fish happened to be sampled on the first day).  Streamlined some code and updated the documentation.
 * `vbStartsDP()`: Added from `FSA`. Fixed a bug related to call to `vbStarts()` and how `type=` worked with `vbStarts()` (thanks to Jake Lowe for pointing this out).
