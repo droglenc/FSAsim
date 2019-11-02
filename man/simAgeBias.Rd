@@ -23,14 +23,14 @@ simApplyAgeBias(ages, bias.table = NULL, agree.table = NULL)
 \item{agree.table}{A table that contains the age-agreement table where the \sQuote{true} ages correspond to columns.}
 }
 \value{
-If \code{simApplyAgeBias} is used then a vector of \sQuote{biased} ages is returned.  If \code{simAgeBias} is used then a list with the following two items is returned:
+If \code{simApplyAgeBias} is used then a vector of \sQuote{biased} ages is returned. If \code{simAgeBias} is used then a list with the following two items is returned:
 \itemize{
 \item agree a table containing the age agreement table resulting from the interactive process.
 \item bias a table containing the bias table resulting from the interactive process.
 }
 }
 \description{
-Constructs an age-bias table interactively.  This age-bias table can then be used to convert the true ages of a sample of fish to \sQuote{biased} ages.
+Constructs an age-bias table interactively. This age-bias table can then be used to convert the true ages of a sample of fish to \sQuote{biased} ages.
 }
 \details{
 NEED DETAIL HERE.

@@ -25,7 +25,7 @@ Plots modeled number of recruits versus stock size for common parameterizations 
 \details{
 This function can be used to explore the dynamics of stock-recruitment models for various parameter choices. In these instances of model exploration the \code{S=} and \code{R=} arguments should be (left) set at \code{NULL}.
 
-The \code{type=} argument is used to choose either the \code{"BevertonHolt"} or \code{"Ricker"} stock-recruitment models. Common parameterizations of the \code{"BevertonHolt"} and \code{"Ricker"} models can be chosen with \code{param=}. Four paramaterizations of the Beverton-Holt model and three parameterizations of the Ricker model are allowed. See \code{\link[FSA]{srFunShow}} to see equations for each model.
+The \code{type=} argument is used to choose either the \code{"BevertonHolt"} or \code{"Ricker"} stock-recruitment models. Common parameterizations of the \code{"BevertonHolt"} and \code{"Ricker"} models can be chosen with \code{param=}. Four paramaterizations of the Beverton-Holt model and three parameterizations of the Ricker model are allowed. See \code{srFunShow} described in \code{\link[FSA]{stockRecruitment}} to see equations for each model.
 }
 \examples{
 ## ONLY RUN IN INTERACTIVE MODE
@@ -44,7 +44,7 @@ srSim(type="Ricker",param=3)
 
 }
 \seealso{
-\code{srStartsDP} and \code{\link[FSA]{srFunShow}}
+\code{srStartsDP} and \code{srFunShow} described in \code{\link[FSA]{stockRecruitment}}.
 }
 \author{
 Derek H. Ogle, \email{dogle@northland.edu}

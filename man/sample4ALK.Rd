@@ -16,7 +16,7 @@ contains the observed length measurements.}
 \item{data}{A data.frame that minimally contains the observed age and length
 measurements in the \code{formula}.}
 
-\item{type}{A string indicating the type of sampling to conduct.  See details.}
+\item{type}{A string indicating the type of sampling to conduct. See details.}
 
 \item{n.fixed}{A single numeric that indicates the number of fish to sample per
 length category when \code{type="fixed"}.}
@@ -39,7 +39,7 @@ replaced with \code{NA} to simulate fish that have NOT been sampled for ages.
 }
 \description{
 Samples fish from a data frame of lengths and ages to simulate selecton of fish
-to be used to construct an age-length key.  Fish can either be selected as a
+to be used to construct an age-length key. Fish can either be selected as a
 fixed number per length category (e.g., 5 fish per 10-mm length category) or as 
 a random sample from the population.
 }

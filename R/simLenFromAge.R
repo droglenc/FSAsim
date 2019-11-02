@@ -48,13 +48,13 @@
 #'
 simLenFromAge <- function(ages,Linf,K,t0,sigma,additive=TRUE,digits=0) {
  # some error catching
-  if (length(Linf)>1 | missing(Linf)) stop("'Linf' must contain one and only one value",call.=FALSE)
-  if (Linf<0) stop("'Linf' must be a postive number",call.=FALSE)
-  if (length(K)>1 | missing(K)) stop("'K' must contain one and only one value",call.=FALSE)
-  if (K<0) stop("'K' must be a postive number",call.=FALSE)
-  if (length(t0)>1 | missing(t0)) stop("'t0' must contain one and only one value",call.=FALSE)
-  if (length(sigma)>1 | missing(sigma)) stop("'sigma' must contain one and only one value",call.=FALSE)
-  if (sigma<0) stop("'sigma' must be a postive number",call.=FALSE)
+  if (length(Linf)>1 | missing(Linf)) FSA:::STOP("'Linf' must contain one and only one value")
+  if (Linf<0) FSA:::STOP("'Linf' must be a postive number")
+  if (length(K)>1 | missing(K)) FSA:::STOP("'K' must contain one and only one value")
+  if (K<0) FSA:::STOP("'K' must be a postive number")
+  if (length(t0)>1 | missing(t0)) FSA:::STOP("'t0' must contain one and only one value")
+  if (length(sigma)>1 | missing(sigma)) FSA:::STOP("'sigma' must contain one and only one value")
+  if (sigma<0) FSA:::STOP("'sigma' must be a postive number")
 
  # simulate mean length-at-age using a von Bert model
   mns <- Linf*(1-exp(-K*(ages-t0)))

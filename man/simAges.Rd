@@ -13,14 +13,14 @@ simAges(N0 = 500, A = 0.3, Z = -log(1 - A), incl.zero = FALSE,
 \item{A}{A numeric representing the annual mortality rate to be used in the simulations.}
 
 \item{Z}{A numeric representing the instantaneous mortality rate to be used
-in the simulations.  Will default to the value that corresponds to the user
+in the simulations. Will default to the value that corresponds to the user
 supplied value for \code{A}.}
 
 \item{incl.zero}{A logical indicating whether age-0 should be included in the
 ouptut (\code{TRUE}) or not (\code{FALSE}; default).}
 
 \item{max.age}{A numeric indicating the maximum age to use in the
-simulations.  If \code{NULL} then the maximum age will be the age at which
+simulations. If \code{NULL} then the maximum age will be the age at which
 the projected cohort size is approximately equal to 1.}
 
 \item{indivs}{A logical indicating whether the output result should be ages
@@ -36,7 +36,7 @@ simulated ages for individual fish (i.e., when \code{indivs=TRUE}; default).
 }
 \description{
 Constructs either a simulated age frequency table or individuals that follow
-a simulated age frequency table.  The number of individuals at each age is
+a simulated age frequency table. The number of individuals at each age is
 determined from an initial cohort size and an instantaneous or annual
 mortality rate supplied by the user.
 }
@@ -44,11 +44,11 @@ mortality rate supplied by the user.
 The heart of this simulation is the assumption of an exponential decay model
 that starts with \code{N0} individuals at age-0 and estimates Nt individuals
 at each age t, from 0 or 1 (depending on the \code{incl.zero} value) to
-\code{max.age}, with Nt=N0*exp(-Zt).  If \code{indivs=FALSE} then the ages
-(t) and frequencies (Nt) are output as a data frame.  If \code{indivs=TRUE}
+\code{max.age}, with Nt=N0*exp(-Zt). If \code{indivs=FALSE} then the ages
+(t) and frequencies (Nt) are output as a data frame. If \code{indivs=TRUE}
 (default) and \code{rand=FALSE} then the age frequency values are used to
 deterministically produce ages for individual fish -- i.e., essentially
-\code{rep(t,Nt)}.  Finally, if \code{indivs=TRUE} (default) and
+\code{rep(t,Nt)}. Finally, if \code{indivs=TRUE} (default) and
 \code{rand=TRUE} (default) then the age frequency values are used to
 stochastically produce ages for individual fish -- i.e., essentially
 \code{sample(t,sum(Nt),replace=TRUE,prob=Nt/sum(Nt))}.

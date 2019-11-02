@@ -4,7 +4,7 @@
 #'
 #' @details This function can be used to explore the dynamics of stock-recruitment models for various parameter choices. In these instances of model exploration the \code{S=} and \code{R=} arguments should be (left) set at \code{NULL}.
 #' 
-#' The \code{type=} argument is used to choose either the \code{"BevertonHolt"} or \code{"Ricker"} stock-recruitment models. Common parameterizations of the \code{"BevertonHolt"} and \code{"Ricker"} models can be chosen with \code{param=}. Four paramaterizations of the Beverton-Holt model and three parameterizations of the Ricker model are allowed. See \code{\link[FSA]{srFunShow}} to see equations for each model.
+#' The \code{type=} argument is used to choose either the \code{"BevertonHolt"} or \code{"Ricker"} stock-recruitment models. Common parameterizations of the \code{"BevertonHolt"} and \code{"Ricker"} models can be chosen with \code{param=}. Four paramaterizations of the Beverton-Holt model and three parameterizations of the Ricker model are allowed. See \code{srFunShow} described in \code{\link[FSA]{stockRecruitment}} to see equations for each model.
 #'
 #' @param type A string that indicates the type of the stock-recruitment model. Must be one of \code{"BevertonHolt"}, \code{"Ricker"}, \code{"Shepherd"}, or \code{"SailaLorda"}.
 #' @param param A numeric that indicates the parameterization of the stock-recruitment model type.
@@ -15,7 +15,7 @@
 #'
 #' @author Derek H. Ogle, \email{dogle@@northland.edu}
 #'
-#' @seealso \code{srStartsDP} and \code{\link[FSA]{srFunShow}}
+#' @seealso \code{srStartsDP} and \code{srFunShow} described in \code{\link[FSA]{stockRecruitment}}.
 #'
 #' @aliases srSim
 #'
@@ -42,7 +42,7 @@ srSim <- function(type=c("BevertonHolt","Ricker"),param=1,
                   max.S=500,max.R=1000) {
   p1 <- p2 <- NULL
   type <- match.arg(type)
-  if (!iCheckRStudio()) stop("'srSim' only works in RStudio.",call.=FALSE)
+  if (!iCheckRStudio()) FSA:::STOP("'srSim' only works in RStudio.")
   if (iChk4Namespace("manipulate")) {
     switch(type,
            BevertonHolt= {
@@ -154,8 +154,8 @@ isrSimPlot <- function(type,param,max.S,max.R,max.rds,a,b,c) {
               y <- a*x*exp(-a*x/(Rp*exp(1))) }
            ) # end Ricker switch
   }
-  old.par <- graphics::par(mfrow=c(1,2),mar=c(3.5,3.5,1.25,1.25),
-                           mgp=c(2,0.4,0),tcl=-0.2, pch=19)
+  withr::local_par(mfrow=c(1,2),mar=c(3.5,3.5,1.25,1.25),
+                   mgp=c(2,0.4,0),tcl=-0.2, pch=19)
   graphics::plot(x,y,xlab="Parental (Spawner) Stock",ylab="Recruits",
                  type="l",lwd=2,col="blue",ylim=c(0,max.R),xlim=c(0,max.S))
   graphics::abline(h=Rp,lwd=2,lty=3,col="red")
@@ -166,5 +166,4 @@ isrSimPlot <- function(type,param,max.S,max.R,max.rds,a,b,c) {
   }
   graphics::plot(x,y/x,xlab="Parental (Spawner) Stock",ylab="Recruits/Spawner",
                  type="l",lwd=2,col="blue",ylim=c(0,max.rds),xlim=c(0,max.S))
-  graphics::par(old.par)
 } # end isrSimPlot internal function

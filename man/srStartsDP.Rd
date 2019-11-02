@@ -13,15 +13,15 @@ srStartsDP(formula, data = NULL, type = c("BevertonHolt", "Ricker",
 
 \item{data}{A data frame in which \code{Recruits} and \code{Stock} are found.}
 
-\item{type}{A string that indicates the type of the stock-recruitment model.  Must be one of \code{"BevertonHolt"}, \code{"Ricker"}, \code{"Shepherd"}, or \code{"SailaLorda"}.}
+\item{type}{A string that indicates the type of the stock-recruitment model. Must be one of \code{"BevertonHolt"}, \code{"Ricker"}, \code{"Shepherd"}, or \code{"SailaLorda"}.}
 
-\item{param}{A numeric that indicates the parameterization of the stock-recruitment model type.  This is ignored if \code{type="Shepherd"} or \code{type="SailaLorda"}}
+\item{param}{A numeric that indicates the parameterization of the stock-recruitment model type. This is ignored if \code{type="Shepherd"} or \code{type="SailaLorda"}}
 
-\item{min.prop}{A single numeric that is used to set the minimum values for the slider bars in the dynamic plot.  see details.}
+\item{min.prop}{A single numeric that is used to set the minimum values for the slider bars in the dynamic plot. see details.}
 
-\item{max.mult}{A single numeric that is used to set the maximum values for the slider bars in the dynamic plot.  see details.}
+\item{max.mult}{A single numeric that is used to set the maximum values for the slider bars in the dynamic plot. see details.}
 
-\item{delta.prop}{A single numeric that is used to set the step value for the slider bars in the dynamic plots.  See details.}
+\item{delta.prop}{A single numeric that is used to set the step value for the slider bars in the dynamic plots. See details.}
 
 \item{\dots}{Further arguments passed to the methods.}
 }
@@ -29,10 +29,10 @@ srStartsDP(formula, data = NULL, type = c("BevertonHolt", "Ricker",
 Nothing, but a dynamic plot is created.
 }
 \description{
-Uses dynamic plots to find reasonable starting values for parameters in specific parameterizations of the \dQuote{Beverton-Holt}, \dQuote{Ricker},  \dQuote{Shepherd}, or \dQuote{Saila-Lorda} stock-recruitment models.  Use \code{\link[FSA]{srFunShow}} for the equations of each model.
+Uses dynamic plots to find reasonable starting values for parameters in specific parameterizations of the \dQuote{Beverton-Holt}, \dQuote{Ricker},  \dQuote{Shepherd}, or \dQuote{Saila-Lorda} stock-recruitment models. Use \code{srFunShow} described in \code{\link[FSA]{stockRecruitment}} for the equations of each model.
 }
 \details{
-Starting values can be obtained by plotting the data with the model superimposed but tied to slider bars for changing parameters.  One can change the parameters until a reasonable fit is observed and then use those valeus as starting values.  The initial parameters for the slider bars are the starting values constructed as described in \code{\link[FSA]{srStarts}}.  The range for the sliders will have a minimum that is \code{min.prop} times the initial value and a maximum that is \code{max.mult} times the initial value.  The step or interval of the slider bar is \code{delta.mult} times the initial value.  It should be noted that the dynamic plot may show an error of \dQuote{[tcl] can't get device image}, but the plot will correctly update if the slider bar is adjusted.
+Starting values can be obtained by plotting the data with the model superimposed but tied to slider bars for changing parameters. One can change the parameters until a reasonable fit is observed and then use those valeus as starting values. The initial parameters for the slider bars are the starting values constructed as described in \code{\link[FSA]{srStarts}}. The range for the sliders will have a minimum that is \code{min.prop} times the initial value and a maximum that is \code{max.mult} times the initial value. The step or interval of the slider bar is \code{delta.mult} times the initial value.
 }
 \section{IFAR Chapter}{
  13-Recruitment.
@@ -60,7 +60,7 @@ if (interactive()) {
 
 }
 \references{
-Ogle, D.H.  2016.  \href{http://derekogle.com/IFAR}{Introductory Fisheries Analyses with R}.  Chapman & Hall/CRC, Boca Raton, FL.
+Ogle, D.H. 2016. \href{http://derekogle.com/IFAR}{Introductory Fisheries Analyses with R}. Chapman & Hall/CRC, Boca Raton, FL.
 }
 \seealso{
 See \code{\link[FSA]{srStarts}} for related functionality.

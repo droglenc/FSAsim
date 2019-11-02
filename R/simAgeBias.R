@@ -1,6 +1,6 @@
 #'Simulate an age bias and simulate the ages of fish using the age bias.
 #'
-#'Constructs an age-bias table interactively.  This age-bias table can then be used to convert the true ages of a sample of fish to \sQuote{biased} ages.
+#'Constructs an age-bias table interactively. This age-bias table can then be used to convert the true ages of a sample of fish to \sQuote{biased} ages.
 #'
 #'NEED DETAIL HERE.
 #'
@@ -13,7 +13,7 @@
 #' @param bias.table A table that contains, as columns, the proportion of fish of a certain \sQuote{true} age in various \sQuote{biased} ages -- i.e., a column-proportions table constructed from an age agreement table where the \sQuote{true} ages correspond to columns.
 #' @param agree.table A table that contains the age-agreement table where the \sQuote{true} ages correspond to columns.
 #'
-#' @return If \code{simApplyAgeBias} is used then a vector of \sQuote{biased} ages is returned.  If \code{simAgeBias} is used then a list with the following two items is returned:
+#' @return If \code{simApplyAgeBias} is used then a vector of \sQuote{biased} ages is returned. If \code{simAgeBias} is used then a list with the following two items is returned:
 #' \itemize{
 #' \item agree a table containing the age agreement table resulting from the interactive process.
 #' \item bias a table containing the bias table resulting from the interactive process.
@@ -43,8 +43,7 @@
 #' @export simAgeBias
 simAgeBias <- function(max.age=10,show.props=TRUE,scale=TRUE) {
   Freq <- NULL  # attempting to get by bindings warning in RCMD CHECK
-  old.par <- graphics::par(no.readonly=TRUE)
-  on.exit(graphics::par(old.par))
+  withr::local_par(no.readonly=TRUE)
   options(locatorBell=FALSE)
   x <- y <- NULL
   mode <- "add"
@@ -53,7 +52,8 @@ simAgeBias <- function(max.age=10,show.props=TRUE,scale=TRUE) {
     graphics::par(mar=c(3.5,0,1,0.5),usr=c(0,1,0,1))
     graphics::frame()
     graphics::box()
-    graphics::text(rep(0.5,4),c(0.8,0.625,0.425,0.225),lab=c("Stop\nInteraction","Add","Delete","Move") )
+    graphics::text(rep(0.5,4),c(0.8,0.625,0.425,0.225),
+                   lab=c("Stop\nInteraction","Add","Delete","Move") )
     graphics::lines(c(0.05,0.05,0.95,0.95,0.05),c(0.75,0.85,0.85,0.75,0.75)) 
     graphics::points(rep(0.5,3),c(0.575,0.375,0.175),
            pch=c(ifelse(mode=="add",16,1),
@@ -61,7 +61,8 @@ simAgeBias <- function(max.age=10,show.props=TRUE,scale=TRUE) {
                  ifelse(mode=="mov",16,1)),cex=2.5 )
     ## left panel
     graphics::par(mar=c(3.5,3.5,1,1),mgp=c(2,0.75,0))
-    graphics::plot(0,0,type="n",xlim=c(0,max.age),ylim=c(0,max.age),xlab="True Age",ylab="Biased Age")
+    graphics::plot(0,0,type="n",xlim=c(0,max.age),ylim=c(0,max.age),
+                   xlab="True Age",ylab="Biased Age")
     graphics::abline(a=0,b=1,lwd=1,col="gray50")
     graphics::abline(h=0:max.age,lty=3,lwd=1,col="gray90")
     graphics::abline(v=0:max.age,lty=3,lwd=1,col="gray90")  
@@ -72,7 +73,7 @@ simAgeBias <- function(max.age=10,show.props=TRUE,scale=TRUE) {
       props <- data.frame(props)
       vals <- FSA::Subset(vals,Freq>0)
       props <- FSA::Subset(props,Freq>0)
-      ifelse(scale,cxs <- 0.5*props$Freq+0.5,cxs <- 1)   # rescale props to be between 0.5 and 1 for plotting size
+      ifelse(scale,cxs <- 0.5*props$Freq+0.5,cxs <- 1)   # rescale props to between 0.5 and 1 for plotting size
       if (show.props) {
         with(props,graphics::text(FSA::fact2num(x),fact2num(y),formatC(Freq,format="f",digits=2),cex=cxs))
       } else {
@@ -114,7 +115,7 @@ simAgeBias <- function(max.age=10,show.props=TRUE,scale=TRUE) {
       }
     }
   } ## end repeat
-  if (is.null(x)) stop("No points were added to the plot.  Nothing is returned.",call.=FALSE)
+  if (is.null(x)) FSA:::STOP("No points were added to the plot. Nothing is returned.")
   else {
     df <- data.frame(true=x,bias=y)
     ac <- FSA::ageBias(true~bias,data=df,ref.lab="Truth",nref.lab="Biased")
@@ -128,12 +129,12 @@ simAgeBias <- function(max.age=10,show.props=TRUE,scale=TRUE) {
 #' @export simApplyAgeBias
 simApplyAgeBias <- function(ages,bias.table=NULL,agree.table=NULL) {
  # some checking
-  if (length(ages) == 0) stop("'ages' must contain data.",call.=FALSE)
+  if (length(ages) == 0) FSA:::STOP("'ages' must contain data.")
   if (is.null(bias.table) & is.null(agree.table)) {
-    stop("One of 'bias.table' or 'agree.table' must be provided",call.=FALSE)
+    FSA:::STOP("One of 'bias.table' or 'agree.table' must be provided")
   }
   if (!is.null(bias.table) & !is.null(agree.table)) {
-    warning("Both 'bias.table' and 'agree.table were provided.\n Only 'bias.table' will be used",call.=FALSE)
+    FSA::WARN("Both 'bias.table' and 'agree.table were provided.\n Only 'bias.table' will be used")
     agree.table <- NULL
   }
  # if only an agreement table given then conver to bias table 
@@ -144,10 +145,10 @@ simApplyAgeBias <- function(ages,bias.table=NULL,agree.table=NULL) {
   ages.in.table <- FSA::fact2num(colnames(bias.table))
  # some more checking
   if (max(ages) > max(ages.in.table)) {
-    stop("An observed age is greater than the maximum age in the bias table.",call.=FALSE)
+    FSA:::STOP("An observed age is greater than the maximum age in the bias table.")
   }
   if (min(ages) < min(ages.in.table)) {
-    stop("An observed age is less than the minimum age in the bias table.",call.=FALSE)
+    FSA:::STOP("An observed age is less than the minimum age in the bias table.")
   }
  # initiate the vector to hold the derived 'biased' ages 
   b.ages <- numeric(length(ages))

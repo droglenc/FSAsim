@@ -187,10 +187,9 @@ iVBDynPlot <- function(age,len,type,p1,p2,p3,ages2use) {
   ## the model type and param
   y <- iVBDynPlot_makeL(x,type,p1,p2,p3,ages2use)
   ## Construct the scatterplot with superimposed model
-  opar <- graphics::par(mar=c(3.5,3.5,1.25,1.25),mgp=c(2,0.4,0),tcl=-0.2,pch=19)
+  withr::local_par(mar=c(3.5,3.5,1.25,1.25),mgp=c(2,0.4,0),tcl=-0.2,pch=19)
   graphics::plot(age,len,xlab="Age",ylab="Mean Length")
   graphics::lines(x,y,lwd=2,lty=1,col="blue")
-  graphics::par(opar)
 }
 
 #===============================================================================

@@ -10,22 +10,22 @@ growthModelSim(type = c("vbTypical", "vbOriginal", "vbGQ",
   max.len = 500, max.wt = 500)
 }
 \arguments{
-\item{type}{A single character string that indicates which growth model to use.  See details.}
+\item{type}{A single character string that indicates which growth model to use. See details.}
 
 \item{max.len}{A single numeric that indicates the maximum length to use in the simulations.}
 
 \item{max.wt}{A single numeric that indicates the maximum weight to use in the simulations (only used of \code{type=} \code{"vbTypicalW"} or \code{"vbOriginalW"}.}
 }
 \value{
-None.  However a dynamic graphic connected to slider bar controls in which the user can change the maximum age over which the growth model is evaluated and change the parameters specific to the chosen growth model.
+None. However a dynamic graphic connected to slider bar controls in which the user can change the maximum age over which the growth model is evaluated and change the parameters specific to the chosen growth model.
 }
 \description{
-Plots hypothetical size-at-age for one of seven possible parameterizations of the von Bertalanffy, three possible parameterizations of the Gompertz, and the Schnute growth models.  Slider bars are used to dynamically alter the parameters of each model.
+Plots hypothetical size-at-age for one of seven possible parameterizations of the von Bertalanffy, three possible parameterizations of the Gompertz, and the Schnute growth models. Slider bars are used to dynamically alter the parameters of each model.
 }
 \details{
-This function can be used to explore the \dQuote{shape} of the growth models for various choices of the parameters.  In this usage the \code{x} and \code{y} arguments should be (left) set at \code{NULL}.  This function can also be used to visually \dQuote{fit} a growth model to a set of observed lengths and ages.  This usage may be used to provide reasonable starting values for the parameters when fitting the growth model to the data with non-linear least-squares.  The observed data are plotted by including a formula of the form \code{length~age} in \code{x} and a data frame from which to draw the variables in the formula in the \code{data} arguments.
+This function can be used to explore the \dQuote{shape} of the growth models for various choices of the parameters. In this usage the \code{x} and \code{y} arguments should be (left) set at \code{NULL}. This function can also be used to visually \dQuote{fit} a growth model to a set of observed lengths and ages. This usage may be used to provide reasonable starting values for the parameters when fitting the growth model to the data with non-linear least-squares. The observed data are plotted by including a formula of the form \code{length~age} in \code{x} and a data frame from which to draw the variables in the formula in the \code{data} arguments.
 
-The \code{type} argument is used to choose a type of growth model and must be one of the following (the models can be seen with \code{\link[FSA]{growthFunShow}}:
+The \code{type} argument is used to choose a type of growth model and must be one of the following (the models can be seen with \code{growthFunShow} described in \code{\link[FSA]{growthModels}}:
 
 \tabular{ll}{
 \code{"vbTypical"} \tab The "typical" Beverton-Holt parameterized von Bertalanffy model.\cr
@@ -66,20 +66,20 @@ growthModelSim(lencap~agecap,data=SMBassWB,type="Gompertz2")
 
 }
 \references{
-Francis, R.I.C.C.  1988.  Are growth parameters estimated from tagging and age-length data comparable?  Canadian Journal of Fisheries and Aquatic Sciences, 45:936-942.
+Francis, R.I.C.C. 1988. Are growth parameters estimated from tagging and age-length data comparable?  Canadian Journal of Fisheries and Aquatic Sciences, 45:936-942.
 
-Gallucci, V.F. and T.J. Quinn II. 1979.  Reparameterizing, fitting, and testing a simple growth model.  Transactions of the American Fisheries Society, 108:14-25.
+Gallucci, V.F. and T.J. Quinn II. 1979. Reparameterizing, fitting, and testing a simple growth model. Transactions of the American Fisheries Society, 108:14-25.
 
-Mooij, W.M., J.M. Van Rooij, and S. Wijnhoven.  1999.  Analysis and comparison of fish growth from small samples of length-at-age data: Detection of sequal dimorphism in Eurasian perch as an example.  Transactions of the American Fisheries Society 128:483-490.
+Mooij, W.M., J.M. Van Rooij, and S. Wijnhoven. 1999. Analysis and comparison of fish growth from small samples of length-at-age data: Detection of sequal dimorphism in Eurasian perch as an example. Transactions of the American Fisheries Society 128:483-490.
 
-Schnute, J.  1981.  A versatile growth model with statistically stable parameters. Canadian Journal of Fisheries & Aquatic Sciences, 38:1128-1140.
+Schnute, J. 1981. A versatile growth model with statistically stable parameters. Canadian Journal of Fisheries & Aquatic Sciences, 38:1128-1140.
 
-Schnute, J. and D. Fournier. 1980.  A new approach to length-frequency analysis: Growth structure.  Canadian Journal of Fisheries and Aquatic Sciences, 37:1337-1351.
+Schnute, J. and D. Fournier. 1980. A new approach to length-frequency analysis: Growth structure. Canadian Journal of Fisheries and Aquatic Sciences, 37:1337-1351.
 
 Weisberg, S., G.R. Spangler, and L. S. Richmond. 2010. Mixed effects models for fish growth. Canadian Journal of Fisheries And Aquatic Sciences 67:269-277.
 }
 \seealso{
-See model equations with \code{\link[FSA]{growthFunShow}}.  See similar functionality for von Bertalanffy models in \code{\link[FSA]{vbStarts}}.
+See model equations with \code{growthFunShow} described in \code{\link[FSA]{growthModels}}. See similar functionality for von Bertalanffy models in \code{\link[FSA]{vbStarts}}.
 }
 \author{
 Derek H. Ogle, \email{dogle@northland.edu}

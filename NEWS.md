@@ -1,8 +1,18 @@
 # FSAsim 0.0.6 ongoing
 * Removed dependency on `relax` and `tcltk`.
-* `srSim()`: Modified. Replaced dependency on `relax` with `manipulate`. Removed `formula` and `data` arguments and, thus, the functionality to plot with data as this was used to find reasonable starting values for the model fitting which is better accomplished with `srStartsDP()`.
+* `catchCurveSim()`: Modified. Used `withr::local_par` to handle `par()` changes.
+* `cohortCurveSim()`: Modified. Used `withr::local_par` to handle `par()` changes.
+* `growthModelSim()`: Modified. Used `withr::local_par` to handle `par()` changes.
+* `lengthWeightSim()`: Modified. Used `withr::local_par` to handle `par()` changes.
+* `lelsieSim()`: Modified. Used `withr::local_par` to handle `par()` changes.
+* `mrClosed1Sim()`: Modified. Used `withr::local_par` to handle `par()` changes.
+* `simAgeBias()`: Modified. Used `withr::local_par` to handle `par()` changes.
+* `simLenSelect()`: Modified. Used `withr::local_par` to handle `par()` changes.
+* `srCobWeb()`: Modified. Changed how `par()` was handled.
+* `srSim()`: Modified. Replaced dependency on `relax` with `manipulate`. Removed `formula` and `data` arguments and, thus, the functionality to plot with data as this was used to find reasonable starting values for the model fitting which is better accomplished with `srStartsDP()`. Used `withr::local_par` to handle `par()` changes.
 * `srStartsDP()`:  Modified. Replaced dependency on `relax` with `manipulate`.
-* `vbStartsDP()`:  Modified. Replaced dependency on `relax` with `manipulate`.
+* `vbComp()`: Modified. Changed how `par()` was handled.
+* `vbStartsDP()`:  Modified. Replaced dependency on `relax` with `manipulate`. Used `withr::local_par` to handle `par()` changes.
 
 
 # FSAsim 0.0.5 10-Jan-17
