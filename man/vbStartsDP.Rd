@@ -17,11 +17,11 @@ vbStartsDP(formula, data = NULL, type = c("Typical", "typical",
 
 \item{type}{A string that indicates the parameterization of the von Bertalanffy model.}
 
-\item{ages2use}{A numerical vector of the two ages to be used in the Schnute or Francis paramaterizations.  See \code{\link[FSA]{vbStarts}}.}
+\item{ages2use}{A numerical vector of the two ages to be used in the Schnute or Francis paramaterizations. See \code{\link[FSA]{vbStarts}}.}
 
-\item{methEV}{A string that indicates how the lengths of the two ages in the Schnute paramaterization or the three ages in the Francis paramaterization should be derived.  See \code{\link[FSA]{vbStarts}}.}
+\item{methEV}{A string that indicates how the lengths of the two ages in the Schnute paramaterization or the three ages in the Francis paramaterization should be derived. See \code{\link[FSA]{vbStarts}}.}
 
-\item{meth0}{A string that indicates how the t0 and L0 paramaters should be derived.  See \code{\link[FSA]{vbStarts}}.}
+\item{meth0}{A string that indicates how the t0 and L0 paramaters should be derived. See \code{\link[FSA]{vbStarts}}.}
 
 \item{\dots}{Further arguments passed to the methods.}
 }
@@ -32,7 +32,7 @@ None, but a dynamic plot is constructed.
 Uses dynamic plots to find reasonable starting values for the parameters in a specific parameterization of the von Bertalanffy growth function.
 }
 \details{
-Starting values can be obtained by plotting the data with the model superimposed but tied to slider bars that allow the parameters to be interactively changed.  One can change the parameters until a reasonable fit is observed and then use those valeus as starting values.  The initial parameters for the slider bars are the starting values constructed with \code{\link[FSA]{vbStarts}}.  It should be noted that the dynamic plot may show an error of \dQuote{[tcl] can't get device image}, but the plot will correctly update if the slider bar is adjusted.
+Starting values can be obtained by plotting the data with the model superimposed but tied to slider bars that allow the parameters to be interactively changed. One can change the parameters until a reasonable fit is observed and then use those valeus as starting values. The initial parameters for the slider bars are the starting values constructed with \code{\link[FSA]{vbStarts}}. It should be noted that the dynamic plot may show an error of \dQuote{[tcl] can't get device image}, but the plot will correctly update if the slider bar is adjusted.
 }
 \note{
 The \sQuote{original} and \sQuote{vonBertalanffy} and the \sQuote{typical} and \sQuote{BevertonHolt} parameterizations are synonymous.
@@ -65,7 +65,7 @@ if (interactive()) {
 
 }
 \references{
-Ogle, D.H.  2016.  \href{http://derekogle.com/IFAR}{Introductory Fisheries Analyses with R}.  Chapman & Hall/CRC, Boca Raton, FL.
+Ogle, D.H. 2016. \href{http://derekogle.com/IFAR}{Introductory Fisheries Analyses with R}. Chapman & Hall/CRC, Boca Raton, FL.
 
 See references in \code{\link{vbFuns}}.
 }

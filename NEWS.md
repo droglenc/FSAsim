@@ -1,4 +1,8 @@
 # FSAsim 0.0.6 ongoing
+* Removed dependency on `relax` and `tcltk`.
+* `srSim()`: Modified. Replaced dependency on `relax` with `manipulate`. Removed `formula` and `data` arguments and, thus, the functionality to plot with data as this was used to find reasonable starting values for the model fitting which is better accomplished with `srStartsDP()`.
+* `srStartsDP()`:  Modified. Replaced dependency on `relax` with `manipulate`.
+* `vbStartsDP()`:  Modified. Replaced dependency on `relax` with `manipulate`.
 
 
 # FSAsim 0.0.5 10-Jan-17
