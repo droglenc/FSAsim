@@ -1,3 +1,5 @@
+# FSAsim 0.0.6 ongoing
+
 # FSAsim 0.0.6 2-Nov-19
 * Removed dependency on `relax` and `tcltk`.
 * `catchCurveSim()`: Modified. Used `withr::local_par` to handle `par()` changes.
@@ -13,7 +15,6 @@
 * `srStartsDP()`:  Modified. Replaced dependency on `relax` with `manipulate`.
 * `vbComp()`: Modified. Changed how `par()` was handled.
 * `vbStartsDP()`:  Modified. Replaced dependency on `relax` with `manipulate`. Used `withr::local_par` to handle `par()` changes.
-
 
 # FSAsim 0.0.5 10-Jan-17
 * Added `::` to functions in many functions.
