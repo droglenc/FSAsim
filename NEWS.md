@@ -1,4 +1,4 @@
-# FSAsim 0.0.6 ongoing
+# FSAsim 0.0.6 2-Nov-19
 * Removed dependency on `relax` and `tcltk`.
 * `catchCurveSim()`: Modified. Used `withr::local_par` to handle `par()` changes.
 * `cohortCurveSim()`: Modified. Used `withr::local_par` to handle `par()` changes.

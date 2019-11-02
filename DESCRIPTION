@@ -1,6 +1,6 @@
 Package: FSAsim
 Title: Simulate Data for Fisheries Stock Assessment Methods
-Version: 0.0.5.9999
+Version: 0.0.6
 Date: 2019-11-2
 Description: Simulate data or visualize models for fisheries stock assessment methods.
 Authors@R: person("Derek","Ogle",email="dogle@northland.edu",role=c("aut","cre"))
