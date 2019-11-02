@@ -4,8 +4,8 @@
 \alias{srSim}
 \title{Dynamic plots to explore typical fisheries stock-recruitment models.}
 \usage{
-srSim(formula = NULL, data = NULL, type = c("BevertonHolt", "Ricker"),
-  param = 1, max.S = 500, max.R = 1000)
+srSim(formula = NULL, data = NULL, type = c("BevertonHolt",
+  "Ricker"), param = 1, max.S = 500, max.R = 1000)
 }
 \arguments{
 \item{formula}{Formula of the form \code{Recruits~Stock}.}

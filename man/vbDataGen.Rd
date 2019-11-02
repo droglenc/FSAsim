@@ -5,11 +5,11 @@
 \title{Randomly create length-at-age data according to a von Bertalanffy growth function.}
 \usage{
 vbDataGen(n, Linf, K, t0, paramCV = 0.1, SE = NULL, SECV = NULL,
-  SD = NULL, SDCV = NULL, minAge = 1, maxAge = 9, agedist = rep(1,
-  maxAge - minAge + 1), growth.per = c(1, 365), sample.per = 1,
-  dataType = c("atCapture", "long", "groupedData", "wide", "tagrecap"),
-  lendigs = getOption("digits"), agedigs = 2, backcalc = FALSE,
-  seed = NULL)
+  SD = NULL, SDCV = NULL, minAge = 1, maxAge = 9,
+  agedist = rep(1, maxAge - minAge + 1), growth.per = c(1, 365),
+  sample.per = 1, dataType = c("atCapture", "long", "groupedData",
+  "wide", "tagrecap"), lendigs = getOption("digits"), agedigs = 2,
+  backcalc = FALSE, seed = NULL)
 }
 \arguments{
 \item{n}{Number of individuals to simulate data for.}

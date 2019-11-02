@@ -38,7 +38,5 @@ str(VBGMlit)
 head(VBGMlit)
 
 }
-\concept{
-Growth 'von Bertalanffy'
-}
+\concept{Growth 'von Bertalanffy'}
 \keyword{datasets}

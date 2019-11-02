@@ -59,6 +59,7 @@ srSim <- function(formula=NULL,data=NULL,type=c("BevertonHolt","Ricker"),param=1
   } # end internal refresh
   
   ## begin main srSim
+  if (!requireNamespace("relax")) stop("'srSim' requires the 'relax' package to be installed.")
   # some checks and handle the formula
   if (!is.null(formula)) {
     # this allows the user to enter a type as the first argument as long as data is not given

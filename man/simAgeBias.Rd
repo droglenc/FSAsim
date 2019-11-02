@@ -3,7 +3,6 @@
 \name{simAgeBias}
 \alias{simAgeBias}
 \alias{simApplyAgeBias}
-\alias{simApplyAgeBias}
 \title{Simulate an age bias and simulate the ages of fish using the age bias.}
 \usage{
 simAgeBias(max.age = 10, show.props = TRUE, scale = TRUE)
