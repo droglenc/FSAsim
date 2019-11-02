@@ -41,7 +41,8 @@
 #'@rdname srCobWeb
 #'@export srCobWeb
 #'
-srCobWeb <- function(type=c("BevertonHolt","Ricker"),param=1,N=100,initS=50,N2ignore=0,...) {
+srCobWeb <- function(type=c("BevertonHolt","Ricker"),param=1,
+                     N=100,initS=50,N2ignore=0,...) {
   type <- match.arg(type)
   # Get model function
   mdl <- srFuns(type=type,param=param)
@@ -49,13 +50,15 @@ srCobWeb <- function(type=c("BevertonHolt","Ricker"),param=1,N=100,initS=50,N2ig
   S <- numeric(N)
   S[1] <- initS
   for (i in 2:N) S[i] <- mdl(S[i-1],...)
-  
-  opar <- graphics::par(mfrow=c(2,1),mar=c(3.5,3.5,0.5,0.5),mgp=c(2,0.75,0)); on.exit(graphics::par(opar))
   # make base cobweb plot
   x <- 0:ceiling(max(S))
   y <- mdl(x,...)
   # The curve
-  graphics::plot(y~x,type="l",lwd=4,col="blue",xlim=c(0,max(c(x,y))),ylim=c(0,max(c(x,y))),xlab="Spawners / Stock",ylab="Recruits")
+  op <- graphics::par(mfrow=c(2,1),mar=c(3.5,3.5,0.5,0.5),mgp=c(2,0.75,0))
+  on.exit(graphics::par(op))
+  graphics::plot(y~x,type="l",lwd=4,col="blue",
+                 xlim=c(0,max(c(x,y))),ylim=c(0,max(c(x,y))),
+                 xlab="Spawners / Stock",ylab="Recruits")
   # The replacement line
   graphics::abline(a=0,b=1,lwd=3,col="red")
   # add cobwebs
@@ -63,11 +66,11 @@ srCobWeb <- function(type=c("BevertonHolt","Ricker"),param=1,N=100,initS=50,N2ig
   for (i in (N2ignore+1):(N-1)) {
     # go vertical to the function line
     if (i==1) {
-      graphics::points(S[i],0,col="green",pch=19)                              # mark start
+      graphics::points(S[i],0,col="green",pch=19)                   # mark start
       graphics::lines(c(S[i],S[i]),c(0,S[i+1]),lwd=2,col=clrs)
     } else graphics::lines(c(S[i],S[i]),c(S[i],S[i+1]),lwd=2,col=clrs)
     # go horizontal to replacement line
-    if (i==(N-1)) graphics::points(S[i],S[i+1],col="red",pch=19)               # mark end
+    if (i==(N-1)) graphics::points(S[i],S[i+1],col="red",pch=19)    # mark end
     else graphics::lines(c(S[i],S[i+1]),c(S[i+1],S[i+1]),lwd=2,col=clrs)
   }
   # Time plot

@@ -14,7 +14,9 @@ getVarFromFormula <- function(formula,data,expNumVars=NULL) {
   varNms <- names(stats::model.frame(formula,data=data))
   # don't "error" check the number of variables
   if (is.null(expNumVars)) varNms
-  else if (length(varNms)!=expNumVars) stop("Function only works with formulas with ",expNumVars," variable",ifelse(expNumVars==1,".","s."))
+  else if (length(varNms)!=expNumVars)
+    FSA:::STOP("Function only works with formulas with ",expNumVars," variable",
+               ifelse(expNumVars==1,".","s."))
   else varNms
 }
 
@@ -24,7 +26,7 @@ getVarFromFormula <- function(formula,data,expNumVars=NULL) {
 ##################################################################
 iChk4Namespace <- function(pkg) {
   res <- requireNamespace(pkg,quietly=TRUE)
-  if (!res) stop(paste0("The '",pkg," package must be installed."))
+  if (!res) FSA:::STOP(paste0("The '",pkg," package must be installed."))
   res
 }
 

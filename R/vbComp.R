@@ -52,6 +52,7 @@ vbComp <- function(df,ages=20,...) {
   }
   # Modify plot parameters
   op <- graphics::par(mar=c(3.5,3.5,1,1),mgp=c(2,0.75,0))
+  on.exit(graphics::par(op))
   # plot results
   graphics::matplot(0:max.age,simdf[,1:num.sims],type="b",lwd=3,
                     xlab="Age",ylab="Mean Length",...)
@@ -61,6 +62,4 @@ vbComp <- function(df,ages=20,...) {
   colnames(key) <- c("Sim","Species","Linf","K","t0","Max. Age")
   # Print the legend/key with graph
   print(key)
-  # Return plot params to original
-  graphics::par(op)
 }

@@ -2,14 +2,14 @@
 #' 
 #' @description Uses dynamic plots to find reasonable starting values for the parameters in a specific parameterization of the von Bertalanffy growth function.
 #' 
-#' @details Starting values can be obtained by plotting the data with the model superimposed but tied to slider bars that allow the parameters to be interactively changed.  One can change the parameters until a reasonable fit is observed and then use those valeus as starting values.  The initial parameters for the slider bars are the starting values constructed with \code{\link[FSA]{vbStarts}}.  It should be noted that the dynamic plot may show an error of \dQuote{[tcl] can't get device image}, but the plot will correctly update if the slider bar is adjusted.
+#' @details Starting values can be obtained by plotting the data with the model superimposed but tied to slider bars that allow the parameters to be interactively changed. One can change the parameters until a reasonable fit is observed and then use those valeus as starting values. The initial parameters for the slider bars are the starting values constructed with \code{\link[FSA]{vbStarts}}. It should be noted that the dynamic plot may show an error of \dQuote{[tcl] can't get device image}, but the plot will correctly update if the slider bar is adjusted.
 #' 
 #' @param formula A formula of the form \code{len~age}.
 #' @param data A data frame that contains the variables in \code{formula}.
 #' @param type A string that indicates the parameterization of the von Bertalanffy model.
-#' @param ages2use A numerical vector of the two ages to be used in the Schnute or Francis paramaterizations.  See \code{\link[FSA]{vbStarts}}.
-#' @param methEV A string that indicates how the lengths of the two ages in the Schnute paramaterization or the three ages in the Francis paramaterization should be derived.  See \code{\link[FSA]{vbStarts}}.
-#' @param meth0 A string that indicates how the t0 and L0 paramaters should be derived.  See \code{\link[FSA]{vbStarts}}.
+#' @param ages2use A numerical vector of the two ages to be used in the Schnute or Francis paramaterizations. See \code{\link[FSA]{vbStarts}}.
+#' @param methEV A string that indicates how the lengths of the two ages in the Schnute paramaterization or the three ages in the Francis paramaterization should be derived. See \code{\link[FSA]{vbStarts}}.
+#' @param meth0 A string that indicates how the t0 and L0 paramaters should be derived. See \code{\link[FSA]{vbStarts}}.
 #' @param \dots Further arguments passed to the methods.
 #' 
 #' @return None, but a dynamic plot is constructed.
@@ -22,7 +22,7 @@
 #' 
 #' @seealso See \code{\link[FSA]{vbStarts}} for related functionality.
 #' 
-#' @references Ogle, D.H.  2016.  \href{http://derekogle.com/IFAR}{Introductory Fisheries Analyses with R}.  Chapman & Hall/CRC, Boca Raton, FL.
+#' @references Ogle, D.H. 2016. \href{http://derekogle.com/IFAR}{Introductory Fisheries Analyses with R}. Chapman & Hall/CRC, Boca Raton, FL.
 #' 
 #' See references in \code{\link{vbFuns}}.
 #' 
@@ -66,32 +66,32 @@ vbStartsDP <- function(formula,data=NULL,
   meth0 <- match.arg(meth0)
   ## get the length and age vectors
   tmp <- FSA:::iHndlFormula(formula,data,expNumR=1,expNumE=1)
+  if (!tmp$metExpNumR)
+    FSA:::STOP("'formula' must have only one LHS variable.")
+  if (!tmp$Rclass %in% c("numeric","integer"))
+    FSA:::STOP("LHS variable must be numeric.")
+  if (!tmp$metExpNumE)
+    FSA:::STOP("'formula' must have only one RHS variable.")
+  if (!tmp$Eclass %in% c("numeric","integer")) 
+    FSA:::STOP("RHS variable must be numeric.")
   len <- tmp$mf[,tmp$Rname[1]]
   age <- tmp$mf[,tmp$Enames[1]]
   ## Get starting values
   sv <- vbStarts(formula,data,type=type,ages2use=ages2use,
                  methEV=methEV,meth0=meth0)
-  if (!requireNamespace("relax")) stop("'vbStarts' requires the 'relax' package to be installed to construct the dynamic plot.",call.=FALSE)
-  else iVBStartsDynPlot(age,len,type,sv,ages2use)
+  if (!iCheckRStudio()) FSA:::STOP("'vbStartsDP' only works in RStudio.")
+  if (iChk4Namespace("manipulate")) {
+    iVBStartsDynPlot(age,len,type,sv,ages2use)
+  }
 }
 
-
-
-##############################################################
+################################################################################
 # INTERNAL FUNCTIONS
-##############################################################
-#=============================================================
+################################################################################
+#===============================================================================
 # Dynamics plots for finding starting values -- main function
-#=============================================================
+#===============================================================================
 iVBStartsDynPlot <- function(age,len,type,sv,ages2use) {
-  ## internal refresh function for the dialog box
-  refresh <- function(...) {
-    p1 <- relax::slider(no=1)
-    p2 <- relax::slider(no=2)
-    p3 <- relax::slider(no=3)
-    iVBDynPlot(age,len,type,p1,p2,p3,ages2use)
-  } # end internal refresh
-
   ## internal function to make minimum values for the sliders
   iMake.slMins <- function(sv) {
     svnms <- names(sv)
@@ -104,7 +104,9 @@ iVBStartsDynPlot <- function(age,len,type,sv,ages2use) {
     if ("t50" %in% svnms) tmp["t50"] <- 0.1*sv[["t50"]]
     if ("L1" %in% svnms) tmp["L1"] <- 0.5*sv[["L1"]]
     if ("L2" %in% svnms) tmp["L2"] <- 0.5*(sv[["L1"]]+sv[["L2"]])
-    if ("L3" %in% svnms) tmp["L3"] <- ifelse("L2" %in% svnms,0.5*(sv[["L2"]]+sv[["L3"]]),0.5*(sv[["L1"]]+sv[["L3"]]))
+    if ("L3" %in% svnms) tmp["L3"] <- ifelse("L2" %in% svnms,
+                                             0.5*(sv[["L2"]]+sv[["L3"]]),
+                                             0.5*(sv[["L1"]]+sv[["L3"]]))
     # reduce to only those in sv
     tmp <- tmp[which(names(tmp) %in% svnms)]
     # make sure they are in the same order as in sv
@@ -121,7 +123,8 @@ iVBStartsDynPlot <- function(age,len,type,sv,ages2use) {
     if ("L0" %in% svnms) tmp["L0"] <- 2*sv[["L0"]]
     if ("omega" %in% svnms) tmp["omega"] <- 2*sv[["omega"]]
     if ("t50" %in% svnms) tmp["t50"] <- 0.6*max(age,na.rm=TRUE)
-    if ("L1" %in% svnms) tmp["L1"] <- ifelse("L2" %in% svnms,0.5*(sv[["L1"]]+sv[["L2"]]),
+    if ("L1" %in% svnms) tmp["L1"] <- ifelse("L2" %in% svnms,
+                                             0.5*(sv[["L1"]]+sv[["L2"]]),
                                              0.5*(sv[["L1"]]+sv[["L3"]]))
     if ("L2" %in% svnms) tmp["L2"] <- 0.5*(sv[["L2"]]+sv[["L3"]])
     if ("L3" %in% svnms) tmp["L3"] <- 1.5*sv[["L3"]]
@@ -151,8 +154,9 @@ iVBStartsDynPlot <- function(age,len,type,sv,ages2use) {
   } # end iMake.slDeltas
   
   ## Main function
-  ## The default values for the sliders will be at the starting
-  ## values as determined above.  Unlist first to make as a vector.
+  p1 <- p2 <- p3 <- NULL
+  ## The default values for the sliders will be at the starting values as
+  ## determined above. Unlist first to make as a vector.
   sl.defaults <- unlist(sv)
   ## Grab names from the sv vector
   sl.names <- names(sl.defaults)
@@ -160,19 +164,21 @@ iVBStartsDynPlot <- function(age,len,type,sv,ages2use) {
   sl.mins <- iMake.slMins(sl.defaults)
   sl.maxs <- iMake.slMaxs(sl.defaults,age)
   sl.deltas <- iMake.slDeltas(sl.defaults)
-  ## Make a title
-  sl.ttl <- paste0("Von Bertalanffy (",type,")")
   ## Set up names that are specific to type and param
-  relax::gslider(refresh,prompt=TRUE,hscale=1.5,pos.of.panel="left",
-                 title=sl.ttl,sl.names=sl.names,
-                 sl.mins=sl.mins,sl.maxs=sl.maxs,
-                 sl.deltas=sl.deltas,sl.defaults=sl.defaults)
+  manipulate::manipulate(
+    { iVBDynPlot(age,len,type,p1,p2,p3,ages2use) },
+    p1=manipulate::slider(sl.mins[[1]],sl.maxs[[1]],step=sl.deltas[[1]],
+                          initial=sl.defaults[[1]],label=sl.names[[1]]),
+    p2=manipulate::slider(sl.mins[[2]],sl.maxs[[2]],step=sl.deltas[[2]],
+                          initial=sl.defaults[[2]],label=sl.names[[2]]),
+    p3=manipulate::slider(sl.mins[[3]],sl.maxs[[3]],step=sl.deltas[[3]],
+                          initial=sl.defaults[[3]],label=sl.names[[3]])
+  )
 }
 
-#=============================================================
-# Constructs the actual plot in the dynamics plots for finding
-# starting values
-#=============================================================
+#===============================================================================
+# Constructs the actual plot in the dynamics plots for finding starting values
+#===============================================================================
 iVBDynPlot <- function(age,len,type,p1,p2,p3,ages2use) {
   ## create a sequence of age values
   max.age <- max(age,na.rm=TRUE)
@@ -181,16 +187,15 @@ iVBDynPlot <- function(age,len,type,p1,p2,p3,ages2use) {
   ## the model type and param
   y <- iVBDynPlot_makeL(x,type,p1,p2,p3,ages2use)
   ## Construct the scatterplot with superimposed model
-  opar <- graphics::par(mar=c(3.5,3.5,1.25,1.25),mgp=c(2,0.4,0),tcl=-0.2,pch=19)
+  withr::local_par(mar=c(3.5,3.5,1.25,1.25),mgp=c(2,0.4,0),tcl=-0.2,pch=19)
   graphics::plot(age,len,xlab="Age",ylab="Mean Length")
   graphics::lines(x,y,lwd=2,lty=1,col="blue")
-  graphics::par(opar)
 }
 
-#=============================================================
-# Construct values for length given values of age, a Von B
-# model and values of the parameters.  This is called by iVBDynPlot()
-#=============================================================
+#===============================================================================
+# Construct values for length given values of age, a VonB model and values of 
+# the parameters. Called by iVBDynPlot()
+#===============================================================================
 iVBDynPlot_makeL <- function(x,type,p1,p2,p3,ages2use){
   switch(type,
          Typical=, typical=, Traditional=, traditional=, BevertonHolt= {

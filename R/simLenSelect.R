@@ -1,16 +1,16 @@
 #'Simulate sampling fish based on length selectivity.
 #'
 #'Constructs a sample of fish based on a user-supplied length-based selectivity
-#'curve.  The selectivity curve can be supplied via a parametric model (the
+#'curve. The selectivity curve can be supplied via a parametric model (the
 #'beta distribution) or manually for various length categories.
 #'
 #'NEED DETAIL HERE.
 #'
 #'@aliases simLenSelectP simLenSelectM
 #'@param lens A vector containg the lengths of individual fish.
-#'@param alpha A numeric shape parameter to the beta distribution.  See
+#'@param alpha A numeric shape parameter to the beta distribution. See
 #'\code{\link{dbeta}}.
-#'@param beta A numeric shape parameter to the beta distribution.  See
+#'@param beta A numeric shape parameter to the beta distribution. See
 #'\code{\link{dbeta}}.
 #'@param max.height A numeric that controls the maximum height of the
 #'probability distribution -- i.e., this will be the maximum probability of
@@ -20,23 +20,23 @@
 #'@param breaks A numeric vector of lower values for the break points of the
 #'length categories.
 #'@param probs A numeric vector of capture probabilities (i.e., selectivities)
-#'for each length category.  Default is a vector containing all ones -- i.e.,
+#'for each length category. Default is a vector containing all ones -- i.e.,
 #'no selectivity by length category.
 #'@param interact A logical indicating whether the capture probabilities (i.e.,
 #'selectivities) should be chosen by the user interacting with a selectivity
-#'plot.  See details.
+#'plot. See details.
 #'@param digits A numeric indicating the number of digits that should be used
-#'when selecting the capture probabilities.  Smaller values represent coarser
+#'when selecting the capture probabilities. Smaller values represent coarser
 #'choices.
 #'@return If \code{simLenSelectP} is used then a vector of logicals indicating
-#'whether each fish was sampled (\code{TRUE}) or not.  If \code{simLenSelectM}
+#'whether each fish was sampled (\code{TRUE}) or not. If \code{simLenSelectM}
 #'is used then a list that contains the following three items is returned:
 #'\itemize{
 #'\item smpld a vector of logicals indicating whether each fish was sampled
 #'(\code{TRUE}) or not.
 #'\item breaks the vector of length category breaks sent in \code{breaks}.
 #'\item probs the vector of capture probabilities that corresponds to the
-#'length categories in \code{breaks}.  This vector may not equal the supplied
+#'length categories in \code{breaks}. This vector may not equal the supplied
 #'\code{probs} vector if the user changed the capture probabilities with the
 #'interactive graphic (i.e., using \code{interact=TRUE}).
 #'}
@@ -92,12 +92,13 @@
 #'@export simLenSelectP
 simLenSelectP <- function(lens,alpha=1,beta=1,max.height=1,show=FALSE) {
  # some error catching
-  if (length(alpha)>1) stop("'alpha' must contain one and only one value",call.=FALSE)
-  if (alpha<0) stop("'alpha' must be a positive number",call.=FALSE)
-  if (length(beta)>1) stop("'beta' must contain one and only one value",call.=FALSE)
-  if (beta<0) stop("'beta' must be a positive number",call.=FALSE)
-  if (length(max.height)>1) stop("'max.height' must contain one and only one value",call.=FALSE)
-  if (max.height<=0 | max.height>1) stop("'max.height' must be a strictly positive number less than or equal to 1",call.=FALSE)
+  if (length(alpha)>1) FSA:::STOP("'alpha' must contain one and only one value")
+  if (alpha<0) FSA:::STOP("'alpha' must be a positive number")
+  if (length(beta)>1) FSA:::STOP("'beta' must contain one and only one value")
+  if (beta<0) FSA:::STOP("'beta' must be a positive number")
+  if (length(max.height)>1) FSA:::STOP("'max.height' must contain one and only one value")
+  if (max.height<=0 | max.height>1)
+    FSA:::STOP("'max.height' must be a strictly positive number less than or equal to 1")
 
  # show plot
   if (show) {
@@ -120,10 +121,10 @@ simLenSelectP <- function(lens,alpha=1,beta=1,max.height=1,show=FALSE) {
 
 #'@rdname simLenSelect
 #'@export simLenSelectM
-simLenSelectM <- function(lens,breaks,probs=rep(max.height,length(breaks)),max.height=1,interact=TRUE,digits=2) {
+simLenSelectM <- function(lens,breaks,probs=rep(max.height,length(breaks)),
+                          max.height=1,interact=TRUE,digits=2) {
   if (interact) {
-    old.par <- graphics::par(no.readonly=TRUE) 
-    on.exit(graphics::par(old.par))
+    withr::local_par(no.readonly=TRUE) 
     options(locatorBell=FALSE)
     graphics::layout(matrix(c(1,2),nrow=2),heights=c(1,15))
     repeat {
@@ -134,9 +135,11 @@ simLenSelectM <- function(lens,breaks,probs=rep(max.height,length(breaks)),max.h
       graphics::text(0.5,0.5,"Stop Interactive Choices & Perform Selections",col="red")
      # setup the plot
       graphics::par(mar=c(3.5,3.5,0.1,3.5),mgp=c(2,0.75,0))
-      graphics::plot(breaks,probs,xlim=range(breaks),ylim=c(0,max.height),xlab='Length Categories',ylab='Probability of Capture',type="n")
+      graphics::plot(breaks,probs,xlim=range(breaks),ylim=c(0,max.height),
+                     xlab='Length Categories',ylab='Probability of Capture',type="n")
       aty <- graphics::axTicks(2)
-      graphics::axis(side=4,at=aty,labels=formatC(aty/aty[length(aty)]*100,format="f",digits=0))
+      graphics::axis(side=4,at=aty,
+                     labels=formatC(aty/aty[length(aty)]*100,format="f",digits=0))
       graphics::mtext("Percentage of Maximum Probability",side=4,line=2)
       graphics::abline(v=breaks,lty=3,lwd=1,col="gray90")
       graphics::abline(h=aty,lty=3,lwd=1,col="gray90")

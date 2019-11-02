@@ -14,10 +14,10 @@ simLenSelectM(lens, breaks, probs = rep(max.height, length(breaks)),
 \arguments{
 \item{lens}{A vector containg the lengths of individual fish.}
 
-\item{alpha}{A numeric shape parameter to the beta distribution.  See
+\item{alpha}{A numeric shape parameter to the beta distribution. See
 \code{\link{dbeta}}.}
 
-\item{beta}{A numeric shape parameter to the beta distribution.  See
+\item{beta}{A numeric shape parameter to the beta distribution. See
 \code{\link{dbeta}}.}
 
 \item{max.height}{A numeric that controls the maximum height of the
@@ -31,34 +31,34 @@ should be shown (\code{=TRUE}) or not (\code{=TRUE}; default).}
 length categories.}
 
 \item{probs}{A numeric vector of capture probabilities (i.e., selectivities)
-for each length category.  Default is a vector containing all ones -- i.e.,
+for each length category. Default is a vector containing all ones -- i.e.,
 no selectivity by length category.}
 
 \item{interact}{A logical indicating whether the capture probabilities (i.e.,
 selectivities) should be chosen by the user interacting with a selectivity
-plot.  See details.}
+plot. See details.}
 
 \item{digits}{A numeric indicating the number of digits that should be used
-when selecting the capture probabilities.  Smaller values represent coarser
+when selecting the capture probabilities. Smaller values represent coarser
 choices.}
 }
 \value{
 If \code{simLenSelectP} is used then a vector of logicals indicating
-whether each fish was sampled (\code{TRUE}) or not.  If \code{simLenSelectM}
+whether each fish was sampled (\code{TRUE}) or not. If \code{simLenSelectM}
 is used then a list that contains the following three items is returned:
 \itemize{
 \item smpld a vector of logicals indicating whether each fish was sampled
 (\code{TRUE}) or not.
 \item breaks the vector of length category breaks sent in \code{breaks}.
 \item probs the vector of capture probabilities that corresponds to the
-length categories in \code{breaks}.  This vector may not equal the supplied
+length categories in \code{breaks}. This vector may not equal the supplied
 \code{probs} vector if the user changed the capture probabilities with the
 interactive graphic (i.e., using \code{interact=TRUE}).
 }
 }
 \description{
 Constructs a sample of fish based on a user-supplied length-based selectivity
-curve.  The selectivity curve can be supplied via a parametric model (the
+curve. The selectivity curve can be supplied via a parametric model (the
 beta distribution) or manually for various length categories.
 }
 \details{

@@ -1,7 +1,7 @@
 #'Sample fish for construction of an age-length key.
 #'
 #'Samples fish from a data frame of lengths and ages to simulate selecton of fish
-#'to be used to construct an age-length key.  Fish can either be selected as a
+#'to be used to construct an age-length key. Fish can either be selected as a
 #'fixed number per length category (e.g., 5 fish per 10-mm length category) or as 
 #'a random sample from the population.
 #'
@@ -11,7 +11,7 @@
 #'contains the observed length measurements.
 #'@param data A data.frame that minimally contains the observed age and length
 #'measurements in the \code{formula}.
-#'@param type A string indicating the type of sampling to conduct.  See details.
+#'@param type A string indicating the type of sampling to conduct. See details.
 #'@param n.fixed A single numeric that indicates the number of fish to sample per
 #'length category when \code{type="fixed"}.
 #'@param n.random A single numeric that indicates the total number of fish to sample
@@ -79,7 +79,7 @@ sample4ALK <- function(formula,data,type=c("fixed","random"),
   ## Start main function
   type <- match.arg(type)
   cl <- getVarFromFormula(formula,data)
-  if (length(cl)!=2) stop("Formulas must be of 'age~len'.",call.=FALSE)
+  if (length(cl)!=2) FSA:::STOP("Formulas must be of 'age~len'.")
   else {
     ca <- cl[1]
     cl <- cl[2]

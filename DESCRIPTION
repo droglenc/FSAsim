@@ -18,7 +18,6 @@ Imports:
     tidyr
 Suggests:
     lattice,
-    relax,
     tcltk
 License: GPL (>= 2)
 Encoding: UTF-8
