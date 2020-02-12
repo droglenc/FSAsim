@@ -4,9 +4,15 @@
 \alias{mrClosed1Sim}
 \title{Dynamic plots to explore single-census mark-recapture models.}
 \usage{
-mrClosed1Sim(sim = c("assumptions", "distribution"), N = 1000,
-  rsmpls = 5000, EM = 200, En = 200, incl.final = TRUE,
-  conf.level = 0.95)
+mrClosed1Sim(
+  sim = c("assumptions", "distribution"),
+  N = 1000,
+  rsmpls = 5000,
+  EM = 200,
+  En = 200,
+  incl.final = TRUE,
+  conf.level = 0.95
+)
 }
 \arguments{
 \item{sim}{A single string that identifies the type of simulation to perform (see details).}

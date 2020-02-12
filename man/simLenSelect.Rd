@@ -5,11 +5,16 @@
 \alias{simLenSelectM}
 \title{Simulate sampling fish based on length selectivity.}
 \usage{
-simLenSelectP(lens, alpha = 1, beta = 1, max.height = 1,
-  show = FALSE)
+simLenSelectP(lens, alpha = 1, beta = 1, max.height = 1, show = FALSE)
 
-simLenSelectM(lens, breaks, probs = rep(max.height, length(breaks)),
-  max.height = 1, interact = TRUE, digits = 2)
+simLenSelectM(
+  lens,
+  breaks,
+  probs = rep(max.height, length(breaks)),
+  max.height = 1,
+  interact = TRUE,
+  digits = 2
+)
 }
 \arguments{
 \item{lens}{A vector containg the lengths of individual fish.}

@@ -43,7 +43,7 @@
 #' @export simAgeBias
 simAgeBias <- function(max.age=10,show.props=TRUE,scale=TRUE) {
   Freq <- NULL  # attempting to get by bindings warning in RCMD CHECK
-  withr::local_par(no.readonly=TRUE)
+  withr::local_par(list(no.readonly=TRUE))
   options(locatorBell=FALSE)
   x <- y <- NULL
   mode <- "add"
@@ -134,7 +134,7 @@ simApplyAgeBias <- function(ages,bias.table=NULL,agree.table=NULL) {
     FSA:::STOP("One of 'bias.table' or 'agree.table' must be provided")
   }
   if (!is.null(bias.table) & !is.null(agree.table)) {
-    FSA::WARN("Both 'bias.table' and 'agree.table were provided.\n Only 'bias.table' will be used")
+    FSA:::WARN("Both 'bias.table' and 'agree.table were provided.\n Only 'bias.table' will be used")
     agree.table <- NULL
   }
  # if only an agreement table given then conver to bias table 

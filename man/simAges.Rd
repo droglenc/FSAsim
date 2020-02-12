@@ -4,8 +4,15 @@
 \alias{simAges}
 \title{Simulate an age structure.}
 \usage{
-simAges(N0 = 500, A = 0.3, Z = -log(1 - A), incl.zero = FALSE,
-  max.age = NULL, indivs = TRUE, rand = TRUE)
+simAges(
+  N0 = 500,
+  A = 0.3,
+  Z = -log(1 - A),
+  incl.zero = FALSE,
+  max.age = NULL,
+  indivs = TRUE,
+  rand = TRUE
+)
 }
 \arguments{
 \item{N0}{A numeric representing the initial cohort size to be used in the simulations.}

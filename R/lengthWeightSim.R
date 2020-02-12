@@ -42,7 +42,7 @@ lengthWeightSim <- function(x=NULL,y=NULL,wt.max=50) {
   if (iChk4Namespace("manipulate")) {
     manipulate::manipulate(
       {
-        withr::local_par(mar=c(3.5,3.5,1,1),mgp=c(2,0.4,0),tcl=-0.2)
+        withr::local_par(list(mar=c(3.5,3.5,1,1),mgp=c(2,0.4,0),tcl=-0.2))
         len <- seq(len.min,len.max,length.out=(len.max-len.min)*5)
         vals <- a*len^b
         if (is.null(x)||is.null(y)) { 

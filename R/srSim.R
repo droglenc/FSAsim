@@ -154,8 +154,8 @@ isrSimPlot <- function(type,param,max.S,max.R,max.rds,a,b,c) {
               y <- a*x*exp(-a*x/(Rp*exp(1))) }
            ) # end Ricker switch
   }
-  withr::local_par(mfrow=c(1,2),mar=c(3.5,3.5,1.25,1.25),
-                   mgp=c(2,0.4,0),tcl=-0.2, pch=19)
+  withr::local_par(list(mfrow=c(1,2),mar=c(3.5,3.5,1.25,1.25),
+                        mgp=c(2,0.4,0),tcl=-0.2, pch=19))
   graphics::plot(x,y,xlab="Parental (Spawner) Stock",ylab="Recruits",
                  type="l",lwd=2,col="blue",ylim=c(0,max.R),xlim=c(0,max.S))
   graphics::abline(h=Rp,lwd=2,lty=3,col="red")

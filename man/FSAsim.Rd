@@ -3,7 +3,6 @@
 \docType{package}
 \name{FSAsim}
 \alias{FSAsim}
-\alias{FSAsim-package}
 \title{Fisheries stock assessment simulation functions.}
 \description{
 Functions to simulate data for fisheries stock assessment methods.

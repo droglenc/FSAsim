@@ -4,8 +4,12 @@
 \alias{leslieSim}
 \title{Dynamic plots to explore the Leslie depletion model.}
 \usage{
-leslieSim(sim = c("deterministic", "random", "resampling", "montecarlo"),
-  removals = 8, Ricker.mod = FALSE, rsmpls = 100)
+leslieSim(
+  sim = c("deterministic", "random", "resampling", "montecarlo"),
+  removals = 8,
+  Ricker.mod = FALSE,
+  rsmpls = 100
+)
 }
 \arguments{
 \item{sim}{A single string that indicates the type or version of simulation that should be used. See the details.}

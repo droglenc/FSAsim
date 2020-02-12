@@ -1,4 +1,5 @@
 # FSAsim 0.0.7 ongoing
+* Fixed all bugs related to `withr::local_par`.
 
 # FSAsim 0.0.6 2-Nov-19
 * Removed dependency on `relax` and `tcltk`.

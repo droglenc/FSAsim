@@ -130,8 +130,8 @@ iSRDynPlot <- function(S,R,type,param,p1,p2=NULL,p3=NULL) {
   ## the model type and param
   y <- iSRDynPlot_makeR(x,type,param,p1,p2,p3)
   ## Construct the scatterplot with superimposed model
-  withr::local_par(mfrow=c(1,2),mar=c(3.5,3.5,1.25,1.25),
-                   mgp=c(2,0.4,0),tcl=-0.2,pch=19)
+  withr::local_par(list(mfrow=c(1,2),mar=c(3.5,3.5,1.25,1.25),
+                        mgp=c(2,0.4,0),tcl=-0.2,pch=19))
   graphics::plot(S,R,xlab="Parental (Spawner) Stock",ylab="Recruits",
        ylim=c(0,max(R,na.rm=TRUE)),xlim=c(0,max(S,na.rm=TRUE)))
   graphics::lines(x,y,lwd=2,lty=1,col="blue")

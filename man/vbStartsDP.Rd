@@ -4,11 +4,17 @@
 \alias{vbStartsDP}
 \title{Uses dynamic plots to find reasonable starting values for a von Bertalanffy growth function.}
 \usage{
-vbStartsDP(formula, data = NULL, type = c("Typical", "typical",
-  "Traditional", "traditional", "BevertonHolt", "Original", "original",
-  "vonBertalanffy", "GQ", "GallucciQuinn", "Mooij", "Weisberg", "Schnute",
-  "Francis", "Somers", "Somers2"), ages2use = NULL, methEV = c("means",
-  "poly"), meth0 = c("yngAge", "poly"), ...)
+vbStartsDP(
+  formula,
+  data = NULL,
+  type = c("Typical", "typical", "Traditional", "traditional", "BevertonHolt",
+    "Original", "original", "vonBertalanffy", "GQ", "GallucciQuinn", "Mooij", "Weisberg",
+    "Schnute", "Francis", "Somers", "Somers2"),
+  ages2use = NULL,
+  methEV = c("means", "poly"),
+  meth0 = c("yngAge", "poly"),
+  ...
+)
 }
 \arguments{
 \item{formula}{A formula of the form \code{len~age}.}

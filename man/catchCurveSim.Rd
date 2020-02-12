@@ -4,8 +4,13 @@
 \alias{catchCurveSim}
 \title{Dynamic plots to explore catch-curve models.}
 \usage{
-catchCurveSim(max.age = 15, v = rep(1, max.age), Zycl = FALSE,
-  deltaAge = round(max.age/2, 0), recruit.age = 3)
+catchCurveSim(
+  max.age = 15,
+  v = rep(1, max.age),
+  Zycl = FALSE,
+  deltaAge = round(max.age/2, 0),
+  recruit.age = 3
+)
 }
 \arguments{
 \item{max.age}{A single numeric integer that indicates the oldest age to use in the simulations.}

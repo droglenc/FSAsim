@@ -93,7 +93,7 @@ iCC.plot <- function(max.age,v,Zycl,deltaAge,recruit.age,Z.param,No.param) {
   No.param.mod <- list(mean=No.param$mean,cv=0,delta=1,deltaAge=deltaAge,dstdy=TRUE)    
   C.mod <- iCC.makeCatch(Ages,v,Zycl,recruit.age,Z.param.mod,No.param.mod)
   # Make the plot
-  withr::local_par(mar=c(3,3,1.5,1),mgp=c(1.9,0.4,0),tcl=-0.2,cex.main=1)
+  withr::local_par(list(mar=c(3,3,1.5,1),mgp=c(1.9,0.4,0),tcl=-0.2,cex.main=1))
   graphics::plot(Ages,log(C.def),type="o",col="gray",pch=16,lwd=3,
                  ylab="log(Catch)",ylim=c(-3,6.2),main=iCC.title(Z.param,No.param))
   graphics::lines(Ages,log(C.ass),type="o",col="red",pch=19,lwd=3)

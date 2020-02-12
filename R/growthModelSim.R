@@ -270,7 +270,8 @@ iGrowthSimPlot <- function(type,t.max,p1,p2,p3,p4) {
   t <- seq(0,t.max,length.out=t.max*20)
   vals <- iPredLength(type,t,p1,p2,p3,p4)
   ylbl <- ifelse (type %in% c("vbTypicalW","vbOriginalW"),"Weight","Length")
-  withr::local_par(mar=c(3.5,3.5,1,1),mgp=c(2,0.4,0),tcl=-0.2,xaxs="i",yaxs="i")
+  withr::local_par(list(mar=c(3.5,3.5,1,1),mgp=c(2,0.4,0),
+                        tcl=-0.2,xaxs="i",yaxs="i"))
   graphics::plot(t,vals,type="l",lwd=2,col="blue",
                  xlab="Age",xlim=c(0,t.max),
                  ylab=ylbl,ylim=c(0,800))

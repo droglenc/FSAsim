@@ -124,7 +124,7 @@ simLenSelectP <- function(lens,alpha=1,beta=1,max.height=1,show=FALSE) {
 simLenSelectM <- function(lens,breaks,probs=rep(max.height,length(breaks)),
                           max.height=1,interact=TRUE,digits=2) {
   if (interact) {
-    withr::local_par(no.readonly=TRUE) 
+    withr::local_par(list(no.readonly=TRUE))
     options(locatorBell=FALSE)
     graphics::layout(matrix(c(1,2),nrow=2),heights=c(1,15))
     repeat {

@@ -4,8 +4,16 @@
 \alias{sample4ALK}
 \title{Sample fish for construction of an age-length key.}
 \usage{
-sample4ALK(formula, data, type = c("fixed", "random"), n.fixed = 10,
-  n.random = 100, w = 1, startcat = NULL, breaks = NULL)
+sample4ALK(
+  formula,
+  data,
+  type = c("fixed", "random"),
+  n.fixed = 10,
+  n.random = 100,
+  w = 1,
+  startcat = NULL,
+  breaks = NULL
+)
 }
 \arguments{
 \item{formula}{A formula of the form \code{age~length} where \dQuote{age}

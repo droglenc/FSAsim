@@ -207,7 +207,7 @@ iMRC1.title <- function(mark.loss,surv.mark,surv.unmark,recruits,cap.ratio) {
 
 ## Internal function to make the main histogram
 iMRC1.hist <- function(df,N,incl.final,hlbl,xaxis,conf.level) {
-  withr::local_par(mar=c(3.5,1.1,1.5,1.1),mgp=c(2,0.4,0),tcl=-0.2,yaxs="i")
+  withr::local_par(list(mar=c(3.5,1.1,1.5,1.1),mgp=c(2,0.4,0),tcl=-0.2,yaxs="i"))
   ## Make the histogram
   # handle the dynamics x-axis (and correct for possible Infs)
   h <- graphics::hist(df$N0,plot=FALSE,breaks=20,right=FALSE)

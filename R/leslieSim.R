@@ -151,8 +151,8 @@ iLeslie.detPlot <- function(resdef,res1,res2,Ricker.mod=FALSE,glbl) {
     res2$K <- cumsum(res2$Ct)-(res2$Ct/2)
   }
   # Plot values for default parameters
-  withr::local_par(mar=c(3.5,3.5,1.5,1.5),mgp=c(2,0.4,0),tcl=-0.2,
-                      xaxs="i",yaxs="i")
+  withr::local_par(list(mar=c(3.5,3.5,1.5,1.5),mgp=c(2,0.4,0),tcl=-0.2,
+                        xaxs="i",yaxs="i"))
   graphics::plot(cpe~K,data=resdef,type="o",pch=19,lwd=2,col="gray",main=glbl,
                  xlab="Cumulative Catch",xlim=c(0,1.75*max(resdef$K)),
                  ylab="CPE",ylim=c(0,1.75*max(resdef$cpe)))
@@ -195,7 +195,7 @@ iLeslie.randPlotMain <- function(params,Ricker.mod,q.adj.const) {
   # Results for possible assumptions violations
   res.ass <- iLeslie.randRun(params)
   res <- FSA::depletion(res.ass$Ct,res.ass$Et,method="Leslie",Ricker.mod=Ricker.mod)
-  withr::local_par(mar=c(3.5,3.5,1.5,1.5),mgp=c(2,0.4,0),tcl=-0.2)
+  withr::local_par(list(mar=c(3.5,3.5,1.5,1.5),mgp=c(2,0.4,0),tcl=-0.2))
   graphics::plot(res,xlim=c(0,800),ylim=c(0,50),
                  main=iLeslie.title(q.adj.const,params$p.surv,params$r.prop))
 } # end iLeslie.randPlotMain
@@ -277,7 +277,7 @@ iLeslie.mcPlotMain <- function(params,Ricker.mod,rsmpls) {
   ## make the layout
   graphics::layout(matrix(c(2,4,1,3),nrow=2,byrow=TRUE),c(1.5,1),c(1,1.5),TRUE)
   ## Scatterplot of No vs q
-  withr::local_par(mar=c(3,3,0,0),mgp=c(1.7,0.4,0),tcl=-0.2) 
+  withr::local_par(list(mar=c(3,3,0,0),mgp=c(1.7,0.4,0),tcl=-0.2))
   graphics::plot(res.qhat,res.N0hat,pch=16,cex=1.1,col=grDevices::rgb(0,0,0,0.8),
                  xlab="Catchability Estimate",xlim=qrng,
                  ylab="Estimated Population Size",ylim=Norng)

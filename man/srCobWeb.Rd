@@ -4,8 +4,14 @@
 \alias{srCobWeb}
 \title{Plots typical fisheries stock-recruitment models with cobwebbing traces.}
 \usage{
-srCobWeb(type = c("BevertonHolt", "Ricker"), param = 1, N = 100,
-  initS = 50, N2ignore = 0, ...)
+srCobWeb(
+  type = c("BevertonHolt", "Ricker"),
+  param = 1,
+  N = 100,
+  initS = 50,
+  N2ignore = 0,
+  ...
+)
 }
 \arguments{
 \item{type}{A single string that indicates which stock-recruitment model to use.  See \code{srModels} in \pkg{FSA}.}

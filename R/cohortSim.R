@@ -27,7 +27,7 @@ cohortSim <- function(age.max=15) {
     manipulate::manipulate(
       {
         Nt <- No*exp(-Z*1:age.max)
-        withr::local_par(mar=c(3.5,3.5,1,1),mgp=c(2,0.4,0),tcl=-0.2)
+        withr::local_par(list(mar=c(3.5,3.5,1,1),mgp=c(2,0.4,0),tcl=-0.2))
         graphics::plot(0:age.max,c(No,Nt),type="l",lwd=2,col="blue",
                        xlab="Time / Age",ylab="Population Size",ylim=c(0,10000))
       },

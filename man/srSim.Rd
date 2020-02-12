@@ -4,8 +4,7 @@
 \alias{srSim}
 \title{Dynamic plots to explore typical fisheries stock-recruitment models.}
 \usage{
-srSim(type = c("BevertonHolt", "Ricker"), param = 1, max.S = 500,
-  max.R = 1000)
+srSim(type = c("BevertonHolt", "Ricker"), param = 1, max.S = 500, max.R = 1000)
 }
 \arguments{
 \item{type}{A string that indicates the type of the stock-recruitment model. Must be one of \code{"BevertonHolt"}, \code{"Ricker"}, \code{"Shepherd"}, or \code{"SailaLorda"}.}

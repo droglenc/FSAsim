@@ -4,9 +4,16 @@
 \alias{srStartsDP}
 \title{Uses dynamic plots to find reasonable starting values for parameters in specific paramaterizations of common stock-recruitment models.}
 \usage{
-srStartsDP(formula, data = NULL, type = c("BevertonHolt", "Ricker",
-  "Shepherd", "SailaLorda", "independence"), param = 1, min.prop = 0.1,
-  max.mult = 3, delta.prop = 0.005, ...)
+srStartsDP(
+  formula,
+  data = NULL,
+  type = c("BevertonHolt", "Ricker", "Shepherd", "SailaLorda", "independence"),
+  param = 1,
+  min.prop = 0.1,
+  max.mult = 3,
+  delta.prop = 0.005,
+  ...
+)
 }
 \arguments{
 \item{formula}{A formula of the form \code{Recruits~Stock}.}

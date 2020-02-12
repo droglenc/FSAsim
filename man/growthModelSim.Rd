@@ -4,10 +4,13 @@
 \alias{growthModelSim}
 \title{Dynamics plots to explore typical fisheries growth models.}
 \usage{
-growthModelSim(type = c("vbTypical", "vbOriginal", "vbGQ",
-  "vbGallucciQuinn", "vbMooij", "vbWeisberg", "vbSchnute", "vbTypicalW",
-  "vbOriginalW", "Gompertz1", "Gompertz2", "Gompertz3", "Schnute"),
-  max.len = 500, max.wt = 500)
+growthModelSim(
+  type = c("vbTypical", "vbOriginal", "vbGQ", "vbGallucciQuinn", "vbMooij",
+    "vbWeisberg", "vbSchnute", "vbTypicalW", "vbOriginalW", "Gompertz1", "Gompertz2",
+    "Gompertz3", "Schnute"),
+  max.len = 500,
+  max.wt = 500
+)
 }
 \arguments{
 \item{type}{A single character string that indicates which growth model to use. See details.}

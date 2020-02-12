@@ -1,7 +1,7 @@
 Package: FSAsim
 Title: Simulate Data for Fisheries Stock Assessment Methods
 Version: 0.0.6.9999
-Date: 2019-11-2
+Date: 2020-2-11
 Description: Simulate data or visualize models for fisheries stock assessment methods.
 Authors@R: person("Derek","Ogle",email="dogle@northland.edu",role=c("aut","cre"))
 URL: http://derekogle.com/fishr, https://github.com/droglenc/FSAsim
@@ -15,10 +15,11 @@ Imports:
     manipulate,
     nlme,
     TeachingDemos,
-    tidyr
+    tidyr,
+    withr
 Suggests:
     lattice,
     tcltk
 License: GPL (>= 2)
 Encoding: UTF-8
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
